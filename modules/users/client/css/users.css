@@ -36,6 +36,10 @@
 }
 .auth{
   padding: 50px 0 50px 0;
+  color: rgba(255,255,255,0.6);
+  background:  url('https://github.com/images/modules/site/heroes/simple-codelines.svg') ,#2b3137;
+  background-position: center 10%;
+  background-size: cover;
 }
 .box-auth{
   padding: 20px 0 20px 0;

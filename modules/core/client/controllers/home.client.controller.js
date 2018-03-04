@@ -2,9 +2,10 @@
 
 angular.module('core').controller('HomeController', ['$scope', 'Authentication','$state',
   function ($scope, Authentication, $state) {
+    var vm =this;
     // This provides Authentication context.
-    $scope.authentication = Authentication;
-    if($scope.authentication.user == ''){
+    vm.auth = Authentication;
+    if(vm.auth.user == ''){
         $state.go('authentication.signup');
     };
   }
