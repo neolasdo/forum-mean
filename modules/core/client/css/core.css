@@ -1,5 +1,17 @@
+body{
+  background:  url('https://github.com/images/modules/site/heroes/simple-codelines.svg') ,#2b3137;
+  background-position: center 10%;
+  background-size: cover;
+}
+.navbar-inverse{
+  background: #000 !important;
+}
 .content {
+  color: rgba(255,255,255,0.6);
+  padding-top: 50px;
   margin-top: 50px;
+  -webkit-font-smoothing: antialiased;
+  font-family: 'Playfair Display', serif;
 }
 .undecorated-link:hover {
   text-decoration: none;
@@ -34,4 +46,24 @@ a:hover .header-profile-image {
 }
 .has-error .help-inline.error-text {
   display: inline;
+}
+.text-white{
+  color: #fff !important;
+}
+.nopadding{
+  padding: 0 !important;
+}
+input{
+  border-radius:  0!important;
+}
+
+.size-21{
+  -webkit-font-smoothing: antialiased;
+  font-size: 21px;
+  font-weight: 300;
+}
+.size-45{
+  -webkit-font-smoothing: antialiased;
+  font-size: 45px;
+  font-weight: 300;
 }

@@ -34,3 +34,18 @@
   min-height: 150px;
   max-height: 150px;
 }
+.auth{
+  padding: 50px 0 50px 0;
+}
+.box-auth{
+  padding: 20px 0 20px 0;
+  background: #fff;
+  color: #282828;
+}
+.signup-text{
+  padding: 30px 10px 30px 10px;
+}
+.signup-h1{
+  margin-bottom: 16px !important;
+  line-height: 1 !important;
+}
