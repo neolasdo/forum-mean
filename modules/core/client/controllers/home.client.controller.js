@@ -6,7 +6,7 @@ angular.module('core').controller('HomeController', ['$scope', 'Authentication',
     // This provides Authentication context.
     vm.auth = Authentication;
     if(vm.auth.user == ''){
-        $state.go('authentication.signup');
+        $state.go('authentication.signin');
     };
   }
 ]);
