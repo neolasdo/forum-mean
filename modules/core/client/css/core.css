@@ -5,7 +5,7 @@ body{
   background: #24292e !important;
 }
 .content {
-  padding-top: 50px;
+  padding-top: 20px;
   -webkit-font-smoothing: antialiased;
   font-family: 'Playfair Display', serif;
 }
@@ -70,8 +70,13 @@ input{
 .main{
   padding: 50px 20px 0px 20px;
 }
+/*------------------------------------------------
+                    SIDEBAR
+ -------------------------------------------------*/
 
+@media screen and (max-width: 992px){
 
+}
 
 /*------------------------------------------------
 -----------------------FOOTER---------------------
