@@ -1,9 +1,39 @@
 <section ng-controller="HomeController as vm" class="main">
-    <div class="col-md-3">
-        left menu
-    </div>
-    <div class="col-md-9">
-        {{vm.auth}}
-
+    <div class="row">
+        <div class="col-md-3">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <h3 class="panel-title"></h3>
+                </div>
+                <div class="panel-body">
+                    Panel body ...
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="panel panel-success">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Panel title</h3>
+                </div>
+                <div class="panel-body">
+                    Panel body ...
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="panel panel-info">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Lớp học của tôi <button ng-click="vm.classHide = !vm.classHide" class="pull-right"> <span class="fa" ng-class="{'fa-chevron-up' : vm.classHide, 'fa-chevron-down' : !vm.classHide}"></span></button></h3>
+                </div>
+                <div class="panel-body" ng-class="{hide: vm.classHide}">
+                    <ul class="list-group">
+                        <a href="#" class="list-group-item">Bread</a>
+                        <a href="#" class="list-group-item">Cheese</a>
+                        <a href="#" class="list-group-item">Soda</a>
+                        <a href="#" class="list-group-item">Meat</a>
+                    </ul>
+                </div>
+            </div>
+        </div>
     </div>
 </section>
