@@ -4,9 +4,7 @@
  * Module dependencies.
  */
 var mongoose = require('mongoose'),
-    Schema = mongoose.Schema,
-    Topic = mongoose.model('Topic');
-
+    Schema = mongoose.Schema;
 /**
  * Comment Schema
  */
