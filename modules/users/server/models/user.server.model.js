@@ -47,7 +47,6 @@ var UserSchema = new Schema({
   email: {
     type: String,
     unique: true,
-    lowercase: true,
     trim: true,
     default: '',
     validate: [validateLocalStrategyEmail, 'Please fill a valid email address']
@@ -150,7 +149,7 @@ UserSchema.methods.authenticate = function (password) {
  */
 UserSchema.statics.findUniqueUsername = function (username, suffix, callback) {
   var _this = this;
-  var possibleUsername = username.toLowerCase() + (suffix || '');
+  var possibleUsername = username + (suffix || '');
 
   _this.findOne({
     username: possibleUsername
