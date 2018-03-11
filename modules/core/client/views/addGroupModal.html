@@ -1,0 +1,67 @@
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close" ng-click="vm.close()"><span
+            aria-hidden="true">&times;</span></button>
+    <h4 class="modal-title text-center" id="AddGroupController">Thêm lớp học</h4>
+</div>
+<div class="modal-body">
+    <div class="alert alert-danger" ng-if="vm.hasError">
+        <ul class="list-style">
+            <li ng-repeat="message in vm.errorMessages" ng-bind="message"></li>
+        </ul>
+    </div>
+    <div class="alert alert-success" ng-if="vm.success">
+        <p>{{vm.success}}</p>
+    </div>
+
+    <form class="form" novalidate>
+        <div class="row">
+            <div class="col-md-2">
+                <div class="form-group text-center" style="border: 1px solid #ddd;padding: 5px">
+                    <img ng-src="{{vm.imageURL?vm.imageURL:'modules/group/client/img/profile/default.png'}}" alt="Class Logo" class="img-thumbnail" style="border: none;max-height: 150px">
+                </div>
+                <div class="text-center form-group" ng-hide="vm.uploader.queue.length">
+                    <span class="btn btn-default btn-file">
+                      Chọn ảnh <input type="file" nv-file-select uploader="vm.uploader">
+                    </span>
+                </div>
+                <div ng-show="vm.success" class="text-center text-success">
+                    <strong>Ảnh đã được cập nhật</strong>
+                </div>
+                <div ng-show="vm.error" class="text-center text-danger">
+                    <strong ng-bind="vm.error"></strong>
+                </div>
+            </div>
+            <div class="col-md-10">
+                <div class="row">
+                    <div class="form-group col-md-12">
+                        <label class="required">Tên lớp học</label>
+                        <input type="text" ng-model="vm.group.name" class="form-control">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group col-md-6">
+                        <label>Thêm giáo viên</label>
+                        <ui-select multiple required ng-model="vm.group.teacher" tagging-label="false" theme="bootstrap" tagging-tokens=",|/" comma-on-blur>
+                            <ui-select-match placeholder="Thêm giáo viên giảng dạy trong lớp">{{$item.displayName}} &lt;{{$item.email}}&gt;</ui-select-match>
+                            <ui-select-choices repeat="teacher in vm.teachers | filter: $select.search">
+                                <div>
+                                    <span ng-bind="teacher.displayName | highlight: $select.search"></span>
+                                    &lt;<span ng-bind="teacher.email | highlight: $select.search"></span>&gt;
+                                </div>
+                            </ui-select-choices>
+                        </ui-select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Mô tả về lớp học này</label>
+                    <textarea rows="5" class="form-control" ng-model="vm.group.information"></textarea>
+                </div>
+
+            </div>
+        </div>
+    </form>
+</div>
+<div class="modal-footer text-right">
+    <button class="btn btn-link btn-flat" ng-click="vm.close()">Cancel</button>
+    <button class="btn btn-success btn-flat" ng-click="vm.save()">Save</button>
+</div>

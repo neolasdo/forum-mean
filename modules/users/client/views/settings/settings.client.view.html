@@ -1,26 +1,32 @@
-<section ng-controller="SettingsController">
+<section ng-controller="SettingsController" class="main">
   <div class="page-header">
     <h1>Cài đặt tài khoản</h1>
   </div>
   <div class="row">
-    <nav class="col-sm-3 col-md-3">
-      <ul class="nav nav-pills nav-stacked">
-        <li ui-sref-active="active">
-          <a ui-sref="settings.profile">Sửa tài khoản</a>
-        </li>
-        <li ui-sref-active="active">
-          <a ui-sref="settings.picture">Thay đổi ảnh</a>
-        </li>
-        <li ui-sref-active="active" ng-show="user.provider === 'local'">
-          <a ui-sref="settings.password">Thay đổi mật khẩu</a>
-        </li>
-        <li ui-sref-active="active">
-          <a ui-sref="settings.accounts">Quản lý mạng xã hội</a>
-        </li>
-      </ul>
-    </nav>
-    <div class="col-sm-9 col-md-8 settings-view">
-      <div ui-view></div>
-    </div>
+      <div class="panel panel-default col-sm-3" style="padding: 0">
+          <div class="panel-body"  style="padding: 0">
+              <nav>
+                  <ul class="nav nav-pills nav-stacked">
+                      <li ui-sref-active="active">
+                          <a ui-sref="settings.profile">Sửa tài khoản</a>
+                      </li>
+                      <li ui-sref-active="active">
+                          <a ui-sref="settings.picture">Thay đổi ảnh</a>
+                      </li>
+                      <li ui-sref-active="active" ng-show="user.provider === 'local'">
+                          <a ui-sref="settings.password">Thay đổi mật khẩu</a>
+                      </li>
+                      <li ui-sref-active="active">
+                          <a ui-sref="settings.accounts">Quản lý mạng xã hội</a>
+                      </li>
+                  </ul>
+              </nav>
+          </div>
+      </div>
+      <div class="panel panel-default col-sm-9 settings-view">
+          <div class="panel-body">
+                  <div ui-view></div>
+          </div>
+      </div>
   </div>
 </section>
