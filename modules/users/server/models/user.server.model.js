@@ -47,7 +47,6 @@ var UserSchema = new Schema({
   email: {
     type: String,
     unique: true,
-    lowercase: true,
     trim: true,
     default: '',
     validate: [validateLocalStrategyEmail, 'Please fill a valid email address']
@@ -77,11 +76,9 @@ var UserSchema = new Schema({
   providerData: {},
   additionalProvidersData: {},
   roles: {
-    type: [{
-      type: String,
-      enum: ['teacher', 'student']
-    }],
-    default: ['student'],
+    type: String,
+    enum: ['teacher', 'student'],
+    default: 'student',
     required: 'Please provide at least one role'
   },
   updated: {
@@ -150,7 +147,7 @@ UserSchema.methods.authenticate = function (password) {
  */
 UserSchema.statics.findUniqueUsername = function (username, suffix, callback) {
   var _this = this;
-  var possibleUsername = username.toLowerCase() + (suffix || '');
+  var possibleUsername = username + (suffix || '');
 
   _this.findOne({
     username: possibleUsername

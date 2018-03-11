@@ -1,6 +1,7 @@
 'use strict';
 
 module.exports = function(app) {
-  // Routing logic   
-  // ...
+    var groups = require('../controllers/group.server.controller');
+
+    app.route('/api/groups/picture').post(groups.uploadPicture);
 };

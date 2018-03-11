@@ -34,6 +34,18 @@ body{
 a:hover .header-profile-image {
   opacity: 1;
 }
+a:hover {
+    text-decoration: none;
+}
+.panel , .img-thumbnail, .btn{
+    border-radius: 0 !important;
+}
+.modal.in .modal-dialog {
+    margin-top: 50px;
+}
+.img-thumbnail{
+    padding: 0;
+}
 .user-header-dropdown-toggle {
   padding-top: 11px !important;
   padding-bottom: 11px !important;
@@ -69,13 +81,13 @@ input{
 }
 .main{
   padding: 50px 20px 0px 20px;
+  background: #E9EBEE;
 }
 /*------------------------------------------------
                     SIDEBAR
  -------------------------------------------------*/
-
-@media screen and (max-width: 992px){
-
+.page-header{
+    margin: 0;
 }
 
 /*------------------------------------------------
@@ -92,11 +104,10 @@ input{
   display: block;
 }
 .footer {
-  background: #EDEFF1;
+  /*background: #EDEFF1;*/
   height: auto;
   padding-bottom: 0px;
   position: relative;
-  margin-top: 50px;
   width: 100%;
   border-bottom: 1px solid #CCCCCC;
   border-top: 1px solid #DDDDDD;

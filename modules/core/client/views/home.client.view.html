@@ -1,16 +1,42 @@
 <section ng-controller="HomeController as vm" class="main">
     <div class="row">
         <div class="col-md-3">
-            <div class="panel panel-primary">
-                <div class="panel-heading">
-                    <h3 class="panel-title"></h3>
+            <div class="panel panel-default">
+                <div class="panel-body" style="padding: 10px 5px">
+                    <div class="row">
+                        <div class="col-xs-4">
+                            <img ng-src="{{vm.auth.user.profileImageURL}}" class="img-thumbnail" alt="{{vm.auth.user.displayName}}" width="100%" style="width: 100%; max-height:230px">
+                        </div>
+                        <div class="info col-xs-8">
+                            <p style="font-size: 20px"><a href="/settings/profile">Hi, {{vm.auth.user.displayName}}</a></p>
+                            <p>{{vm.auth.user.roles === 'student'? 'Học viên': 'Giáo viên'}}</p>
+                        </div>
+                    </div>
                 </div>
-                <div class="panel-body">
-                    Panel body ...
+            </div>
+            <div class="panel panel-info">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Lớp học của tôi <button ng-if="vm.auth.user.roles == 'teacher'" style="border: 0; background: none" ng-click="vm.addGroup()" class="pull-right"><span class="fa fa-plus"></span></button></h3>
+                </div>
+                <div class="panel-body" style="padding: 0">
+                    <ul class="list-group"  style="margin-bottom: 0" ng-if="vm.showAll">
+                        <a href="#" class="list-group-item" style="border-radius: 0">Bread</a>
+                    </ul>
+                    <ul class="list-group"  style="margin-bottom: 0" ng-if="!vm.showAll">
+                        <a href="#" class="list-group-item" style="border-radius: 0">Orange</a>
+                    </ul>
+                    <ul class="list-group"  style="margin-bottom: 0" ng-if="!vm.listGroup">
+                        <li class="list-group-item">Bạn chưa tham gia lớp học nào!</li>
+                    </ul>
+                    <div class="see-more" style="display: block;padding: 10px 15px; cursor: pointer" ng-click="vm.showAllGroup()">
+                        <div ng-if="!vm.showAll">Xem tất cả <span class="fa  fa-chevron-down pull-right" style="background: none;border: none;"></span></div>
+                        <div ng-if="vm.showAll">Thu gọn <span class="fa fa-chevron-up pull-right" style="background: none;border: none;"></span></div>
+                    </div>
                 </div>
             </div>
         </div>
-        <div class="col-md-6">
+
+        <div class="col-md-8">
             <div class="panel panel-success">
                 <div class="panel-heading">
                     <h3 class="panel-title">Panel title</h3>
@@ -20,20 +46,8 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-3">
-            <div class="panel panel-info">
-                <div class="panel-heading">
-                    <h3 class="panel-title">Lớp học của tôi <button ng-click="vm.classHide = !vm.classHide" class="pull-right"> <span class="fa" ng-class="{'fa-chevron-up' : vm.classHide, 'fa-chevron-down' : !vm.classHide}"></span></button></h3>
-                </div>
-                <div class="panel-body" ng-class="{hide: vm.classHide}">
-                    <ul class="list-group">
-                        <a href="#" class="list-group-item">Bread</a>
-                        <a href="#" class="list-group-item">Cheese</a>
-                        <a href="#" class="list-group-item">Soda</a>
-                        <a href="#" class="list-group-item">Meat</a>
-                    </ul>
-                </div>
-            </div>
+        <div class="col-md-1">
+
         </div>
     </div>
 </section>
