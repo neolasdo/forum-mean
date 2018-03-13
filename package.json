@@ -15,7 +15,7 @@
     "npm": "3.5.2"
   },
   "scripts": {
-    "start": "node server.js",
+    "start": "gulp",
     "test": "gulp test",
     "postinstall": "bower install --config.interactive=false"
   },
