@@ -19,19 +19,39 @@ var path = require('path'),
  * @param req
  * @param res
  */
-exports.getAllJoined = function (req, res, next) {
+exports.getAllJoined = function (req, res) {
     var userId = req.params.userId;
     var role = req.params.role;
-
+    if (role == 'student') {
+        GroupStudent.find({student : userId}).populate('group').exec(function (err, grs) {
+            if (err) return res.status(400).send({
+               'message' : err
+            });
+            return res.json(grs);
+        })
+    }
+    if (role == 'teacher') {
+        GroupTeacher.find({teacher : userId}).populate('group').exec(function (err, grs) {
+            if (err) return res.status(400).send({
+                'message': err
+            });
+            return res.json(grs);
+        })
+    }
 };
 /**
  *
  * @param req
  * @param res
  */
-exports.getAllByUser = function (req, res, next) {
+exports.getAllByUser = function (req, res) {
     var userId = req.params.userId;
-
+    Group.find({createdBy: userId}).exec(function (err, grs) {
+        if (err) return res.status(400).send({
+            message: err
+        });
+        return res.json(grs);
+    })
 };
 /**
  * upload picture
