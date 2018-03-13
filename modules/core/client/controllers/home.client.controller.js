@@ -1,14 +1,32 @@
 'use strict';
 
-angular.module('core').controller('HomeController', ['$scope', 'Authentication','$state', 'toastr', '$modal',
-  function ($scope, Authentication, $state, toastr, $modal) {
+angular.module('core').controller('HomeController', ['$scope', '$http', 'Authentication','$state', 'toastr', '$modal',
+  function ($scope, $http, Authentication, $state, toastr, $modal) {
     var vm =this;
     // This provides Authentication context.
     vm.auth = Authentication;
     vm.showAll = false;
     vm.showAllGroup = function () {
         vm.showAll = ! vm.showAll;
-    }
+    };
+    vm.getJoinedGroup = function () {
+        $http.get('/api/'+ vm.auth.user.roles + '/' + vm.auth.user._id + '/groups/getAllJoined').success(function(res) {
+
+        }).error(function (err) {
+
+        })
+    };
+    // vm.getJoinedGroup();
+    vm.getMyGroup = function () {
+        if (vm.auth.user.roles == 'teacher'){
+            $http.get('/api/teacher/' + vm.auth.user._id + '/groups/getAllByUser').success(function(res) {
+
+            }).error(function (err) {
+
+            })
+        }
+    };
+    // vm.getMyGroup();
     vm.addGroup = function() {
         var modalInstance = $modal.open({
             animation: false,
@@ -23,10 +41,11 @@ angular.module('core').controller('HomeController', ['$scope', 'Authentication',
         $state.go('authentication.signin');
     };
   }
-]).controller('AddGroupController', ['$scope', '$http', 'Authentication','$state', '$modal', '$modalInstance', '$timeout', '$window', 'FileUploader',
-    function($scope, $http, Authentication, $state, $modal, $modalInstance, $timeout, $window, FileUploader){
+]).controller('AddGroupController', ['$scope', '$http', 'Authentication','$state', 'toastr', '$modal', '$modalInstance', '$timeout', '$window', 'FileUploader',
+    function($scope, $http, Authentication, $state, toastr, $modal, $modalInstance, $timeout, $window, FileUploader){
         var vm = this;
         vm.teachers = [];
+        vm.imageURL = '';
         vm.getListTeacher = function () {
             $http.get('/api/users/getAllTeacher').then(function(res) {
                 vm.teachers = res.data;
@@ -34,14 +53,20 @@ angular.module('core').controller('HomeController', ['$scope', 'Authentication',
                 vm.teachers.splice(index, 1);
             })
         };
+        vm.getListStudent = function () {
+            $http.get('/api/users/getAllStudent').then(function(res) {
+                vm.students = res.data;
+            })
+        }
         vm.getListTeacher();
+        vm.getListStudent();
         vm.group = {};
         vm.user = Authentication.user;
-        console.log(vm.user._id);
+
         vm.close = function () {
             $modalInstance.close();
         };
-        vm.imageURL = '';
+
         vm.uploader = new FileUploader({
             url: '/api/groups/picture',
             alias: 'newGroupPicture'
@@ -78,6 +103,28 @@ angular.module('core').controller('HomeController', ['$scope', 'Authentication',
             vm.uploader.clearQueue();
             vm.error = response.message;
             vm.imageURL = '';
+        };
+
+        vm.save = function () {
+            if (vm.imageURL){
+                vm.group.image = vm.imageURL;
+            }
+            if (vm.user) {
+                vm.group.createdBy = vm.user._id;
+            }
+            if (vm.group) {
+                $http.post('/api/addGroup', vm.group).success(function (res) {
+                    if (res.status == 'success') {
+                        vm.hasError = false;
+                        toastr.success('Lớp học đã được tạo thành công');
+                        vm.close();
+                        $state.reload();
+                    }
+                }).error(function (err) {
+                    vm.hasError = true;
+                    vm.errorMessages = err;
+                })
+            }
         };
     }
 ]);

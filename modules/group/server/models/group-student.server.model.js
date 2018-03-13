@@ -21,7 +21,8 @@ var GroupStudentSchema = new Schema({
     point: {
         type: Number,
         min: 0,
-        max: 10
+        max: 10,
+        default: null
     }
 });
 

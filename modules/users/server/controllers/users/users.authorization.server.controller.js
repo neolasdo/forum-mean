@@ -23,6 +23,21 @@ exports.getAllTeacher = function(req, res){
     });
 }
 /**
+ * get all students
+ */
+exports.getAllStudent = function(req, res){
+    User.find({
+        roles : "student"
+    }).select({"_id" : 1, "displayName": 1, "email": 1}).exec(function (err, list) {
+        if (err) {
+            res.status(500).jsonp(err);
+        } else if (!list) {
+            res.send("Danh sách học sinh trống");
+        }
+        res.json(list);
+    });
+}
+/**
  * User middleware
  */
 exports.userByID = function (req, res, next, id) {

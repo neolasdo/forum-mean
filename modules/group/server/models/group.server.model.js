@@ -38,6 +38,7 @@ var GroupSchema = new Schema({
 
 GroupSchema.pre('save', function(next){
     this.secretCode = this.generateRandomCode();
+    next();
 });
 GroupSchema.methods.generateRandomCode = function(){
     return Math.random().toString(36).substring(7).toUpperCase()
