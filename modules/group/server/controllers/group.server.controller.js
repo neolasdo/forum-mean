@@ -25,20 +25,35 @@ exports.getAllJoined = function (req, res) {
     if (role == 'student') {
         GroupStudent.find({student : userId}).populate('group').exec(function (err, grs) {
             if (err) return res.status(400).send({
-               'message' : err
+               'message' : err,
+                'status' : 'error'
             });
-            return res.json(grs);
+            return res.json({status:'success', 'data': grs});
         })
     }
     if (role == 'teacher') {
         GroupTeacher.find({teacher : userId}).populate('group').exec(function (err, grs) {
             if (err) return res.status(400).send({
-                'message': err
+                'message': err,
+                'status' : 'error'
             });
-            return res.json(grs);
+            return res.json({status:'success', 'data': grs});
         })
     }
 };
+/**
+ * get group by id
+ * @param req
+ * @param res
+ */
+exports.getById = function (req, res) {
+    var groupId = req.params.id;
+
+    Group.findById(groupId).exec(function (err, grp) {
+        if (err) return res.status(400).send({status: 'error',message: err});
+        return res.json({status: 'success', 'data' : grp});
+    })
+}
 /**
  *
  * @param req
@@ -48,9 +63,10 @@ exports.getAllByUser = function (req, res) {
     var userId = req.params.userId;
     Group.find({createdBy: userId}).exec(function (err, grs) {
         if (err) return res.status(400).send({
-            message: err
+            'message': err,
+            'status' : 'error'
         });
-        return res.json(grs);
+        return res.json({status:'success', 'data': grs});
     })
 };
 /**
@@ -83,6 +99,14 @@ exports.addGroup = function (req, res) {
 
     var teachers = req.body.teachers;
     var students = req.body.students;
+    if (req.body.createdBy) {
+        var groupTeacher = new GroupTeacher({group: group._id, teacher: createdBy});
+        groupTeacher.save(function (err) {
+            if (err) return res.status(400).send({
+                message: "Có lỗi khi thêm giáo viên vào lớp"
+            });
+        });
+    }
     group.save(function (err) {
         if (err){
             return res.status(400).send({

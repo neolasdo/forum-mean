@@ -6,22 +6,35 @@ angular.module('core').controller('HomeController', ['$scope', '$http', 'Authent
     // This provides Authentication context.
     vm.auth = Authentication;
     vm.showAll = false;
-    vm.showAllGroup = function () {
-        vm.showAll = ! vm.showAll;
+    vm.groupJoined = [];
+    vm.myGroups = [];
+    vm.myLength = 6;
+    vm.joinedLength = 6;
+    vm.showAllMyGroup = function () {
+        vm.showAllMy = ! vm.showAllMy;
+        vm.myLength = (vm.showAllMy)? 'false': 6;
+    };
+    vm.showAllJoinedGroup = function () {
+        vm.showAllJoined = ! vm.showAllJoined;
+        vm.joinedLength = (vm.showAllJoined)? 'false': 6;
     };
     vm.getJoinedGroup = function () {
         $http.get('/api/'+ vm.auth.user.roles + '/' + vm.auth.user._id + '/groups/getAllJoined').success(function(res) {
-
+            if(res.status == 'success' && res.data){
+                vm.groupJoined = res.data;
+            }
         }).error(function (err) {
-
+            console.log(err);
         })
     };
     vm.getMyGroup = function () {
         if (vm.auth.user.roles == 'teacher'){
             $http.get('/api/teacher/' + vm.auth.user._id + '/groups/getAllByUser').success(function(res) {
-
+                if(res.status == 'success' && res.data){
+                    vm.myGroups = res.data;
+                }
             }).error(function (err) {
-
+                console.log(err);
             })
         }
     };

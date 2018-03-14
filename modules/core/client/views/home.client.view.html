@@ -19,18 +19,36 @@
                     <h3 class="panel-title">Lớp học của tôi <button ng-if="vm.auth.user.roles == 'teacher'" style="border: 0; background: none" ng-click="vm.addGroup()" class="pull-right"><span class="fa fa-plus"></span></button></h3>
                 </div>
                 <div class="panel-body" style="padding: 0">
-                    <ul class="list-group"  style="margin-bottom: 0" ng-if="vm.showAll">
-                        <a href="#" class="list-group-item" style="border-radius: 0">Bread</a>
+                    <div ng-repeat="group in vm.myGroups|orderBy:'createdAt'|limitTo: vm.myLength">
+                        <ul class="list-group"  style="margin-bottom: 0">
+                            <a ng-href="/group/{{group._id}}" class="list-group-item" style="border-radius: 0">{{group.groupName}}</a>
+                        </ul>
+                    </div>
+                    <ul class="list-group"  style="margin-bottom: 0" ng-if="!vm.myGroups.length">
+                        <li class="list-group-item">Bạn chưa có lớp học nào!</li>
                     </ul>
-                    <ul class="list-group"  style="margin-bottom: 0" ng-if="!vm.showAll">
-                        <a href="#" class="list-group-item" style="border-radius: 0">Orange</a>
-                    </ul>
-                    <ul class="list-group"  style="margin-bottom: 0" ng-if="!vm.listGroup">
+                    <div class="see-more" ng-if="vm.myGroups.length > 7" style="display: block;padding: 10px 15px; cursor: pointer" ng-click="vm.showAllMyGroup()">
+                        <div ng-if="!vm.showAllMy">Xem tất cả <span class="fa  fa-chevron-down pull-right" style="background: none;border: none;"></span></div>
+                        <div ng-if="vm.showAllMy">Thu gọn <span class="fa fa-chevron-up pull-right" style="background: none;border: none;"></span></div>
+                    </div>
+                </div>
+            </div>
+            <div class="panel panel-info">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Lớp học đã tham gia</h3>
+                </div>
+                <div class="panel-body" style="padding: 0">
+                    <div ng-repeat="group in vm.groupJoined|orderBy:'createdAt'|limitTo: vm.joinedLength">
+                        <ul class="list-group"  style="margin-bottom: 0">
+                            <a ng-href="/group/{{group._id}}" class="list-group-item" style="border-radius: 0">{{group.groupName}}</a>
+                        </ul>
+                    </div>
+                    <ul class="list-group"  style="margin-bottom: 0" ng-if="!vm.groupJoined.length">
                         <li class="list-group-item">Bạn chưa tham gia lớp học nào!</li>
                     </ul>
-                    <div class="see-more" style="display: block;padding: 10px 15px; cursor: pointer" ng-click="vm.showAllGroup()">
-                        <div ng-if="!vm.showAll">Xem tất cả <span class="fa  fa-chevron-down pull-right" style="background: none;border: none;"></span></div>
-                        <div ng-if="vm.showAll">Thu gọn <span class="fa fa-chevron-up pull-right" style="background: none;border: none;"></span></div>
+                    <div class="see-more" ng-if="vm.groupJoined.length > 7" style="display: block;padding: 10px 15px; cursor: pointer" ng-click="vm.showAllJoinedGroup()">
+                        <div ng-if="!vm.showAllJoined">Xem tất cả <span class="fa  fa-chevron-down pull-right" style="background: none;border: none;"></span></div>
+                        <div ng-if="vm.showAllJoined">Thu gọn <span class="fa fa-chevron-up pull-right" style="background: none;border: none;"></span></div>
                     </div>
                 </div>
             </div>
