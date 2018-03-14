@@ -106,9 +106,9 @@ exports.addGroup = function (req, res) {
                 message: "Không thể tạo lớp mới"
             })
         } else {
-            GroupTeacher({group: group._id, teacher: req.body.createdBy}).save(function (err) {
-                console.log(err);
-            })
+            // GroupTeacher({group: group._id, teacher: req.body.createdBy}).save(function (err) {
+            //     console.log(err);
+            // })
             if (teachers) {
                 teachers.forEach(function (item) {
                     var groupTeacher = new GroupTeacher({group: group._id, teacher: item._id});
