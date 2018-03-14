@@ -16,7 +16,6 @@ angular.module('core').controller('HomeController', ['$scope', '$http', 'Authent
 
         })
     };
-    vm.getJoinedGroup();
     vm.getMyGroup = function () {
         if (vm.auth.user.roles == 'teacher'){
             $http.get('/api/teacher/' + vm.auth.user._id + '/groups/getAllByUser').success(function(res) {
@@ -26,7 +25,10 @@ angular.module('core').controller('HomeController', ['$scope', '$http', 'Authent
             })
         }
     };
-    vm.getMyGroup();
+    if (vm.auth) {
+        vm.getJoinedGroup();
+        vm.getMyGroup();
+    }
     vm.addGroup = function() {
         var modalInstance = $modal.open({
             animation: false,
