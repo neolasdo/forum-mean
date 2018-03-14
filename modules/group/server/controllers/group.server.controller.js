@@ -28,7 +28,7 @@ exports.getAllJoined = function (req, res) {
                'message' : err,
                 'status' : 'error'
             });
-            return res.json({status:'success', 'data': grs});
+            return res.json({status:'success', 'data': grs.group});
         })
     }
     if (role == 'teacher') {
@@ -37,7 +37,7 @@ exports.getAllJoined = function (req, res) {
                 'message': err,
                 'status' : 'error'
             });
-            return res.json({status:'success', 'data': grs});
+            return res.json({status:'success', 'data': grs.group});
         })
     }
 };
@@ -99,15 +99,16 @@ exports.addGroup = function (req, res) {
 
     var teachers = req.body.teachers;
     var students = req.body.students;
-    GroupTeacher({group: group._id, teacher: req.body.createdBy}).save(function (err) {
-        console.log(err);
-    })
+
     group.save(function (err) {
         if (err){
             return res.status(400).send({
                 message: "Không thể tạo lớp mới"
             })
         } else {
+            GroupTeacher({group: group._id, teacher: req.body.createdBy}).save(function (err) {
+                console.log(err);
+            })
             if (teachers) {
                 teachers.forEach(function (item) {
                     var groupTeacher = new GroupTeacher({group: group._id, teacher: item._id});

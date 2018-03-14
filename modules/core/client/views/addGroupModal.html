@@ -35,7 +35,7 @@
                 <div class="row">
                     <div class="form-group col-md-6">
                         <label>Thêm giáo viên</label>
-                        <ui-select multiple required ng-model="vm.group.teacher" tagging-label="false" theme="bootstrap" tagging-tokens=",|/" comma-on-blur>
+                        <ui-select multiple required ng-model="vm.group.teachers" tagging-label="false" theme="bootstrap" tagging-tokens=",|/" comma-on-blur>
                             <ui-select-match placeholder="Thêm giáo viên giảng dạy trong lớp">{{$item.displayName}} &lt;{{$item.email}}&gt;</ui-select-match>
                             <ui-select-choices repeat="teacher in vm.teachers | filter: $select.search">
                                 <div>
