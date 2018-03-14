@@ -49,7 +49,9 @@ angular.module('core').controller('HomeController', ['$scope', '$http', 'Authent
         vm.getListTeacher = function () {
             $http.get('/api/users/getAllTeacher').then(function(res) {
                 vm.teachers = res.data;
-                var index = vm.teachers.findIndex(teacher => teacher._id === Authentication.user._id);
+                var index = vm.teachers.findIndex(function(teacher) {
+                    return teacher._id === Authentication.user._id;
+                });
                 vm.teachers.splice(index, 1);
             })
         };
