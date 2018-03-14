@@ -23,7 +23,7 @@ exports.getAllJoined = function (req, res) {
     var userId = req.params.userId;
     var role = req.params.role;
     if (role == 'student') {
-        GroupStudent.find({student : userId}).populate('group').exec(function (err, grs) {
+        GroupStudent.find({student : userId}).populate('group').select({secretCode: false}).exec(function (err, grs) {
             if (err) return res.status(400).send({
                'message' : err,
                 'status' : 'error'
@@ -32,7 +32,7 @@ exports.getAllJoined = function (req, res) {
         })
     }
     if (role == 'teacher') {
-        GroupTeacher.find({teacher : userId}).populate('group').exec(function (err, grs) {
+        GroupTeacher.find({teacher : userId}).populate('group').select({secretCode: false}).exec(function (err, grs) {
             if (err) return res.status(400).send({
                 'message': err,
                 'status' : 'error'
@@ -49,7 +49,7 @@ exports.getAllJoined = function (req, res) {
 exports.getById = function (req, res) {
     var groupId = req.params.id;
 
-    Group.findById(groupId).exec(function (err, grp) {
+    Group.findById(groupId).select({secretCode: false}).exec(function (err, grp) {
         if (err) return res.status(400).send({status: 'error',message: err});
         return res.json({status: 'success', 'data' : grp});
     })
@@ -61,7 +61,7 @@ exports.getById = function (req, res) {
  */
 exports.getAllByUser = function (req, res) {
     var userId = req.params.userId;
-    Group.find({createdBy: userId}).exec(function (err, grs) {
+    Group.find({createdBy: userId}).select({secretCode: false}).exec(function (err, grs) {
         if (err) return res.status(400).send({
             'message': err,
             'status' : 'error'
@@ -99,14 +99,9 @@ exports.addGroup = function (req, res) {
 
     var teachers = req.body.teachers;
     var students = req.body.students;
-    if (req.body.createdBy) {
-        var groupTeacher = new GroupTeacher({group: group._id, teacher: createdBy});
-        groupTeacher.save(function (err) {
-            if (err) return res.status(400).send({
-                message: "Có lỗi khi thêm giáo viên vào lớp"
-            });
-        });
-    }
+    GroupTeacher({group: group._id, teacher: req.body.createdBy}).save(function (err) {
+        console.log(err);
+    })
     group.save(function (err) {
         if (err){
             return res.status(400).send({
