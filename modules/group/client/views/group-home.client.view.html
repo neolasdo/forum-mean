@@ -1,0 +1,23 @@
+<section ng-controller="GroupHomeController as vm">
+  <div class="panel panel-success group-nav">
+    <div class="panel-heading">
+      <h3 class="panel-title"><span class="glyphicon glyphicon-pencil"></span>Tạo bài viết</a></h3>
+    </div>
+    <div class="panel-body" style="padding: 0; border-radius:0">
+      <div class="col-xs-12" id="new_status">
+        <div class="col-xs-12" id="post_content">
+          <text-angular  ta-toolbar="[['bold', 'italics', 'underline', 'strikeThrough', 'ul', 'ol', 'quote', 'insertImage','insertLink', 'charcount']]" ng-model="vm.newPost">
+          </text-angular>
+        </div>
+        <div class="col-xs-12" id="post_footer">
+          <button class="btn btn-primary pull-right" ng-click="vm.createPost()">Đăng bài viết</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="panel panel-default">
+    <div class="panel-body">
+      Home
+    </div>
+  </div>
+</section>

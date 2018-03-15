@@ -10,6 +10,11 @@ angular.module('core').controller('HomeController', ['$scope', '$http', 'Authent
     vm.myGroups = [];
     vm.myLength = 6;
     vm.joinedLength = 6;
+
+    if(vm.auth.user == ''){
+      $state.go('authentication.signin');
+    };
+
     vm.showAllMyGroup = function () {
         vm.showAllMy = ! vm.showAllMy;
         vm.myLength = (vm.showAllMy)? 'false': 6;
@@ -52,9 +57,6 @@ angular.module('core').controller('HomeController', ['$scope', '$http', 'Authent
             windowClass: 'AddGroupController',
         });
     }
-    if(vm.auth.user == ''){
-        $state.go('authentication.signin');
-    };
   }
 ]).controller('AddGroupController', ['$scope', '$http', 'Authentication','$state', 'toastr', '$modal', '$modalInstance', '$timeout', '$window', 'FileUploader',
     function($scope, $http, Authentication, $state, toastr, $modal, $modalInstance, $timeout, $window, FileUploader){

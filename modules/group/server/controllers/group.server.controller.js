@@ -49,7 +49,7 @@ exports.getAllJoined = function (req, res) {
 exports.getById = function (req, res) {
     var groupId = req.params.id;
 
-    Group.findById(groupId).select({secretCode: false}).exec(function (err, grp) {
+    Group.findById(groupId).exec(function (err, grp) {
         if (err) return res.status(400).send({status: 'error',message: err});
         return res.json({status: 'success', 'data' : grp});
     })

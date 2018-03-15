@@ -24,7 +24,7 @@
                 <div class="panel-body" style="padding: 0">
                     <div ng-repeat="group in vm.myGroups|orderBy:'createdAt'|limitTo: vm.myLength">
                         <ul class="list-group"  style="margin-bottom: 0">
-                            <a ng-href="/group/{{group._id}}" class="list-group-item" style="border-radius: 0">{{group.groupName}}</a>
+                            <a ng-href="/group/{{group._id}}/home" class="list-group-item" style="border-radius: 0">{{group.groupName}}</a>
                         </ul>
                     </div>
                     <ul class="list-group"  style="margin-bottom: 0" ng-if="!vm.myGroups.length">
@@ -43,7 +43,7 @@
                 <div class="panel-body" style="padding: 0">
                     <div ng-repeat="group in vm.groupJoined|orderBy:'createdAt'|limitTo: vm.joinedLength">
                         <ul class="list-group"  style="margin-bottom: 0">
-                            <a ng-href="/group/{{group._id}}" class="list-group-item" style="border-radius: 0">{{group.groupName}}</a>
+                            <a ng-href="/group/{{group._id}}/home" class="list-group-item" style="border-radius: 0">{{group.groupName}}</a>
                         </ul>
                     </div>
                     <ul class="list-group"  style="margin-bottom: 0" ng-if="!vm.groupJoined.length">

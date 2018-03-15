@@ -18,7 +18,8 @@
     "angular-toastr": "^2.1.1",
     "angular-aside-menu": "^1.5.1",
     "opentok-angular": "^2.1.0",
-    "angular-ui-select": "^0.19.8"
+    "angular-ui-select": "^0.19.8",
+    "textAngular": "^1.5.16"
   },
   "resolutions": {
     "angular": "~1.3"
