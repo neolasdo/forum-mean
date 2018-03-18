@@ -8,7 +8,10 @@
   GroupHomeController.$inject = ['$rootScope','$scope', '$http', '$stateParams', 'Authentication', '$state', '$modal', 'toastr', 'groupService'];
 
   function GroupHomeController($rootScope, $scope, $http, $stateParams, Authentication, $state, $modal, toastr, groupService) {
-    var vm = this;
+      var vm = this;
+      vm.auth = Authentication;
+
+      vm.groupId = $stateParams.id;
 
   }
 })();
