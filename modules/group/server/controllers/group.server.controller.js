@@ -21,15 +21,54 @@ var path = require('path'),
  * @param req
  * @param res
  */
-exports.getTopics = function (req, res) {
-    var groupId = req.params.id;
+exports.createComment = function (req, res) {
+    var topicId = req.body.topicId;
+    var userId = req.body.userId;
+    var content = req.body.content;
+    var comment = new Comment ({
+        createdBy: userId,
+        content: content,
+        topic: topicId
+    });
 
-    if (groupId) {
-        Topic.find({status: 1, group: groupId}).populate('comments').populate('createdBy', 'username displayName profileImageURL').exec(function (err, topics) {
+    comment.save(function (err, cmt) {
+        if  (err)  return res.status(400).send({
+            'status' : 'error',
+            'message' : err
+        });
+        Topic.findById(topicId).exec(function (err, topic) {
             if (err)  return res.status(400).send({
                 'status' : 'error',
                 'message' : err
             });
+            topic.comments.push(cmt._id);
+            topic.save(function (err, done) {
+                if (err)  return res.status(400).send({
+                    'status' : 'error',
+                    'message' : err
+                });
+                return res.json({'status' : 'success'});
+            })
+        })
+    })
+}
+/**
+ *
+ * @param req
+ * @param res
+ */
+exports.getTopics = function (req, res) {
+    var groupId = req.params.id;
+
+    if (groupId) {
+        Topic.find({status: 1, group: groupId})
+            .populate({path: 'comments', populate: { path: 'createdBy', select: { 'username': 1, 'displayName': 1, 'profileImageURL': 1}}})
+            .populate('createdBy', 'username displayName profileImageURL').exec(function (err, topics) {
+            if (err)  return res.status(400).send({
+                'status' : 'error',
+                'message' : err
+            });
+
             return res.json({'status' : 'success', 'data' : topics});
         })
     }

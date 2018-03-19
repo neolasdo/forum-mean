@@ -9,10 +9,6 @@ var mongoose = require('mongoose'),
  * Comment Schema
  */
 var CommentSchema = new Schema({
-    group: {
-        type: Schema.ObjectId,
-        ref: "Group",
-    },
     createdBy: {
         type: Schema.ObjectId,
         ref: "User",

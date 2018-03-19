@@ -13,4 +13,5 @@ module.exports = function(app) {
     app.route('/api/group/:id/topics').get(groups.getTopics);
     app.route('/api/topic/hide').put(groups.hideTopic);
     // app.route('/api/topic/:id').get(groups.getTopic);
+    app.route('/api/createComment').post(groups.createComment);
 };

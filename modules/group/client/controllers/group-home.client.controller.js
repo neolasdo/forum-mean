@@ -56,9 +56,19 @@
               })
           }
       }
-      vm.createComment = function (id, comment) {
-          console.log(id);
-          console.log(comment);
+      vm.createComment = function (id, content) {
+          if (content.length > 1 ){
+              groupService.createComment({topicId: id, userId: vm.auth.user._id, content: content}, function (res) {
+                  if (res.status == 'success') {
+                      toastr.success('Đã đăng bình luận của bạn');
+                      vm.getTopics();
+                  }
+              }, function (err) {
+                  console.log(err);
+              })
+          }else{
+              toastr.warning('Nội dung bình luận không được trống');
+          }
       }
   }
 })();

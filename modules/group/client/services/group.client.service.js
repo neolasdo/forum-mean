@@ -24,6 +24,10 @@
         hideTopic: {
             method: 'PUT',
             url: '/api/topic/hide'
+        },
+        createComment: {
+            method: 'POST',
+            url: '/api/createComment'
         }
     });
   }
