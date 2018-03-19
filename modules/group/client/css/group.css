@@ -135,3 +135,11 @@
 .post-footer-comment-wrapper{
     background-color:#F6F7F8;
 }
+i {  vertical-align: middle; }
+.table-users tbody tr:hover {
+    cursor: pointer;
+    background-color: #eee;
+}
+.nav-user-photo {
+    vertical-align: middle;
+}
