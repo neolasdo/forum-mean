@@ -41,6 +41,6 @@ GroupSchema.pre('save', function(next){
     next();
 });
 GroupSchema.methods.generateRandomCode = function(){
-    return  Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+    return  Math.random().toString(36).substring(2, 8).toUpperCase();
 }
 mongoose.model('Group', GroupSchema);

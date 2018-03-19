@@ -4,7 +4,6 @@ angular.module('group').controller('GroupController', ['$scope', '$http', '$stat
     function GroupController($scope, $http, $stateParams, Authentication, $state, $modal, toastr, groupService) {
         var vm = this;
         vm.auth = Authentication;
-
         vm.groupId = $stateParams.id;
         groupService.get({id: vm.groupId}, function (res){
           if (res.status == 'success') {
@@ -13,10 +12,13 @@ angular.module('group').controller('GroupController', ['$scope', '$http', '$stat
         })
 
         vm.resetCode = function () {
-
-        }
-        vm.createPost = function() {
-
+            groupService.resetCode({groupId : vm.groupId}, function (res){
+                if (res.status == 'success'){
+                    vm.groupInfo = res.data;
+                }
+            },function(err){
+                console.log(err);
+            })
         }
     }
 ]);

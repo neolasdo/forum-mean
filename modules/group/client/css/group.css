@@ -105,3 +105,33 @@
      /* min-height: 300px; */
      padding: 6px 12px;
  }
+
+
+/*-- Content Style --*/
+.post-footer-option li{
+    float:left;
+    margin-right:20px;
+    padding-bottom:10px;
+}
+
+.post-footer-option li a{
+    font-weight:500;
+    font-size:1.3rem;
+}
+
+.photo-profile{
+    border:1px solid #DDD;
+}
+
+.anchor-username h4{
+    font-weight:bold;
+}
+
+.anchor-time{
+    color:#ADB2BB;
+    font-size:1.2rem;
+}
+
+.post-footer-comment-wrapper{
+    background-color:#F6F7F8;
+}

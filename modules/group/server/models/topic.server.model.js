@@ -4,6 +4,7 @@
  * Module dependencies.
  */
 var mongoose = require('mongoose'),
+    Comment = mongoose.model('Comment'),
   Schema = mongoose.Schema;
 
 /**
@@ -14,21 +15,10 @@ var TopicSchema = new Schema({
         type: Schema.ObjectId,
         ref: "Group"
     },
-    name: {
-        type: String,
-        required: "Vui lòng nhập tên chủ đề"
-    },
     content: {
         type: String,
-        minlength: 10
+        minlength: 20
     },
-    attach: {
-        type: Schema.ObjectId,
-        ref: "Document"
-    },
-    img: [{
-        type: String,
-    }],
     status: {
         type: Number,
         min: 0,
@@ -41,10 +31,18 @@ var TopicSchema = new Schema({
         max: 1,
         default: 1
     },
+    createdBy:{
+        type:  Schema.ObjectId,
+        ref: "User"
+    },
     createdAt: {
         type: Date,
         default: Date.now()
-    }
+    },
+    comments: [{
+        type: Schema.ObjectId,
+        ref: "Comment"
+    }]
 });
 
 mongoose.model('Topic', TopicSchema);

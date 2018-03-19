@@ -9,11 +9,104 @@ var path = require('path'),
     multer = require('multer'),
     fs = require('fs'),
     Group = mongoose.model('Group'),
+    Topic = mongoose.model('Topic'),
+    Comment = mongoose.model('Comment'),
     GroupStudent = mongoose.model('GroupStudent'),
     GroupTeacher = mongoose.model('GroupTeacher'),
     errorHandler = require(path.resolve('./modules/core/server/controllers/errors.server.controller')),
   _ = require('lodash');
 
+/**
+ *
+ * @param req
+ * @param res
+ */
+exports.getTopics = function (req, res) {
+    var groupId = req.params.id;
+
+    if (groupId) {
+        Topic.find({status: 1, group: groupId}).populate('comments').populate('createdBy', 'username displayName profileImageURL').exec(function (err, topics) {
+            if (err)  return res.status(400).send({
+                'status' : 'error',
+                'message' : err
+            });
+            return res.json({'status' : 'success', 'data' : topics});
+        })
+    }
+}
+/**
+ *
+ * @param req
+ * @param res
+ */
+exports.hideTopic = function (req, res) {
+    var id = req.body.id;
+
+    Topic.findById(id).exec(function (err, topic) {
+        if (err) return res.status(400).send({
+            'status' : 'error',
+            'message' : err
+        });
+        topic.set({status : 0});
+        topic.save(function (err, updatedTopic) {
+            if (err) return res.status(400).send({
+                'status' : 'error',
+                'message' : err
+            });
+            return res.json({'status' : 'success'});
+        });
+    })
+}
+/**
+ *
+ * @param req
+ * @param res
+ */
+exports.createTopic = function (req, res) {
+    var groupId = req.body.groupId;
+    var topic = req.body.topic;
+    var userId = req.body.user;
+
+    if (groupId && topic.content) {
+        var topic = new Topic({
+            group: groupId,
+            content: topic.content,
+            comments: [],
+            createdBy: userId
+        });
+        topic.save(function (err, topic) {
+            if (err) return res.status(400).send({
+                'status' : 'error',
+                'message' : err
+            });
+            return res.json({'status' : 'success', 'data' : topic});
+        })
+    }
+}
+/**
+ *
+ * @param req
+ * @param res
+ */
+exports.resetCode = function (req, res) {
+    var groupId = req.body.groupId;
+
+    Group.findById(groupId).exec(function (err, group) {
+        if (err) return res.status(400).send({
+            'status' : 'error',
+            'message' : err
+        });
+        var code = group.generateRandomCode();
+        group.set({secretCode : code});
+        group.save(function (err, updatedGroup) {
+            if (err) return res.status(400).send({
+                'status' : 'error',
+                'message' : err
+            });
+            return res.json({'status' : 'success', 'data' : updatedGroup});
+        });
+    })
+}
 /**
  *
  * @param req
