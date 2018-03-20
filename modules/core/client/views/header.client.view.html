@@ -9,7 +9,7 @@
     <a ui-sref="home" class="navbar-brand">EClass</a>
   </div>
   <nav class="collapse navbar-collapse" collapse="!isCollapsed" role="navigation">
-    <form class="navbar-form navbar-left" role="search" novalidate>
+    <form class="navbar-form navbar-left" role="search" novalidate  ng-show="authentication.user">
       <div class="form-group">
         <input type="text" class="form-control" ng-model="searchKey" placeholder="Tìm kiếm lớp học">
       </div>
@@ -63,3 +63,33 @@
     </ul>
   </nav>
 </div>
+
+
+<script type="text/ng-template" id="search-result-modal.html">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" ng-click="vm.close()"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">Kết quả tìm kiếm</h4>
+    </div>
+    <div class="modal-body">
+        <div class="table-container">
+            <table class="table-users table" border="0">
+                <tbody>
+                <tr ng-repeat="group in vm.groups | orderBy: -createdAt">
+                    <td width="10" align="center">
+                        <img class="pull-left img-circle nav-user-photo" width="50" ng-src="{{group.image?group.image:'modules/group/client/img/profile/default.png'}}"/>  
+                    </td>
+                    <td>
+                        <a ng-href="/group/{{group._id}}/home">{{group.groupName}}</a>
+                    </td>
+                    <td>
+                        {{group.information}}
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="modal-footer text-right">
+        <button class="btn btn-default" ng-click="vm.close()">Đóng</button>
+    </div>
+</script>

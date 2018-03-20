@@ -99,10 +99,11 @@ exports.getTopic = function (req, res) {
  * @param res
  */
 exports.findClass = function (req, res) {
-    var topicId = req.params.key;
-
-
-
+    var key = req.params.key;
+    Group.find({groupName:{$regex: new RegExp(key, "i")}}).select({secretCode: false}).exec(function(err, groups) {
+        if (err) return res.status(400).send({status: 'error',message: err});
+        return res.json({status: 'success', 'data' : groups});
+    });
 }
 /**
  *
