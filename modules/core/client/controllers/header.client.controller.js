@@ -1,7 +1,7 @@
 'use strict';
 
-angular.module('core').controller('HeaderController', ['$scope', '$state', 'Authentication', 'Menus',
-  function ($scope, $state, Authentication, Menus) {
+angular.module('core').controller('HeaderController', ['$scope', '$state', 'Authentication', 'Menus', 'groupService',
+  function ($scope, $state, Authentication, Menus, groupService) {
     // Expose view variables
     $scope.$state = $state;
     $scope.authentication = Authentication;
@@ -21,7 +21,11 @@ angular.module('core').controller('HeaderController', ['$scope', '$state', 'Auth
     });
 
     $scope.searchClass = function(key) {
+      groupService.search({key:key}, function() {
 
+      },function (err) {
+          console.log(err);
+      })
     }
   }
 ]);

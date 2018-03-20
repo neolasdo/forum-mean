@@ -98,6 +98,17 @@ exports.getTopic = function (req, res) {
  * @param req
  * @param res
  */
+exports.findClass = function (req, res) {
+    var topicId = req.params.key;
+
+
+
+}
+/**
+ *
+ * @param req
+ * @param res
+ */
 exports.hideTopic = function (req, res) {
     var id = req.body.id;
 

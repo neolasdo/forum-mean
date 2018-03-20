@@ -13,6 +13,10 @@
             method: 'PUT',
             url: '/api/group/resetCode'
         },
+        search : {
+            method: 'GET',
+            url: '/api/group/find/:key'
+        },
         createTopic: {
             method: 'POST',
             url: 'api/group/createTopic'

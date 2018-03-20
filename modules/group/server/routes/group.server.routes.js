@@ -8,6 +8,7 @@ module.exports = function(app) {
     app.route('/api/:role/:userId/groups/getAllByUser').get(groups.getAllByUser);
     app.route('/api/addGroup').post(groups.addGroup);
     app.route('/api/group/:id').get(groups.getById);
+    app.route('/api/group/find/:key').get(groups.findClass);
     app.route('/api/group/resetCode').put(groups.resetCode);
     app.route('/api/group/createTopic').post(groups.createTopic);
     app.route('/api/group/:id/topics').get(groups.getTopics);
