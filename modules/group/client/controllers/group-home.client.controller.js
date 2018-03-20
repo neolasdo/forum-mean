@@ -10,6 +10,10 @@
 
   function GroupHomeController($rootScope, $scope, $http, $stateParams, Authentication, $state, $modal, toastr, groupService) {
       var vm = this;
+      moment.locale('vi');
+      vm.getTimeAgo = function (time) {
+          return moment(time).fromNow();
+      };
       vm.auth = Authentication;
       vm.newTopic = {};
       vm.topics = {};
@@ -77,7 +81,7 @@
               templateUrl: 'view-topic.html',
               controller: 'ViewTopicController',
               controllerAs: 'vm',
-              size: 'md',
+              size: 'lg',
               windowClass: 'ViewTopicController',
               resolve: {
                   data: topic
@@ -93,7 +97,10 @@
   function ViewTopicController($rootScope, $scope, $http, $stateParams, Authentication, $state, $modalInstance, toastr, groupService, data) {
       var vm = this;
       vm.auth = Authentication;
-
+      moment.locale('vi');
+      vm.getTimeAgo = function (time) {
+          return moment(time).fromNow();
+      };
       vm.topic = data;
       vm.newComment = null;
       vm.hideTopic = function(id) {

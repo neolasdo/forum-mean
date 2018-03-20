@@ -104,6 +104,7 @@
      height: auto;
      /* min-height: 300px; */
      padding: 6px 12px;
+    min-height: unset;
  }
 
 
@@ -149,4 +150,14 @@ i {  vertical-align: middle; }
 }
 .comments-list .media{
     border-bottom: 1px dotted #ccc;
+}
+.time-ago {
+    font-size: 11px;
+}
+.comment-content{
+    padding: 0 20px;
+    box-sizing: border-box;
+}
+.comment-info {
+    padding-bottom: 10px;
 }

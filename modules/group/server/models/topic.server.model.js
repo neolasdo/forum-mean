@@ -15,6 +15,11 @@ var TopicSchema = new Schema({
         type: Schema.ObjectId,
         ref: "Group"
     },
+    like: {
+        type: Number,
+        min: 0,
+        default: 0
+    },
     content: {
         type: String,
         minlength: 20

@@ -19,6 +19,8 @@ module.exports = {
         'public/lib/angular-file-upload/angular-file-upload.js',
         'public/lib/owasp-password-strength-test/owasp-password-strength-test.js',
         'public/lib/*/dist/*.js',
+        'public/lib/moment/moment.js',
+        'public/lib/moment/locale/vi.js',
         'public/lib/opentok-layout-js/opentok-layout.js',
         'public/lib/opentok-angular/opentok-angular.js'
       ],
