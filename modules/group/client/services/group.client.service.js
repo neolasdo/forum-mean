@@ -28,7 +28,11 @@
         createComment: {
             method: 'POST',
             url: '/api/createComment'
-        }
+        },
+        getTopic: {
+            method: 'GET',
+            url: 'api/topics/:topicId'
+        },
     });
   }
 })();

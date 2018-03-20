@@ -69,6 +69,9 @@
                 </div>
                 </div>
               </div>
+            <div class="show-all text-center" style="padding-top: 15px" ng-if="topic.comments.length > 5">
+              <a href="#" ng-click="vm.viewTopic(topic)">Xem tất cả</a>
+            </div>
             </div>
           </div>
         </div>
@@ -76,3 +79,63 @@
     </div>
   </div>
 </section>
+
+<script type="text/ng-template" id="view-topic.html">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close" ng-click="vm.close()"><span aria-hidden="true">&times;</span></button>
+    <h4 class="modal-title">Bài viết</h4>
+  </div>
+  <div class="modal-body">
+    <a href="#">
+      <img ng-src="{{vm.topic.createdBy.profileImageURL?vm.topic.createdBy.profileImageURL:'/modules/users/client/img/profile/default.png'}}" alt="{{vm.topic.createdBy.displayName}}" class="header-profile-image" />
+      {{vm.topic.createdBy.displayName}}
+    </a>
+    <div ta-bind ng-model="vm.topic.content" style="padding-top: 20px"></div>
+    <div class="options">
+      <hr>
+      <div class="post-footer-option col-xs-12">
+        <ul class="list-unstyled">
+          <li><a href="#"><i class="glyphicon glyphicon-thumbs-up"></i> Thích</a> <span>(30)</span></li>
+          <li><a href="#"><i class="fa fa-sticky-note"></i> Note</a></li>
+          <li><a href="#" ng-click="vm.hideTopic(vm.topic._id)"><i class="fa fa-eye" ng-if="vm.topic.createdBy._id == vm.auth.user._id || vm.auth.user._id == vm.groupInfo.createdBy"></i> Ẩn</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="newComment">
+      <hr>
+      <div class="input-group">
+        <input type="text" name="comment" class="form-control" ng-model="vm.newComment" title="Bình luận" placeholder="Bình luận">
+        <span class="input-group-btn">
+          <button class="btn btn-secondary" type="button" ng-disabled="!vm.newComment" ng-click="vm.createComment(vm.topic._id, vm.newComment)">Gửi</button>
+        </span>
+      </div>
+    </div>
+    <div class="comments" style="max-height: 300px;overflow-x: hidden;overflow-y: scroll;" ng-if="vm.topic.comments.length" style="margin-top: 5px">
+      <div class="row">
+        <div class="col-sm-12">
+          <div class="page-header">
+            <h3><small class="pull-right">{{vm.topic.comments.length+' bình luận'}}</small> Bình luận </h3>
+          </div>
+          <div class="comments-list" ng-repeat="comment in vm.topic.comments |  orderBy:'-createdAt'" style="padding-top: 10px">
+            <div class="media">
+              <div class="col-xs-1">
+                <img ng-src="{{comment.createdBy.profileImageURL?comment.createdBy.profileImageURL:'/modules/users/client/img/profile/default.png'}}" alt="{{comment.createdBy.displayName}}" class="header-profile-image"/>
+              </div>
+              <div class="col-xs-11">
+                <a href="#">
+                  {{comment.createdBy.displayName}}
+                </a>
+                {{comment.content}}
+
+                <p><small><a href="#" ng-click="">Thích </a><span>({{comment.like}})</span></small></p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer text-right">
+    <button class="btn btn-default" ng-click="vm.close()">Đóng</button>
+  </div>
+</script>

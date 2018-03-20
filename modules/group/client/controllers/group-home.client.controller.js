@@ -3,9 +3,10 @@
 
   angular
     .module('group')
-    .controller('GroupHomeController', GroupHomeController);
+    .controller('GroupHomeController', GroupHomeController).controller('ViewTopicController', ViewTopicController);
 
   GroupHomeController.$inject = ['$rootScope','$scope', '$http', '$stateParams', 'Authentication', '$state', '$modal', 'toastr', 'groupService'];
+  ViewTopicController.$inject = ['$rootScope','$scope', '$http', '$stateParams', 'Authentication', '$state', '$modalInstance', 'toastr', 'groupService', 'data'];
 
   function GroupHomeController($rootScope, $scope, $http, $stateParams, Authentication, $state, $modal, toastr, groupService) {
       var vm = this;
@@ -70,5 +71,69 @@
               toastr.warning('Nội dung bình luận không được trống');
           }
       }
+      vm.viewTopic = function (topic) {
+          var modalInstance = $modal.open({
+              animation: false,
+              templateUrl: 'view-topic.html',
+              controller: 'ViewTopicController',
+              controllerAs: 'vm',
+              size: 'md',
+              windowClass: 'ViewTopicController',
+              resolve: {
+                  data: topic
+              }
+          });
+
+          modalInstance.result.then(function () {
+              vm.getTopics();
+          })
+      }
+  }
+
+  function ViewTopicController($rootScope, $scope, $http, $stateParams, Authentication, $state, $modalInstance, toastr, groupService, data) {
+      var vm = this;
+      vm.auth = Authentication;
+
+      vm.topic = data;
+      vm.newComment = null;
+      vm.hideTopic = function(id) {
+          if(confirm('Bạn có chắc muốn ẩn bài viết?')){
+              groupService.hideTopic({id: id}, function (res) {
+                  if (res.status == 'success'){
+                      toastr.success('Ẩn bài viết thành công');
+                      vm.close();
+                  }
+              }, function (er) {
+                  console.log(er);
+              })
+          }
+      }
+      vm.createComment = function (id, content) {
+          if (content.length > 1 ){
+              groupService.createComment({topicId: id, userId: vm.auth.user._id, content: content}, function (res) {
+                  if (res.status == 'success') {
+                      toastr.success('Đã đăng bình luận của bạn');
+                      vm.getTopic();
+                      vm.newComment = null;
+                  }
+              }, function (err) {
+                  console.log(err);
+              })
+          }else{
+              toastr.warning('Nội dung bình luận không được trống');
+          }
+      }
+      vm.getTopic = function () {
+          groupService.getTopic({topicId : vm.topic._id}, function (res){
+              if (res.status == 'success' && res.data){
+                  vm.topic = res.data;
+              }
+          },function(err){
+              console.log(err);
+          })
+      };
+      vm.close = function () {
+          $modalInstance.close();
+      };
   }
 })();

@@ -78,6 +78,26 @@ exports.getTopics = function (req, res) {
  * @param req
  * @param res
  */
+exports.getTopic = function (req, res) {
+    var topicId = req.params.topicId;
+
+    Topic.findOne({status: 1, _id: topicId})
+        .populate({path: 'comments', populate: { path: 'createdBy', select: { 'username': 1, 'displayName': 1, 'profileImageURL': 1}}})
+        .populate('createdBy', 'username displayName profileImageURL').exec(function (err, topic) {
+        if (err)  return res.status(400).send({
+            'status' : 'error',
+            'message' : err
+        });
+
+        return res.json({'status' : 'success', 'data' : topic});
+    })
+
+}
+/**
+ *
+ * @param req
+ * @param res
+ */
 exports.hideTopic = function (req, res) {
     var id = req.body.id;
 
