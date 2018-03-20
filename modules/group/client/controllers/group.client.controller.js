@@ -12,13 +12,15 @@ angular.module('group').controller('GroupController', ['$scope', '$http', '$stat
         })
 
         vm.resetCode = function () {
-            groupService.resetCode({groupId : vm.groupId}, function (res){
-                if (res.status == 'success'){
-                    vm.groupInfo = res.data;
-                }
-            },function(err){
-                console.log(err);
-            })
+            if(confirm('Thay đổi mã bảo mật?')){
+                groupService.resetCode({groupId : vm.groupId}, function (res){
+                    if (res.status == 'success'){
+                        vm.groupInfo = res.data;
+                    }
+                },function(err){
+                    console.log(err);
+                })
+            }
         }
     }
 ]);
