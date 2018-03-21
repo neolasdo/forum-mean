@@ -77,6 +77,7 @@
               }
           })
       }
+      vm.getListStudent();
       vm.save = function() {
           if (vm.add.length){
               groupService.addStudents({id: vm.groupId}, {students : vm.add}, function (res) {

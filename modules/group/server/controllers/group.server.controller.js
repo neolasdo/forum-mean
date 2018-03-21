@@ -354,29 +354,39 @@ exports.addGroup = function (req, res) {
             // GroupTeacher({group: group._id, teacher: req.body.createdBy}).save(function (err) {
             //     console.log(err);
             // })
-            if (teachers) {
-                teachers.forEach(function (item) {
-                    var groupTeacher = new GroupTeacher({group: group._id, teacher: item._id});
-                    groupTeacher.save(function (err) {
-                        if (err) return res.status(400).send({
-                            message: "Có lỗi khi thêm giáo viên vào lớp"
+            var promises = [];
+            var syncMember = function () {
+                if (teachers) {
+                    teachers.forEach(function (item) {
+                        var groupTeacher = new GroupTeacher({group: group._id, teacher: item._id});
+                        groupTeacher.save(function (err) {
+                            if (err) return res.status(400).send({
+                                message: "Có lỗi khi thêm giáo viên vào lớp"
+                            });
                         });
                     });
-                });
-            }
-            if (students) {
-                students.forEach(function (item) {
-                    var groupStudent = new GroupStudent({group: group._id, student: item._id});
-                    groupStudent.save(function (err) {
-                        if (err) return res.status(400).send({
-                            message: "Có lỗi khi thêm học sinh vào lớp"
+                }
+                if (students) {
+                    students.forEach(function (item) {
+                        var groupStudent = new GroupStudent({group: group._id, student: item._id});
+                        groupStudent.save(function (err) {
+                            if (err) return res.status(400).send({
+                                message: "Có lỗi khi thêm học sinh vào lớp"
+                            });
                         });
                     });
-                });
+                }
             }
-            return res.json({
-                'status' : 'success',
-                'group': group
+            promises.push(syncMember());
+            Promise.all(promises).then(function() {
+                return res.json({
+                    'status' : 'success',
+                    'group': group
+                });
+            }).catch(function (err){
+                return res.status(400).send({
+                    message: "Lỗi khi thêm thành viên"
+                })
             });
         }
     })
