@@ -3,7 +3,7 @@
         <div class="panel-heading" style="height: 40px;">
             <div class="col-xs-3"><h3 class="panel-title">Học viên</h3></div>
             <div class="col-xs-9">
-                <button style="border: 0; background: none" ng-click="vm.addStudents()" class="pull-right"><span class="fa fa-plus"></span></button>
+                <button style="border: 0; background: none" ng-if="vm.groupInfo.createdBy._id == vm.auth.user._id" ng-click="vm.addStudents()" class="pull-right"><span class="fa fa-plus"></span></button>
             </div>
         </div>
         <div class="panel-body">
@@ -22,6 +22,9 @@
                         </td>
                         <td align="center">
                             Điểm:  {{data.point?data.point: 'Chưa có'}}
+                        </td>
+                        <td ng-if="vm.groupInfo.createdBy._id == vm.auth.user._id" >
+                            <button class="btn btn-danger" ng-click="vm.removeStudent(data.student._id)"><i class="fa fa-trash"></i></button>
                         </td>
                     </tr>
                     </tbody>

@@ -102,6 +102,7 @@ input{
   font-weight: 300;
 }
 .main{
+  min-height: calc(100vh - 100px);
   padding: 50px 20px 0px 20px;
   background: #E9EBEE;
 }

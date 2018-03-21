@@ -79,7 +79,7 @@
                         <img class="pull-left img-circle nav-user-photo" width="50" ng-src="{{group.image?group.image:'modules/group/client/img/profile/default.png'}}"/>  
                     </td>
                     <td>
-                        <a ng-href="/group/{{group._id}}/home">{{group.groupName}}</a>
+                        <a ng-href="/group-info/{{group._id}}" ng-click="vm.close()">{{group.groupName}}</a>
                     </td>
                     <td>
                         {{group.information}}

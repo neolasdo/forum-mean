@@ -31,6 +31,19 @@
           })
       }
       vm.getStudents();
+      vm.removeStudent = function(id) {
+          if(confirm('Bạn có chắc muốn xóa học viên này?'))
+          {
+              groupService.removeStudent({id: vm.groupId, uid: id}, function(res) {
+                  if(res.status == 'success') {
+                      toastr.success('Đã xóa thành công');
+                      $state.reload();
+                  }
+              }, function (err) {
+                  console.log(err)
+              })
+          }
+      }
       vm.addStudents = function() {
           var modalInstance = $modal.open({
               animation: false,
@@ -82,7 +95,6 @@
           if (vm.add.length){
               groupService.addStudents({id: vm.groupId}, {students : vm.add}, function (res) {
                   if(res.status == 'success'){
-
                       toastr.success('Thêm thành công');
                       vm.close();
                   }

@@ -69,20 +69,20 @@
         <div class="panel-body statics">
           <ul style="padding: 0">
             <li>
-              <p class="statics-count"><i class="fa fa-question-circle"></i> <span ng-bind="vm.countTopics"></span></p>
+              <p class="statics-count"><i class="fa fa-question-circle"></i> <span ng-bind="vm.count.topics"></span></p>
               <p>Bài viết</p>
             </li>
             <li>
-              <p class="statics-count"><i class="fa fa-comments"></i> <span ng-bind="vm.countComments"></span></p>
+              <p class="statics-count"><i class="fa fa-comments"></i> <span ng-bind="vm.count.comments"></span></p>
               <p>Bình luận</p>
             </li>
             <li>
-              <p class="statics-count"><i class="fa fa-tags"></i> <span ng-bind="vm.countDocuments"></span></p>
-              <p>Tài liệu</p>
+              <p class="statics-count"><i class="fa fa-user-secret"></i> <span ng-bind="vm.count.teachers+1"></span></p>
+              <p>Giáo viên</p>
             </li>
             <li>
-              <p class="statics-count"><i class="fa fa-users"></i> <span ng-bind="vm.countUsers"></span></p>
-              <p>Thành viên</p>
+              <p class="statics-count"><i class="fa fa-user"></i> <span ng-bind="vm.count.students"></span></p>
+              <p>Học viên</p>
             </li>
           </ul>
         </div>

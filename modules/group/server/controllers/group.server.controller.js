@@ -195,7 +195,7 @@ exports.getAllJoined = function (req, res) {
                'message' : err,
                 'status' : 'error'
             });
-            return res.json({status:'success', 'data': grs.group});
+            return res.json({status:'success', 'data': grs});
         })
     }
     if (role == 'teacher') {
@@ -204,7 +204,7 @@ exports.getAllJoined = function (req, res) {
                 'message': err,
                 'status' : 'error'
             });
-            return res.json({status:'success', 'data': grs.group});
+            return res.json({status:'success', 'data': grs});
         })
     }
 };
@@ -225,6 +225,91 @@ exports.getById = function (req, res) {
     })
 }
 /**
+ * check join group
+ * @param req
+ * @param res
+ */
+exports.checkJoined = function (req, res) {
+    var groupId = req.params.id;
+    var uid = req.params.uid;
+
+    Group.findById(groupId).exec(function (err, grp) {
+        if (err) return res.status(400).send({status: 'error',message: err});
+        else {
+            if (grp.createdBy != uid) {
+                GroupStudent.find({group:groupId, student:uid}).exec(function(err, gs){
+                    if (err) return res.status(400).send({status: 'error',message: err});
+                    if (gs.length > 0) return res.json({'status' : 'success'});
+                })
+                GroupTeacher.find({group:groupId, teacher:uid}).exec(function(err, gt){
+                    if (err) return res.status(400).send({status: 'error',message: err});
+                    if (gt.length > 0) return res.json({'status' : 'success'});
+                });
+                return res.json({'status' : 'wrong'});
+            }
+            if (grp.createdBy == uid) return res.json({'status' : 'success'});
+        }
+    })
+}
+/**
+ * join group by id
+ * @param req
+ * @param res
+ */
+exports.joinGroup = function (req, res) {
+    var groupId = req.body.id;
+    var code = req.body.code;
+    var userId = req.body.userId;
+
+    Group.findById(groupId).exec(function (err, grp) {
+        if (err) return res.status(400).send({status: 'error',message: err});
+        if(grp.secretCode == code) {
+            var groupStudent = new GroupStudent({group: groupId, student: userId});
+            groupStudent.save(function (err, gs) {
+                if (err) return res.status(400).send({
+                    message: "Có lỗi"
+                });
+                return res.json({
+                    'status' : 'success',
+                    'data': gs
+                });
+            });
+        } else {
+            return res.json({
+                'status' : 'wrong',
+            });
+        }
+    })
+}
+/**
+ *
+ * @param req
+ * @param res
+ */
+exports.removeStudent = function (req, res) {
+    var gid = req.body.id;
+    var uid = req.body.uid;
+
+    GroupStudent.remove({group: gid, student: uid}, function (err) {
+        if (err) return res.status(400).send({message: "Có lỗi"});
+        return res.json({'status' : 'success'});
+    });
+}
+/**
+ *
+ * @param req
+ * @param res
+ */
+exports.removeTeacher = function (req, res) {
+    var gid = req.body.id;
+    var uid = req.body.uid;
+
+    GroupTeacher.remove({group: gid, teacher: uid}, function (err) {
+        if (err) return res.status(400).send({message: "Có lỗi"});
+        return res.json({'status' : 'success'});
+    });
+}
+/**
  * count group by id
  * @param req
  * @param res
@@ -232,45 +317,35 @@ exports.getById = function (req, res) {
 exports.count = function (req, res) {
     var groupId = req.params.id;
     if (groupId) {
-        var count = [];
-        var promises = [];
-        promises.push(function () {
-            GroupStudent.find({group:groupId}).populate({
-                path: 'student',
-                select: {password:0, salt: 0}
-            }).exec(function(err, students){
-                if (err) return res.status(400).send({status: 'error',message: err});
-                count.push({students: students.length})
-            })
+        var count = {};
+        GroupStudent.find({group:groupId}).populate({
+            path: 'student',
+            select: {password:0, salt: 0}
+        }).exec(function(err, students){
+            if (err) return res.status(400).send({status: 'error',message: err});
+            count.students= students.length;
             GroupTeacher.find({group:groupId}).populate({
                 path: 'teacher',
                 select: {password:0, salt: 0}
             }).exec(function(err, teachers){
                 if (err) return res.status(400).send({status: 'error',message: err});
-                count.push({teachers: teachers.length});
-
+                count.teachers= teachers.length;
+                Topic.find({status: 1, group: groupId}).populate('comments').exec(function (err, topics) {
+                    if (err)  return res.status(400).send({'status' : 'error', 'message' : err});
+                    if(topics.length){
+                        count.comments = 0;
+                        topics.forEach(function (item) {
+                            count.comments += item.comments.length;
+                        })
+                    }
+                    count.topics= topics.length;
+                    return res.json({
+                        'status' : 'success',
+                        'data': count
+                    });
+                });
             })
-            Topic.find({status: 1, group: groupId}).populate('comments').exec(function (err, topics) {
-                if (err)  return res.status(400).send({'status' : 'error', 'message' : err});
-                if(topics.length){
-                    count.comments = 0;
-                    topics.forEach(function (item) {
-                        count.comments += item.comments.length;
-                    })
-                }
-                count.push({topics: topics.length});
-            });
-        });
-        Promise.all(promises).then(function() {
-            return res.json({
-                'status' : 'success',
-                'data': count
-            });
-        }).catch(function (err){
-            return res.status(400).send({
-                message: err
-            })
-        });
+        })
     }
 }
 /**

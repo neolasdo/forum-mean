@@ -32,6 +32,18 @@
             })
         }
         vm.getTeachers();
+        vm.removeTeacher = function(id) {
+            if(confirm('Bạn có chắc muốn xóa giáo viên này?'))
+            {
+                groupService.removeTeacher({id: vm.groupId, uid: id}, function(res) {
+                    if(res.status == 'success') {
+                        toastr.success('Đã xóa thành công');
+                        $state.reload();                    }
+                }, function (err) {
+                    console.log(err)
+                })
+            }
+        }
         vm.addTeachers = function () {
             var modalInstance = $modal.open({
                 animation: false,

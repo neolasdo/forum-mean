@@ -169,3 +169,8 @@ i {  vertical-align: middle; }
 .statics .statics-count{font-size: 34px; font-family: 'RobotoBold'; margin-bottom: 0;}
 .statics .statics-count .fa{font-size: 28px; opacity: 0.3;}
 .statics li:hover .fa{opacity: 1;}
+.group-info{
+    background: #fff;
+    min-height: 200px;
+    margin-bottom: 30px;
+}

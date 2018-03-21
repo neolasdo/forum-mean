@@ -1,0 +1,45 @@
+<section ng-controller="GroupInfoController as vm" class="main">
+  <div class="row group-info" >
+    <div class="col-sm-3" style="padding: 15px;">
+      <img ng-src="{{vm.groupInfo.image?vm.groupInfo.image:'modules/group/client/img/profile/default.png'}}" alt="Class Logo" class="img-thumbnail" style="border: 1px solid #ddd; padding: 5px">
+    </div>
+    <div class="col-sm-6">
+      <h2>
+        {{vm.groupInfo.groupName}}
+      </h2>
+
+    </div>
+    <div class="col-sm-3">
+      <div class="panel panel-success">
+        <div class="panel-body statics">
+          <ul style="padding: 0">
+            <li>
+              <p class="statics-count"><i class="fa fa-question-circle"></i> <span ng-bind="vm.count.topics?vm.count.topics: 0"></span></p>
+              <p>Bài viết</p>
+            </li>
+            <li>
+              <p class="statics-count"><i class="fa fa-comments"></i> <span ng-bind="vm.count.comments?vm.count.comments:'0'"></span></p>
+              <p>Bình luận</p>
+            </li>
+            <li>
+              <p class="statics-count"><i class="fa fa-user-secret"></i> <span ng-bind="vm.count.teachers+1"></span></p>
+              <p>Giáo viên</p>
+            </li>
+            <li>
+              <p class="statics-count"><i class="fa fa-user"></i> <span ng-bind="vm.count.students"></span></p>
+              <p>Học viên</p>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row" style="padding-bottom: 50px">
+    <div class="col-xs-6 col-xs-offset-3">
+        <form novalidate>
+            <input ng-model="vm.code" class="form-control" placeholder="Mã bảo mật" style="margin-bottom: 20px">
+            <button type="submit" class="btn btn-primary col-xs-6 col-xs-offset-3" ng-click="vm.join()">Tham gia</button>
+        </form>
+    </div>
+  </div>
+</section>

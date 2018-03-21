@@ -7,7 +7,11 @@ module.exports = function(app) {
     app.route('/api/:role/:userId/groups/getAllJoined').get(groups.getAllJoined);
     app.route('/api/:role/:userId/groups/getAllByUser').get(groups.getAllByUser);
     app.route('/api/addGroup').post(groups.addGroup);
+    app.route('/api/joinGroup').post(groups.joinGroup);
+    app.route('/api/removeTeacher').post(groups.removeTeacher);
+    app.route('/api/removeStudent').post(groups.removeStudent);
     app.route('/api/group/:id').get(groups.getById);
+    app.route('/api/group/:id/user/:uid').get(groups.checkJoined);
     app.route('/api/group/:id/count').get(groups.count);
     app.route('/api/group/:id/students').get(groups.getListStudent);
     app.route('/api/group/:id/addStudents').post(groups.addStudents);

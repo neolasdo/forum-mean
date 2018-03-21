@@ -34,6 +34,9 @@
                         <td>
                             {{data.teacher.email}}
                         </td>
+                        <td ng-if="vm.groupInfo.createdBy._id == vm.auth.user._id" >
+                            <button class="btn btn-danger" ng-click="vm.removeTeacher(data.teacher._id)"><i class="fa fa-trash"></i></button>
+                        </td>
                     </tr>
                     </tbody>
                 </table>

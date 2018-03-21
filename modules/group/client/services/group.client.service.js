@@ -17,6 +17,22 @@
             method: 'GET',
             url: '/api/group/find/:key'
         },
+        checkJoined : {
+            method: 'GET',
+            url: '/api/group/:id/user/:uid'
+        },
+        join : {
+            method: 'POST',
+            url: '/api/joinGroup'
+        },
+        removeStudent : {
+            method: 'POST',
+            url: '/api/removeStudent'
+        },
+        removeTeacher : {
+            method: 'POST',
+            url: '/api/removeTeacher'
+        },
         count : {
             method: 'GET',
             url: '/api/group/:id/count'

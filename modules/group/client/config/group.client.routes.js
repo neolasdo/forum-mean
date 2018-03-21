@@ -10,6 +10,10 @@
 
   function routeConfig($stateProvider) {
       $stateProvider
+        .state('group-info', {
+            url: '/group-info/:id',
+            templateUrl: 'modules/group/client/views/group-info.client.view.html'
+        })
         .state('group', {
             url: '/group/:id',
             abstract: true,
