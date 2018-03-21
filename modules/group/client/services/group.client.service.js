@@ -17,6 +17,22 @@
             method: 'GET',
             url: '/api/group/find/:key'
         },
+        getStudents : {
+            method: 'GET',
+            url: '/api/group/:id/students'
+        },
+        getTeachers : {
+            method: 'GET',
+            url: '/api/group/:id/teachers'
+        },
+        addStudents : {
+            method: 'POST',
+            url: '/api/group/:id/addStudents'
+        },
+        addTeachers : {
+            method: 'POST',
+            url: '/api/group/:id/addTeachers'
+        },
         createTopic: {
             method: 'POST',
             url: 'api/group/createTopic'

@@ -213,9 +213,90 @@ exports.getAllJoined = function (req, res) {
 exports.getById = function (req, res) {
     var groupId = req.params.id;
 
-    Group.findById(groupId).exec(function (err, grp) {
+    Group.findById(groupId).populate({
+        path: 'createdBy',
+        select: {password:0, salt: 0}
+    }).exec(function (err, grp) {
         if (err) return res.status(400).send({status: 'error',message: err});
         return res.json({status: 'success', 'data' : grp});
+    })
+}
+/**
+ * get group by id
+ * @param req
+ * @param res
+ */
+exports.getListStudent = function (req, res) {
+    var groupId = req.params.id;
+
+    GroupStudent.find({group:groupId}).populate({
+        path: 'student',
+        select: {password:0, salt: 0}
+    }).exec(function(err, students){
+        if (err) return res.status(400).send({status: 'error',message: err});
+        return res.json({status: 'success', 'data' : students});
+    })
+}
+/**
+ * get group by id
+ * @param req
+ * @param res
+ */
+exports.addTeachers = function (req, res) {
+    var groupId = req.params.id;
+    var teachers = req.body.teachers;
+    if (teachers) {
+        teachers.forEach(function (item) {
+            var groupTeacher = new GroupTeacher({group: groupId, teacher: item._id});
+            groupTeacher.save(function (err) {
+                if (err) return res.status(400).send({
+                    message: "Có lỗi khi thêm giáo viên vào lớp"
+                });
+
+                return res.json({
+                    'status' : 'success',
+                });
+            });
+        });
+    }
+
+}
+/**
+ * get group by id
+ * @param req
+ * @param res
+ */
+exports.addStudents = function (req, res) {
+    var groupId = req.params.id;
+    var students = req.body.students;
+    if (students) {
+        students.forEach(function (item) {
+            var groupStudent = new GroupStudent({group: groupId, student: item._id});
+            groupStudent.save(function (err) {
+                if (err) return res.status(400).send({
+                    message: "Có lỗi khi thêm học sinh vào lớp"
+                });
+                return res.json({
+                    'status' : 'success',
+                });
+            });
+        });
+    }
+}
+/**
+ * get group by id
+ * @param req
+ * @param res
+ */
+exports.getListTeacher = function (req, res) {
+    var groupId = req.params.id;
+
+    GroupTeacher.find({group:groupId}).populate({
+        path: 'teacher',
+        select: {password:0, salt: 0}
+    }).exec(function(err, teachers){
+        if (err) return res.status(400).send({status: 'error',message: err});
+        return res.json({status: 'success', 'data' : teachers});
     })
 }
 /**

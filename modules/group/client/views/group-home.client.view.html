@@ -19,6 +19,11 @@
       </div>
     </div>
   </div>
+  <div class="panel panel-default" ng-if="vm.topics.length == 0">
+    <div class="panel-body">
+      Không có bài viết nào
+    </div>
+  </div>
   <div ng-repeat="topic in vm.topics | orderBy:'-createdAt'" class="panel panel-default">
     <div class="panel-heading">
       <a href="#">

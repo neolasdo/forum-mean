@@ -3,7 +3,7 @@
         <div class="panel-heading" style="height: 40px;">
             <div class="col-xs-3"><h3 class="panel-title">Giáo viên</h3></div>
             <div class="col-xs-9">
-                <button style="border: 0; background: none" ng-click="vm.addTeacher()" class="pull-right"><span class="fa fa-plus"></span></button>
+                <button style="border: 0; background: none" ng-click="vm.addTeachers()" class="pull-right"><span class="fa fa-plus"></span></button>
             </div>
         </div>
         <div class="panel-body">
@@ -11,31 +11,28 @@
                 <table class="table-users table" border="0">
                     <tbody>
                     <tr>
-                        <td width="10" align="center">
-                            <i class="fa fa-2x fa-user fw"></i>
+                        <td width="10">
+                            <img class="pull-left img-circle nav-user-photo" width="50" ng-src="{{vm.groupInfo.createdBy.profileImageURL?vm.groupInfo.createdBy.profileImageURL:'/modules/users/client/img/profile/default.png'}}" />  
                         </td>
                         <td>
-                            John Smith<br><i class="fa fa-envelope"></i>
+                            {{vm.groupInfo.createdBy.displayName}}
                         </td>
                         <td>
-                            Builder Admin
+                            {{vm.groupInfo.createdBy.email}}
                         </td>
-                        <td align="center">
-                            Last Login:  6/14/2017<br><small class="text-muted">2 days ago</small>
+                        <td>
+                            <span class="label label-danger">Chủ nhiệm</span>
                         </td>
                     </tr>
-                    <tr>
+                    <tr ng-repeat="data in vm.teachers">
                         <td width="10">
-                            <img class="pull-left img-circle nav-user-photo" width="50" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSxhcCYW4QDWMOjOuUTxOd50KcJvK-rop9qE9zRltSbVS_bO-cfWA" />  
+                            <img class="pull-left img-circle nav-user-photo" width="50" src="{{data.student.profileImageURL?data.student.profileImageURL:'/modules/users/client/img/profile/default.png'}}" />  
                         </td>
                         <td>
-                            Herbert Hoover<br><i class="fa fa-envelope"></i>
+                            {{data.teacher.displayName}}
                         </td>
                         <td>
-                            Builder Sales Agent
-                        </td>
-                        <td align="center">
-                            Last Login:  6/10/2017<br><small class="text-muted">5 days ago</small>
+                            {{data.teacher.email}}
                         </td>
                     </tr>
                     </tbody>
@@ -44,3 +41,30 @@
         </div>
     </div>
 </section>
+
+
+<script type="text/ng-template" id="add-teachers-modal.html">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" ng-click="vm.close()"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">Thêm giáo viên</h4>
+    </div>
+    <div class="modal-body">
+        <div class="row">
+            <div class="form-group col-md-12">
+                <ui-select multiple required ng-model="vm.add" tagging-label="false" theme="bootstrap" tagging-tokens=",|/" comma-on-blur>
+                    <ui-select-match placeholder="Chọn hoặc tìm kiếm giáo viên">{{$item.displayName}} &lt;{{$item.email}}&gt;</ui-select-match>
+                    <ui-select-choices repeat="teacher in vm.teachers | filter: $select.search">
+                        <div>
+                            <span ng-bind="teacher.displayName | highlight: $select.search"></span>
+                            &lt;<span ng-bind="teacher.email | highlight: $select.search"></span>&gt;
+                        </div>
+                    </ui-select-choices>
+                </ui-select>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer text-right">
+        <button class="btn btn-success" ng-disabled="!vm.add.length" ng-click="vm.save()">Thêm</button>
+        <button class="btn btn-default" ng-click="vm.close()">Đóng</button>
+    </div>
+</script>
