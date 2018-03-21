@@ -24,7 +24,7 @@
           </div>
           <div class="info">
             <p class="text-left">Code: <span style="color: #000; font-size: 1em;">{{vm.groupInfo.secretCode}}</span>
-              <button ng-if="vm.groupInfo.createdBy == vm.auth.user._id" style="border: 0; background: none" ng-click="vm.resetCode()" class="pull-right"><span class="fas fa-history"></span></button>
+              <button ng-if="vm.groupInfo.createdBy._id == vm.auth.user._id" style="border: 0; background: none" ng-click="vm.resetCode()" class="pull-right"><span class="fas fa-history"></span></button>
             </p>
             <div class="nav-tabs">
               <div class="list-heading" ui-sref="group.home">
@@ -66,11 +66,25 @@
     </div>
     <div class="col-sm-3">
       <div class="panel panel-success">
-        <div class="panel-heading">
-          <h3 class="panel-title">Panel title</h3>
-        </div>
-        <div class="panel-body">
-          Panel body ...
+        <div class="panel-body statics">
+          <ul style="padding: 0">
+            <li>
+              <p class="statics-count"><i class="fa fa-question-circle"></i> <span ng-bind="vm.countTopics"></span></p>
+              <p>Bài viết</p>
+            </li>
+            <li>
+              <p class="statics-count"><i class="fa fa-comments"></i> <span ng-bind="vm.countComments"></span></p>
+              <p>Bình luận</p>
+            </li>
+            <li>
+              <p class="statics-count"><i class="fa fa-tags"></i> <span ng-bind="vm.countDocuments"></span></p>
+              <p>Tài liệu</p>
+            </li>
+            <li>
+              <p class="statics-count"><i class="fa fa-users"></i> <span ng-bind="vm.countUsers"></span></p>
+              <p>Thành viên</p>
+            </li>
+          </ul>
         </div>
       </div>
     </div>

@@ -26,8 +26,23 @@ var DocumentSchema = new Schema({
     image: {
         type: String,
         default: 'modules/group/client/img/document/default.jpeg'
+    },
+    group: {
+        type: Schema.ObjectId,
+        ref: "Group"
+    },
+    uploadBy: {
+        type: Schema.ObjectId,
+        ref: "User"
+    },
+    uploadAt: {
+        type: Date,
+        default: Date.now()
+    },
+    desc: {
+        type: String,
+        default: ''
     }
-
 });
 
 mongoose.model('Document', DocumentSchema);

@@ -161,3 +161,11 @@ i {  vertical-align: middle; }
 .comment-info {
     padding-bottom: 10px;
 }
+.statics li{display: block; list-style: none; width: 50%; height: 80px; float: left; text-align: center; font-size: 15px; color: #fff;}
+.statics li:nth-child(1){background-color: #1abc9c;}
+.statics li:nth-child(2){background-color: #2ecc71;}
+.statics li:nth-child(3){background-color: #f1c40f;}
+.statics li:nth-child(4){background-color: #e67e22;}
+.statics .statics-count{font-size: 34px; font-family: 'RobotoBold'; margin-bottom: 0;}
+.statics .statics-count .fa{font-size: 28px; opacity: 0.3;}
+.statics li:hover .fa{opacity: 1;}

@@ -162,7 +162,10 @@ exports.createTopic = function (req, res) {
 exports.resetCode = function (req, res) {
     var groupId = req.body.groupId;
 
-    Group.findById(groupId).exec(function (err, group) {
+    Group.findById(groupId).populate({
+        path: 'createdBy',
+        select: {password:0, salt: 0}
+    }).exec(function (err, group) {
         if (err) return res.status(400).send({
             'status' : 'error',
             'message' : err
@@ -220,6 +223,55 @@ exports.getById = function (req, res) {
         if (err) return res.status(400).send({status: 'error',message: err});
         return res.json({status: 'success', 'data' : grp});
     })
+}
+/**
+ * count group by id
+ * @param req
+ * @param res
+ */
+exports.count = function (req, res) {
+    var groupId = req.params.id;
+    if (groupId) {
+        var count = [];
+        var promises = [];
+        promises.push(function () {
+            GroupStudent.find({group:groupId}).populate({
+                path: 'student',
+                select: {password:0, salt: 0}
+            }).exec(function(err, students){
+                if (err) return res.status(400).send({status: 'error',message: err});
+                count.push({students: students.length})
+            })
+            GroupTeacher.find({group:groupId}).populate({
+                path: 'teacher',
+                select: {password:0, salt: 0}
+            }).exec(function(err, teachers){
+                if (err) return res.status(400).send({status: 'error',message: err});
+                count.push({teachers: teachers.length});
+
+            })
+            Topic.find({status: 1, group: groupId}).populate('comments').exec(function (err, topics) {
+                if (err)  return res.status(400).send({'status' : 'error', 'message' : err});
+                if(topics.length){
+                    count.comments = 0;
+                    topics.forEach(function (item) {
+                        count.comments += item.comments.length;
+                    })
+                }
+                count.push({topics: topics.length});
+            });
+        });
+        Promise.all(promises).then(function() {
+            return res.json({
+                'status' : 'success',
+                'data': count
+            });
+        }).catch(function (err){
+            return res.status(400).send({
+                message: err
+            })
+        });
+    }
 }
 /**
  * get group by id

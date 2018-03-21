@@ -75,6 +75,12 @@
               toastr.warning('Nội dung bình luận không được trống');
           }
       }
+      vm.likeTopic = function (id) {
+          console.log(id)
+      }
+      vm.likeComment = function (id) {
+          console.log(id)
+      }
       vm.viewTopic = function (topic) {
           var modalInstance = $modal.open({
               animation: false,

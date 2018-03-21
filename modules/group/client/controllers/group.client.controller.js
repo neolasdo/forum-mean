@@ -10,7 +10,14 @@ angular.module('group').controller('GroupController', ['$scope', '$http', '$stat
               vm.groupInfo = res.data;
           }
         })
-
+        vm.count = function() {
+            groupService.count({id: vm.groupId}, function (res){
+                if (res.status == 'success') {
+                    vm.count = res.data;
+                }
+            })
+        }
+        vm.count();
         vm.resetCode = function () {
             if(confirm('Thay đổi mã bảo mật?')){
                 groupService.resetCode({groupId : vm.groupId}, function (res){

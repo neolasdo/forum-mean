@@ -39,7 +39,7 @@
         <hr>
         <div class="post-footer-option col-xs-12">
           <ul class="list-unstyled">
-            <li><a href="#"><i class="glyphicon glyphicon-thumbs-up"></i> Thích</a> <span>({{topic.like?topic.like:'0'}})</span></li>
+            <!--<li><a href="#" ng-click="vm.likeTopic(topic._id)"><i class="glyphicon glyphicon-thumbs-up"></i> Thích</a> <span>({{topic.like?topic.like:'0'}})</span></li>-->
             <li><a href="#"><i class="fa fa-sticky-note"></i> Note</a></li>
             <li><a href="#" ng-click="vm.hideTopic(topic._id)"><i class="fa fa-eye" ng-if="topic.createdBy._id == vm.auth.user._id || vm.auth.user._id == vm.groupInfo.createdBy"></i> Ẩn</a></li>
           </ul>
@@ -78,7 +78,7 @@
                     {{comment.content}}
                   </div>
                   <div class="action col-xs-12">
-                    <p><small><a href="#" ng-click="">Thích </a><span>({{comment.like}})</span></small></p>
+                    <!--<p><small><a href="#" ng-click="vm.likeComment(comment._id)">Thích </a><span>({{comment.like}})</span></small></p>-->
                   </div>
                 </div>
                 </div>

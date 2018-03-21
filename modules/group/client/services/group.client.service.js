@@ -17,6 +17,10 @@
             method: 'GET',
             url: '/api/group/find/:key'
         },
+        count : {
+            method: 'GET',
+            url: '/api/group/:id/count'
+        },
         getStudents : {
             method: 'GET',
             url: '/api/group/:id/students'
