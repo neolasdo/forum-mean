@@ -7,6 +7,7 @@ module.exports = function(app) {
     app.route('/api/:role/:userId/groups/getAllJoined').get(groups.getAllJoined);
     app.route('/api/:role/:userId/groups/getAllByUser').get(groups.getAllByUser);
     app.route('/api/addGroup').post(groups.addGroup);
+    app.route('/api/uploadDocument').post(groups.uploadDocument);
     app.route('/api/joinGroup').post(groups.joinGroup);
     app.route('/api/removeTeacher').post(groups.removeTeacher);
     app.route('/api/removeStudent').post(groups.removeStudent);

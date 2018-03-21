@@ -69,6 +69,10 @@
             method: 'POST',
             url: '/api/createComment'
         },
+        uploadFile: {
+            method: 'POST',
+            url: '/api/uploadDocument'
+        },
         getTopic: {
             method: 'GET',
             url: 'api/topics/:topicId'

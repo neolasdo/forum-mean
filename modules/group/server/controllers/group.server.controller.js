@@ -286,6 +286,19 @@ exports.joinGroup = function (req, res) {
  * @param req
  * @param res
  */
+exports.uploadDocument = function (req, res) {
+    var document = req.body.file;
+    var uid = req.body.uid;
+    var gid = req.body.gid;
+    var desc = req.body.desc;
+    var name = req.body.name;
+
+}
+/**
+ *
+ * @param req
+ * @param res
+ */
 exports.removeStudent = function (req, res) {
     var gid = req.body.id;
     var uid = req.body.uid;
