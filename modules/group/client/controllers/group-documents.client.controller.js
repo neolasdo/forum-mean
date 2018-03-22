@@ -10,32 +10,46 @@
   function GroupDocumentsController($rootScope, $scope, $http, $stateParams, Authentication, $state, $modal, toastr, groupService, FileUploader) {
       var vm = this;
       vm.auth = Authentication;
-
+      vm.fileInfo = {};
       vm.groupId = $stateParams.id;
       vm.readFile = function(){
           if (this.files && this.files[0]) {
               var FR= new FileReader();
               FR.readAsDataURL( this.files[0] );
+              vm.fileInfo.fileName = this.files[0].name;
+              vm.fileInfo.extension = vm.getExtension(vm.fileInfo.fileName);
+
               FR.addEventListener("load", function(e) {
-                  vm.file = e.target.result;
-                  vm.uploadFile();
+                  vm.fileInfo.file = e.target.result;
               });
           }
+      };
+      vm.getExtension = function(filename) {
+          return typeof filename != "undefined" ? filename.substring(filename.lastIndexOf(".")+1, filename.length).toLowerCase() : false;
       }
       vm.chooseFile = function () {
-
           var input = document.querySelector('input[type=file]');
           input.click();
           input.addEventListener("change", vm.readFile);
-          console.log(input.val);
       }
       vm.uploadFile = function() {
-          var file = vm.file;
-          groupService.uploadFile({uid: vm.auth.user._id, gid: vm.groupId, file: file, desc: vm.desc, name: vm.name}, function (res) {
+          var file = vm.fileInfo;
+          if (file.name && file.file) {
+              var extensions = ['doc', 'docx', 'txt', 'pdf', 'xlsx', 'ppt', 'xls', 'ppsx', 'pps', 'ppt', 'rtf', 'xml', 'html'];
+              if(extensions.indexOf(file.extension) > -1) {
+                  groupService.uploadFile({uid: vm.auth.user._id, gid: vm.groupId, file: file}, function (res) {
 
-          }, function (err) {
-              console.log(err);
-          })
+                  }, function (err) {
+                      console.log(err);
+                  })
+              }else {
+                  toastr.warning('Định dạng file không được hỗ trợ');
+              }
+
+          }else {
+              toastr.warning('Bạn phải chọn và nhập tên file');
+          }
+
       }
   }
 })();
