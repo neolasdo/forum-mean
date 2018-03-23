@@ -8,7 +8,6 @@ var path = require('path'),
     config = require(path.resolve('./config/config')),
     multer = require('multer'),
     fs = require('fs'),
-    decode64 = require('base64').decode,
     Group = mongoose.model('Group'),
     Topic = mongoose.model('Topic'),
     Comment = mongoose.model('Comment'),
@@ -293,16 +292,7 @@ exports.uploadDocument = function (req, res) {
     var uid = req.body.uid;
     var gid = req.body.gid;
     var path = config.uploads.groupDocument.dest+fileInfo.fileName;
-    var buffer = new Buffer(data, 'base64');
-    // fs.writeFileSync(path, decode64(buffer), 'binary', function (err, callback) {
-    //     if (err) return res.status(400).send({message: "Có lỗi"});
-    // });
-    // var document =new Document({ name: fileInfo.name, url: path, group: gid, uploadBy: uid, desc: fileInfo.desc});
-    //
-    // document.save(function (err) {
-    //     if (err) return res.status(400).send({message: "Có lỗi"});
-    //     return res.json({'status' : 'success', 'path': path});
-    // })
+
 }
 /**
  *

@@ -27,6 +27,15 @@
       vm.getExtension = function(filename) {
           return typeof filename != "undefined" ? filename.substring(filename.lastIndexOf(".")+1, filename.length).toLowerCase() : false;
       }
+      function dataURLtoFile(dataurl) {
+          var arr = dataurl.split(','), mime = arr[0].match(/:(.*?);/)[1],
+              bstr = atob(arr[1]), n = bstr.length, u8arr = new Uint8Array(n);
+          while(n--){
+              u8arr[n] = bstr.charCodeAt(n);
+          }
+          var blob = new Blob([u8arr], {type:mime});
+          return blob;
+      }
       vm.chooseFile = function () {
           var input = document.querySelector('input[type=file]');
           input.click();
@@ -35,16 +44,12 @@
       vm.uploadFile = function() {
           var file = vm.fileInfo;
           if (file.name && file.file) {
-              var extensions = ['doc', 'docx', 'txt', 'pdf', 'xlsx', 'ppt', 'xls', 'ppsx', 'pps', 'ppt', 'rtf', 'xml', 'html'];
-              if(extensions.indexOf(file.extension) > -1) {
-                  groupService.uploadFile({uid: vm.auth.user._id, gid: vm.groupId, file: file}, function (res) {
+              file.file = dataURLtoFile(file.file);
+              groupService.uploadFile({uid: vm.auth.user._id, gid: vm.groupId, file: file}, function (res) {
 
-                  }, function (err) {
-                      console.log(err);
-                  })
-              }else {
-                  toastr.warning('Định dạng file không được hỗ trợ');
-              }
+              }, function (err) {
+                  console.log(err);
+              })
 
           }else {
               toastr.warning('Bạn phải chọn và nhập tên file');
