@@ -13,7 +13,6 @@ var path = require('path'),
     Comment = mongoose.model('Comment'),
     Document = mongoose.model('Document'),
     GroupStudent = mongoose.model('GroupStudent'),
-    GroupTeacher = mongoose.model('GroupTeacher'),
     errorHandler = require(path.resolve('./modules/core/server/controllers/errors.server.controller')),
   _ = require('lodash');
 
@@ -199,15 +198,6 @@ exports.getAllJoined = function (req, res) {
             return res.json({status:'success', 'data': grs});
         })
     }
-    if (role == 'teacher') {
-        GroupTeacher.find({teacher : userId}).populate('group').select({secretCode: false}).exec(function (err, grs) {
-            if (err) return res.status(400).send({
-                'message': err,
-                'status' : 'error'
-            });
-            return res.json({status:'success', 'data': grs});
-        })
-    }
 };
 /**
  * get group by id
@@ -242,10 +232,6 @@ exports.checkJoined = function (req, res) {
                     if (err) return res.status(400).send({status: 'error',message: err});
                     if (gs.length > 0) return res.json({'status' : 'success'});
                 })
-                GroupTeacher.find({group:groupId, teacher:uid}).exec(function(err, gt){
-                    if (err) return res.status(400).send({status: 'error',message: err});
-                    if (gt.length > 0) return res.json({'status' : 'success'});
-                });
                 return res.json({'status' : 'wrong'});
             }
             if (grp.createdBy == uid) return res.json({'status' : 'success'});
@@ -309,20 +295,6 @@ exports.removeStudent = function (req, res) {
     });
 }
 /**
- *
- * @param req
- * @param res
- */
-exports.removeTeacher = function (req, res) {
-    var gid = req.body.id;
-    var uid = req.body.uid;
-
-    GroupTeacher.remove({group: gid, teacher: uid}, function (err) {
-        if (err) return res.status(400).send({message: "Có lỗi"});
-        return res.json({'status' : 'success'});
-    });
-}
-/**
  * count group by id
  * @param req
  * @param res
@@ -337,27 +309,20 @@ exports.count = function (req, res) {
         }).exec(function(err, students){
             if (err) return res.status(400).send({status: 'error',message: err});
             count.students= students.length;
-            GroupTeacher.find({group:groupId}).populate({
-                path: 'teacher',
-                select: {password:0, salt: 0}
-            }).exec(function(err, teachers){
-                if (err) return res.status(400).send({status: 'error',message: err});
-                count.teachers= teachers.length;
-                Topic.find({status: 1, group: groupId}).populate('comments').exec(function (err, topics) {
-                    if (err)  return res.status(400).send({'status' : 'error', 'message' : err});
-                    if(topics.length){
-                        count.comments = 0;
-                        topics.forEach(function (item) {
-                            count.comments += item.comments.length;
-                        })
-                    }
-                    count.topics= topics.length;
-                    return res.json({
-                        'status' : 'success',
-                        'data': count
-                    });
+            Topic.find({status: 1, group: groupId}).populate('comments').exec(function (err, topics) {
+                if (err)  return res.status(400).send({'status' : 'error', 'message' : err});
+                if(topics.length){
+                    count.comments = 0;
+                    topics.forEach(function (item) {
+                        count.comments += item.comments.length;
+                    })
+                }
+                count.topics= topics.length;
+                return res.json({
+                    'status' : 'success',
+                    'data': count
                 });
-            })
+            });
         })
     }
 }
@@ -377,30 +342,7 @@ exports.getListStudent = function (req, res) {
         return res.json({status: 'success', 'data' : students});
     })
 }
-/**
- * get group by id
- * @param req
- * @param res
- */
-exports.addTeachers = function (req, res) {
-    var groupId = req.params.id;
-    var teachers = req.body.teachers;
-    if (teachers) {
-        teachers.forEach(function (item) {
-            var groupTeacher = new GroupTeacher({group: groupId, teacher: item._id});
-            groupTeacher.save(function (err) {
-                if (err) return res.status(400).send({
-                    message: "Có lỗi khi thêm giáo viên vào lớp"
-                });
 
-                return res.json({
-                    'status' : 'success',
-                });
-            });
-        });
-    }
-
-}
 /**
  * get group by id
  * @param req
@@ -422,22 +364,6 @@ exports.addStudents = function (req, res) {
             });
         });
     }
-}
-/**
- * get group by id
- * @param req
- * @param res
- */
-exports.getListTeacher = function (req, res) {
-    var groupId = req.params.id;
-
-    GroupTeacher.find({group:groupId}).populate({
-        path: 'teacher',
-        select: {password:0, salt: 0}
-    }).exec(function(err, teachers){
-        if (err) return res.status(400).send({status: 'error',message: err});
-        return res.json({status: 'success', 'data' : teachers});
-    })
 }
 /**
  *
@@ -496,16 +422,6 @@ exports.addGroup = function (req, res) {
             // })
             var promises = [];
             var syncMember = function () {
-                if (teachers) {
-                    teachers.forEach(function (item) {
-                        var groupTeacher = new GroupTeacher({group: group._id, teacher: item._id});
-                        groupTeacher.save(function (err) {
-                            if (err) return res.status(400).send({
-                                message: "Có lỗi khi thêm giáo viên vào lớp"
-                            });
-                        });
-                    });
-                }
                 if (students) {
                     students.forEach(function (item) {
                         var groupStudent = new GroupStudent({group: group._id, student: item._id});

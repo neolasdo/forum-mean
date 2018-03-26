@@ -34,13 +34,13 @@
             </div>
             <div class="nav-tabs">
               <div class="list-heading" ui-sref="group.students">
-                  Học viên
+                  Thành viên
                 <span class="pull-right"><i class="fa fa-angle-right"></i></span>
               </div>
             </div>
-            <div class="nav-tabs">
-              <div class="list-heading" ui-sref="group.teachers">
-                Giáo viên
+            <div class="nav-tabs" ng-if="vm.groupInfo.createdBy._id == vm.auth.user._id">
+              <div class="list-heading" ui-sref="group.assigments">
+                Bài kiểm tra
                 <span class="pull-right"><i class="fa fa-angle-right"></i></span>
               </div>
             </div>
@@ -77,8 +77,8 @@
               <p>Bình luận</p>
             </li>
             <li>
-              <p class="statics-count"><i class="fa fa-user-secret"></i> <span ng-bind="vm.count.teachers+1"></span></p>
-              <p>Giáo viên</p>
+              <p class="statics-count"><i class="fa fa-file"></i> <span ng-bind="vm.count.teachers+1"></span></p>
+              <p>Assigment</p>
             </li>
             <li>
               <p class="statics-count"><i class="fa fa-user"></i> <span ng-bind="vm.count.students"></span></p>

@@ -27,24 +27,11 @@
       </div>
       <div class="col-md-10">
         <div class="row">
-          <div class="form-group col-md-12">
+          <div class="form-group col-md-6">
             <label class="required">Tên lớp học *</label>
             <input type="text" ng-model="vm.group.groupName" class="form-control">
           </div>
-        </div>
-        <div class="row">
-          <div class="form-group col-md-6">
-            <label>Thêm giáo viên</label>
-            <ui-select multiple required ng-model="vm.group.teachers" tagging-label="false" theme="bootstrap" tagging-tokens=",|/" comma-on-blur>
-              <ui-select-match placeholder="Thêm giáo viên giảng dạy trong lớp">{{$item.displayName}} &lt;{{$item.email}}&gt;</ui-select-match>
-              <ui-select-choices repeat="teacher in vm.teachers | filter: $select.search">
-                <div>
-                  <span ng-bind="teacher.displayName | highlight: $select.search"></span>
-                  &lt;<span ng-bind="teacher.email | highlight: $select.search"></span>&gt;
-                </div>
-              </ui-select-choices>
-            </ui-select>
-          </div>
+
           <div class="form-group col-md-6">
             <label>Thêm học sinh</label>
             <ui-select multiple required ng-model="vm.group.students" tagging-label="false" theme="bootstrap" tagging-tokens=",|/" comma-on-blur>

@@ -7,7 +7,7 @@ module.exports = {
     keywords: 'mongodb, express, angularjs, node.js, mongoose, passport',
     googleAnalyticsTrackingID: process.env.GOOGLE_ANALYTICS_TRACKING_ID || 'GOOGLE_ANALYTICS_TRACKING_ID'
   },
-  port: process.env.PORT || 3000,
+  port: process.env.PORT || 3300,
   templateEngine: 'swig',
   // Session Cookie settings
   sessionCookie: {
@@ -39,7 +39,13 @@ module.exports = {
     groupUpload: {
         dest: './modules/group/client/img/uploads/', // group upload destination path
         limits: {
-            fileSize: 5*1024*1024 // Max file size in bytes (1 MB)
+            fileSize: 5*1024*1024 // Max file size in bytes (5 MB)
+        }
+    },
+    groupDocument: {
+        dest: './modules/group/client/file/uploads/', // group upload destination path
+        limits: {
+            fileSize: 100*1024*1024 // Max file size in bytes (100 MB)
         }
     }
   }

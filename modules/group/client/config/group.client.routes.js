@@ -30,9 +30,9 @@
             url: '/students',
             templateUrl: 'modules/group/client/views/group-students.client.view.html',
         })
-        .state('group.teachers', {
-            url: '/teachers',
-            templateUrl: 'modules/group/client/views/group-teachers.client.view.html',
+        .state('group.assigments', {
+            url: '/assigments',
+            templateUrl: 'modules/group/client/views/group-assigments.client.view.html',
         })
         .state('group.videos', {
             url: '/videos',

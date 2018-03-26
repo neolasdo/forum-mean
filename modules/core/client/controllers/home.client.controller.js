@@ -24,13 +24,15 @@ angular.module('core').controller('HomeController', ['$scope', '$http', 'Authent
         vm.joinedLength = (vm.showAllJoined)? 'false': 6;
     };
     vm.getJoinedGroup = function () {
-        $http.get('/api/'+ vm.auth.user.roles + '/' + vm.auth.user._id + '/groups/getAllJoined').success(function(res) {
-            if(res.status == 'success' && res.data){
-                vm.groupJoined = res.data;
-            }
-        }).error(function (err) {
-            console.log(err);
-        })
+        if (vm.auth.user.roles) {
+            $http.get('/api/student/' + vm.auth.user._id + '/groups/getAllJoined').success(function(res) {
+                if(res.status == 'success' && res.data){
+                    vm.groupJoined = res.data;
+                }
+            }).error(function (err) {
+                console.log(err);
+            })
+        }
     };
     vm.getMyGroup = function () {
         if (vm.auth.user.roles == 'teacher'){
@@ -61,23 +63,13 @@ angular.module('core').controller('HomeController', ['$scope', '$http', 'Authent
 ]).controller('AddGroupController', ['$scope', '$http', 'Authentication','$state', 'toastr', '$modal', '$modalInstance', '$timeout', '$window', 'FileUploader',
     function($scope, $http, Authentication, $state, toastr, $modal, $modalInstance, $timeout, $window, FileUploader){
         var vm = this;
-        vm.teachers = [];
         vm.imageURL = '';
-        vm.getListTeacher = function () {
-            $http.get('/api/users/getAllTeacher').then(function(res) {
-                vm.teachers = res.data;
-                var index = vm.teachers.findIndex(function(teacher) {
-                    return teacher._id === Authentication.user._id;
-                });
-                vm.teachers.splice(index, 1);
-            })
-        };
+
         vm.getListStudent = function () {
             $http.get('/api/users/getAllStudent').then(function(res) {
                 vm.students = res.data;
             })
         }
-        vm.getListTeacher();
         vm.getListStudent();
         vm.group = {};
         vm.user = Authentication.user;

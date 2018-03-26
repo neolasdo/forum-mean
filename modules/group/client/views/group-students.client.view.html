@@ -10,6 +10,21 @@
             <div class="table-container">
                 <table class="table-users table" border="0">
                     <tbody>
+                    <tr>
+                        <td width="10">
+                            <img class="pull-left img-circle nav-user-photo" width="50" ng-src="{{vm.groupInfo.createdBy.profileImageURL?vm.groupInfo.createdBy.profileImageURL:'/modules/users/client/img/profile/default.png'}}" />  
+                        </td>
+                        <td>
+                            {{vm.groupInfo.createdBy.displayName}}
+                        </td>
+                        <td>
+                            {{vm.groupInfo.createdBy.email}}
+                        </td>
+                        <td></td>
+                        <td>
+                            <span class="label label-danger">Chủ nhiệm</span>
+                        </td>
+                    </tr>
                     <tr ng-repeat="data in vm.students">
                         <td width="10" align="center">
                             <img class="pull-left img-circle nav-user-photo" width="50" ng-src="{{data.student.profileImageURL?data.student.profileImageURL:'/modules/users/client/img/profile/default.png'}}" />  
