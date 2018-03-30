@@ -83,7 +83,7 @@
       }
       vm.viewTopic = function (topic) {
           var modalInstance = $modal.open({
-              animation: false,
+              animation: true,
               templateUrl: 'view-topic.html',
               controller: 'ViewTopicController',
               controllerAs: 'vm',

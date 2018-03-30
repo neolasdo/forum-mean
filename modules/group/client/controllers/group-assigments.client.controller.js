@@ -25,7 +25,7 @@
 
         vm.addTeachers = function () {
             var modalInstance = $modal.open({
-                animation: false,
+                animation: true,
                 templateUrl: 'add-assigments-modal.html',
                 controller: 'AddAssigmentsController',
                 controllerAs: 'vm',
@@ -60,9 +60,7 @@
         }
 
         vm.save = function() {
-            if (vm.add.length){
 
-            }
         }
     }
 })();

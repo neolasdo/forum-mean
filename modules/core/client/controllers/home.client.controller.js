@@ -51,7 +51,7 @@ angular.module('core').controller('HomeController', ['$scope', '$http', 'Authent
     }
     vm.addGroup = function() {
         var modalInstance = $modal.open({
-            animation: false,
+            animation: true,
             templateUrl: 'modules/core/client/views/addGroupModal.html',
             controller: 'AddGroupController',
             controllerAs: 'vm',
