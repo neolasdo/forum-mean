@@ -54,15 +54,7 @@
   <div class="modal-body">
     <div class="row">
       <div class="form-group col-md-12">
-        <ui-select multiple required ng-model="vm.add" tagging-label="false" theme="bootstrap" tagging-tokens=",|/" comma-on-blur>
-          <ui-select-match placeholder="Chọn hoặc tìm kiếm giáo viên">{{$item.displayName}} &lt;{{$item.email}}&gt;</ui-select-match>
-          <ui-select-choices repeat="teacher in vm.teachers | filter: $select.search">
-            <div>
-              <span ng-bind="teacher.displayName | highlight: $select.search"></span>
-              &lt;<span ng-bind="teacher.email | highlight: $select.search"></span>&gt;
-            </div>
-          </ui-select-choices>
-        </ui-select>
+
       </div>
     </div>
   </div>

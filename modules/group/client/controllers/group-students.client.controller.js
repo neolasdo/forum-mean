@@ -62,6 +62,7 @@
       var vm = this;
       vm.auth = Authentication;
       vm.add = [];
+      vm.students = [];
       vm.studentJoined = [];
       vm.groupId = $stateParams.id;
       vm.close = function () {
@@ -71,26 +72,27 @@
           groupService.getStudents({id: vm.groupId}, function (res) {
               if(res.status == 'success') {
                   vm.studentJoined = res.data;
+                  vm.getListStudent();
               }
           }, function (err){
               console.log(err);
           })
       }
-      vm.getStudents();
       vm.getListStudent = function () {
           $http.get('/api/users/getAllStudent').then(function(res) {
               vm.students = res.data;
               if (vm.studentJoined.length) {
                   vm.studentJoined.forEach(function(item){
                       var index = vm.students.findIndex(function(student) {
-                          return student._id === item._id;
+                          return student._id === item.student._id;
                       });
                       vm.students.splice(index, 1);
                   })
               }
           })
       }
-      vm.getListStudent();
+      vm.getStudents();
+
       vm.save = function() {
           if (vm.add.length){
               groupService.addStudents({id: vm.groupId}, {students : vm.add}, function (res) {

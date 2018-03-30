@@ -42,7 +42,6 @@
         var vm = this;
         vm.auth = Authentication;
         vm.add = [];
-        vm.teacherJoined = [];
         vm.groupId = $stateParams.id;
         console.log(vm.groupId)
         vm.close = function () {
