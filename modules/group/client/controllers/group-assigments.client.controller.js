@@ -43,7 +43,12 @@
         vm.auth = Authentication;
         vm.add = [];
         vm.groupId = $stateParams.id;
-        console.log(vm.groupId)
+        $scope.dateOptions = {
+            formatYear: 'yy',
+            startingDay: 1,
+            showWeeks: false
+        };
+        $scope.today = moment();
         vm.close = function () {
             $modalInstance.close();
         };

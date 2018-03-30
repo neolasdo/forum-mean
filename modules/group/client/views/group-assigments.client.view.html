@@ -68,7 +68,7 @@
               <label for="">Ngày bắt đầu</label>
               <div class="form-group">
                 <div class="input-group input-group date">
-                  <input type="text" style="border-radius: 0" placeholder="From date" class="form-control" ng-model="vm.assigment.startDate" ng-model-options="{ timezone: 'UTC' }"  uib-datepicker-popup="MM/dd/yyyy" is-open="vm.showCalendar1" datepicker-options="{showWeeks:false}" ng-click="vm.openDatePicker1()" />
+                  <input type="text" class="form-control" datepicker-popup="{{'dd-MM-yyyy'}}" ng-model="vm.assigment.startDate" is-open="vm.showCalendar1" min-date="today" max-date="'2020-06-22'" datepicker-options="dateOptions" ng-required="true" close-text="Close" ng-click="vm.openDatePicker1()" />
                   <span style="border-radius: 0; cursor: pointer" class="input-group-addon" ng-click="vm.openDatePicker1()">
                         <span class="glyphicon glyphicon-calendar"></span>
                     </span>
@@ -80,8 +80,8 @@
               <label for="">Hạn nộp</label>
               <div class="form-group">
                 <div class="input-group input-group date">
-                  <input type="text" style="border-radius: 0" placeholder="From date" class="form-control" ng-model="vm.assigment.endDate" ng-model-options="{ timezone: 'UTC' }"  uib-datepicker-popup="MM/dd/yyyy" is-open="vm.showCalendar1" datepicker-options="{showWeeks:false}" ng-click="vm.openDatePicker1()" />
-                  <span style="border-radius: 0; cursor: pointer" class="input-group-addon" ng-click="vm.openDatePicker1()">
+                  <input type="text" class="form-control" datepicker-popup="{{'dd-MM-yyyy'}}" ng-model="vm.assigment.endDate" is-open="vm.showCalendar2" min-date="today" max-date="'2020-06-22'" datepicker-options="dateOptions" ng-required="true" close-text="Close" ng-click="vm.openDatePicker2()" />
+                  <span style="border-radius: 0; cursor: pointer" class="input-group-addon" ng-click="vm.openDatePicker2()">
                         <span class="glyphicon glyphicon-calendar"></span>
                     </span>
                 </div>
