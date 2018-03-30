@@ -47,6 +47,12 @@
         vm.close = function () {
             $modalInstance.close();
         };
+        vm.openDatePicker1 = function() {
+            vm.showCalendar1 = true
+        }
+        vm.openDatePicker2 = function() {
+            vm.showCalendar2 = true
+        }
 
         vm.save = function() {
             if (vm.add.length){

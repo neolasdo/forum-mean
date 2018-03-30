@@ -30,7 +30,7 @@ var AssignmentSchema = new Schema({
         type: Number,
         max: 1,
         min: 0,
-        default: 0
+        default: 1
     },
     question: [{
         type: mongoose.Schema.ObjectId,
