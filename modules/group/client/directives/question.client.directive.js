@@ -3,20 +3,28 @@
 
   angular
     .module('group')
-    .directive('question', question);
+    .directive('question', function () {
+        return {
+            transclude: true,
+            scope: {
+                value: '=',
+            },
+            templateUrl: 'modules/group/client/views/question-directive.client.view.html',
+            restrict: 'E',
+            controller: 'QuestionController',
+            controllerAs: 'vm'
+        };
+    })
+    .controller('QuestionController', QuestionController);
 
-  question.$inject = [/*Example: '$state', '$window' */];
+  // question.$inject = [];
+  QuestionController.$inject = ['$scope', '$stateParams', 'Authentication', '$state'];
 
-  function question(/*Example: $state, $window */) {
-    return {
-      template: '<div></div>',
-      restrict: 'E',
-      link: function postLink(scope, element, attrs) {
-        // Question directive logic
-        // ...
+  function QuestionController($scope, $stateParams, Authentication, $state) {
+      var vm = this;
+      vm.auth = Authentication;
 
-        element.text('this is the question directive');
-      }
-    };
+      vm.question = $scope.value;
+      console.log(vm.question);
   }
 })();

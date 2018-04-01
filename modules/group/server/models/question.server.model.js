@@ -26,6 +26,10 @@ var QuestionSchema = new Schema({
     correctAnswer: {
         type: String,
         default: ''
+    },
+    createdBy: {
+        type: mongoose.Schema.ObjectId,
+        ref: "User",
     }
 });
 

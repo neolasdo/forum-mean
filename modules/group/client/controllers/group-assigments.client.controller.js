@@ -23,7 +23,7 @@
         });
 
 
-        vm.addTeachers = function () {
+        vm.addAssignment = function () {
             var modalInstance = $modal.open({
                 animation: true,
                 templateUrl: 'add-assigments-modal.html',
@@ -38,10 +38,20 @@
         }
     }
 
-    function AddAssigmentsController($rootScope, $scope, $http, $stateParams, $modalInstance, Authentication, $state, $modal, toastr, groupService) {
+    function AddAssigmentsController($rootScope, $scope, $http, $stateParams, $modalInstance, Authentication, $state, $modal, toastr, groupService, question) {
         var vm = this;
         vm.auth = Authentication;
-        vm.add = [];
+        vm.assigment = {};
+        vm.assigment.questions = [];
+        vm.addQuestion = function() {
+            vm.assigment.questions.push({
+                question: "",
+                type: "",
+                answers: "",
+                correctAnswer: "",
+                createdBy: vm.auth.user._id
+            })
+        }
         vm.groupId = $stateParams.id;
         $scope.dateOptions = {
             formatYear: 'yy',
@@ -59,6 +69,9 @@
             vm.showCalendar2 = true
         }
 
+        vm.isValidated = function() {
+            return (vm.assigment.name && vm.assigment.startDate && vm.assigment.endDate && vm.assigment.questions.length);
+        }
         vm.save = function() {
 
         }
