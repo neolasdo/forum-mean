@@ -174,3 +174,39 @@ i {  vertical-align: middle; }
     min-height: 200px;
     margin-bottom: 30px;
 }
+
+.panel-heading .panel-title:after{
+    /* symbol for "opening" panels */
+    font-family: 'Glyphicons Halflings';  /* essential for enabling glyphicon */
+    content: "\e082";
+    float: right;
+    opacity:0.6;
+}
+.panel-heading.collapsed .panel-title:after  {
+    /* symbol for "collapsed" panels */
+    content: "\e081";
+}
+.pad-left {
+    padding-left:15px;
+}
+.panel-item {
+    padding:30px;
+}
+.panel .nav-tabs {
+    margin-top:1px;
+}
+.panel .tab-pane {
+    padding-bottom:15px;
+}
+
+.padding10,.btn.padding10 {
+    padding:10px;
+}
+.padding20,.btn.padding20 {
+    padding:20px;
+}
+.padding30,.btn.padding30 {
+    min-width:110px;
+    padding:30px;
+    display:block;
+}

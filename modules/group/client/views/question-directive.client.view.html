@@ -1,3 +1,19 @@
 <div class="form-group">
-    {{vm.question}}
+    <div class="panel panel-info">
+        <div class="panel-heading collapsed" ng-click="isCollapsed = !isCollapsed">
+            <h3 class="panel-title">
+                Collapsed Panel (info)
+            </h3>
+        </div>
+        <div collapse="isCollapsed" class="collapse">
+            <div class="panel-body">
+                <blockquote>
+                    <p>"Click my heading to toggle me"</p>
+                </blockquote>
+
+                <p>This panel has the <code>panel-info</code> context.</p>
+            </div>
+        </div>
+    </div><!--/panel-info-->
+
 </div>
