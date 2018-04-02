@@ -1,19 +1,37 @@
 <div class="form-group">
-    <div class="panel panel-info">
-        <div class="panel-heading collapsed" ng-click="isCollapsed = !isCollapsed">
-            <h3 class="panel-title">
-                Collapsed Panel (info)
-            </h3>
-        </div>
-        <div collapse="isCollapsed" class="collapse">
-            <div class="panel-body">
-                <blockquote>
-                    <p>"Click my heading to toggle me"</p>
-                </blockquote>
-
-                <p>This panel has the <code>panel-info</code> context.</p>
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="form-group">
+                <label for="">Nội dung</label>
+                <input  class="form-control" type="text" ng-model="vm.question.question" placeholder="Câu hỏi" required>
             </div>
         </div>
-    </div><!--/panel-info-->
+        <div class="col-sm-6">
+            <div class="form-group">
+                <label for="">Loại câu hỏi</label>
+                <select ng-model="vm.question.type" class="form-control">
+                    <option disabled selected>Chọn loại câu hỏi</option>
+                    <option value="multi_choice">Chọn nhiều đáp án</option>
+                    <option value="text">Viết</option>
+                    <option value="pick_one">Chọn 1</option>
+                    <option value="true/false">Đúng/Sai</option>
+                </select>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div ng-if="vm.question.question && vm.question.type">
+            <div class="answer">
+                <h4>Câu trả lời</h4>
+                <text-area>
+
+                </text-area>
+            </div>
+            <div class="correct-answer">
+                <label for="">Câu trả lời đúng</label>
+                <input  class="form-control" type="text" ng-model="vm.question.correctAnswer" placeholder="Câu hỏi" required>
+            </div>
+        </div>
+    </div>
 
 </div>
