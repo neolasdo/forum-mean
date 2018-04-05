@@ -28,15 +28,18 @@
                 <div class="col-md-10">
                     <div class="form-group">
                         <div class="row" ng-repeat="(index, answer) in vm.question.answers track by index">
-                            <div class="col-md-12 form-group">
+                            <div class="col-md-12 input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">{{index}}</span>
+                                </div>
                                 <input type="text" ng-model="answer" placeholder="Thêm câu trả lời" class="form-control"/>
-                                <span class="input-btn group-btn glyphicon glyphicon-minus-sign" ng-click="vm.removeAnswer(index)"></span>
+                                <span class="input-btn input-group-addon group-btn glyphicon glyphicon-minus-sign" ng-click="vm.removeAnswer(index)"></span>
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-md-12 form-group">
+                            <div class="col-md-12 input-group">
                                 <input type="text" ng-model="vm.answer" placeholder="Thêm câu trả lời" class="form-control"/>
-                                <span class="input-btn group-btn glyphicon glyphicon-plus-sign" ng-click="vm.addAnswer(vm.answer)"></span>
+                                <span class="input-btn input-group-addon group-btn glyphicon glyphicon-plus-sign" ng-click="vm.addAnswer(vm.answer)"></span>
                             </div>
                         </div>
                     </div>
@@ -44,11 +47,28 @@
             </div>
         </div>
     </div>
-    <div class="row form-group">
-        <div class="col-md-12 correct-answer">
+    <div class="row">
+        <div class="form-group col-md-12 correct-answer" ng-if="vm.question.type == 'pick_one'">
             <label for="">Câu trả lời đúng</label>
-            <input  class="form-control" type="text" ng-model="vm.question.correctAnswer" placeholder="Câu hỏi" required>
+            <select class="form-control" ng-options="value in vm.question.answers" ng-model="vm.question.correctAnswer"></select>
+        </div>
+        <div class="form-group col-md-12 correct-answer" ng-if="vm.question.type == 'true/false'">
+            <label for="">Câu trả lời đúng</label>
+            <select class="form-control" ng-model="vm.question.correctAnswer">
+                <option value="true">Đúng</option>
+                <option value="false">Sai</option>
+            </select>
+        </div>
+        <div class="form-group correct-answer col-md-12" ng-if="vm.question.type == 'multi_choice'">
+            <ui-select multiple ng-model="vm.question.correctAnswer" tagging-label="false" theme="bootstrap" tagging-tokens=",|/" comma-on-blur>
+                <ui-select-match placeholder="Chọn câu trả lời">{{$item.index}} &lt;{{$item.value}}&gt;</ui-select-match>
+                <ui-select-choices repeat="(index, value) in vm.question.answers | filter: $select.search">
+                    <div>
+                        <span ng-bind="index | highlight: $select.search"></span>
+                        &lt;<span ng-bind="value | highlight: $select.search"></span>&gt;
+                    </div>
+                </ui-select-choices>
+            </ui-select>
         </div>
     </div>
-
 </div>

@@ -23,7 +23,6 @@
   function QuestionController($scope, $stateParams, Authentication, $state) {
       var vm = this;
       vm.auth = Authentication;
-
       vm.answer = '';
       vm.question = $scope.value;
       vm.addAnswer = function(answer) {
