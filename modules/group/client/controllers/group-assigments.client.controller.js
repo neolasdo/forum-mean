@@ -47,7 +47,7 @@
             vm.assigment.questions.push({
                 question: "",
                 type: "",
-                answers: "",
+                answers: [],
                 correctAnswer: "",
                 createdBy: vm.auth.user._id
             })

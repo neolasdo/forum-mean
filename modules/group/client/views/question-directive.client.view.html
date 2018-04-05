@@ -10,7 +10,7 @@
             <div class="form-group">
                 <label for="">Loại câu hỏi</label>
                 <select ng-model="vm.question.type" class="form-control">
-                    <option disabled selected>Chọn loại câu hỏi</option>
+                    <option disabled selected value="">Chọn loại câu hỏi</option>
                     <option value="multi_choice">Chọn nhiều đáp án</option>
                     <option value="text">Viết</option>
                     <option value="pick_one">Chọn 1</option>
@@ -20,17 +20,34 @@
         </div>
     </div>
     <div class="row">
-        <div ng-if="vm.question.question && vm.question.type">
-            <div class="answer">
-                <h4>Câu trả lời</h4>
-                <text-area>
-
-                </text-area>
+        <div ng-if="vm.question.question && vm.question.type" class="col-md-12">
+            <div class="answer" ng-if="vm.question.type == 'multi_choice' || vm.question.type == 'pick_one' ">
+                <div class="col-md-2">
+                    <label><h4>Câu trả lời</h4></label>
+                </div>
+                <div class="col-md-10">
+                    <div class="form-group">
+                        <div class="row" ng-repeat="(index, answer) in vm.question.answers track by index">
+                            <div class="col-md-12 form-group">
+                                <input type="text" ng-model="answer" placeholder="Thêm câu trả lời" class="form-control"/>
+                                <span class="input-btn group-btn glyphicon glyphicon-minus-sign" ng-click="vm.removeAnswer(index)"></span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12 form-group">
+                                <input type="text" ng-model="vm.answer" placeholder="Thêm câu trả lời" class="form-control"/>
+                                <span class="input-btn group-btn glyphicon glyphicon-plus-sign" ng-click="vm.addAnswer(vm.answer)"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="correct-answer">
-                <label for="">Câu trả lời đúng</label>
-                <input  class="form-control" type="text" ng-model="vm.question.correctAnswer" placeholder="Câu hỏi" required>
-            </div>
+        </div>
+    </div>
+    <div class="row form-group">
+        <div class="col-md-12 correct-answer">
+            <label for="">Câu trả lời đúng</label>
+            <input  class="form-control" type="text" ng-model="vm.question.correctAnswer" placeholder="Câu hỏi" required>
         </div>
     </div>
 

@@ -24,7 +24,16 @@
       var vm = this;
       vm.auth = Authentication;
 
+      vm.answer = '';
       vm.question = $scope.value;
-      console.log(vm.question);
+      vm.addAnswer = function(answer) {
+          if (answer != '') {
+              vm.question.answers.push(answer);
+              answer = '';
+          }
+      }
+      vm.removeAnswer = function (index, answer) {
+          vm.question.answers.splice(index, 1);
+      }
   }
 })();

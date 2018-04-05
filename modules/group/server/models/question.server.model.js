@@ -19,10 +19,10 @@ var QuestionSchema = new Schema({
         enum: ['multi_choice' ,'text' , 'pick_one', 'true/false'],
         default: 'text'
     },
-    answers: {
+    answers: [{
         type: String,
         default: ''
-    },
+    }],
     correctAnswer: {
         type: String,
         default: ''
