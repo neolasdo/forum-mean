@@ -23,10 +23,10 @@ var QuestionSchema = new Schema({
         type: String,
         default: ''
     }],
-    correctAnswer: {
+    correctAnswer: [{
         type: String,
         default: ''
-    },
+    }],
     createdBy: {
         type: mongoose.Schema.ObjectId,
         ref: "User",

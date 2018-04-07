@@ -175,6 +175,9 @@ i {  vertical-align: middle; }
     margin-bottom: 30px;
 }
 .question {
-    padding: 10px 10px 0 20px;
+    margin-bottom: 20px;
     border-left: #ccc 10px solid;
+}
+.input-group-addon:hover {
+    cursor: pointer;
 }

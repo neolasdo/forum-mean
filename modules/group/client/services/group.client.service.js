@@ -63,8 +63,28 @@
         },
         getTopic: {
             method: 'GET',
-            url: 'api/topics/:topicId'
+            url: '/api/topics/:topicId'
         },
+        createAssignment: {
+            method: 'POST',
+            url: '/api/assignment/create'
+        },
+        getAssignments: {
+            method: 'GET',
+            url: '/api/group/:id/assignments'
+        },
+        deleteAssignment: {
+            method: 'POST',
+            url: '/api/assignment/:id/destroy'
+        },
+        updateAssignment: {
+            method: 'PUT',
+            url: '/api/assignment/:id/update'
+        },
+        getActiveAssignment: {
+            method: 'GET',
+            url: '/api/group/:id/activeAssignments'
+        }
     });
   }
 })();

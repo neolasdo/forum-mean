@@ -23,4 +23,9 @@ module.exports = function(app) {
     app.route('/api/topic/hide').put(groups.hideTopic);
     // app.route('/api/topic/:id').get(groups.getTopic);
     app.route('/api/createComment').post(groups.createComment);
+    app.route('/api/assignment/create').post(groups.createAssignment);
+    app.route('/api/assignment/:id/update').put(groups.updateAssignment);
+    app.route('/api/assignment/:id/destroy').post(groups.deleteAssignment);
+    app.route('/api/group/:id/assignments').get(groups.getAssignments);
+    app.route('/api/group/:id/activeAssignments').get(groups.getActiveAssignments);
 };

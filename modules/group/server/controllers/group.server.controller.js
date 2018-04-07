@@ -11,6 +11,8 @@ var path = require('path'),
     Group = mongoose.model('Group'),
     Topic = mongoose.model('Topic'),
     Comment = mongoose.model('Comment'),
+    Assignment = mongoose.model('Assignment'),
+    Question = mongoose.model('Question'),
     Document = mongoose.model('Document'),
     GroupStudent = mongoose.model('GroupStudent'),
     errorHandler = require(path.resolve('./modules/core/server/controllers/errors.server.controller')),
@@ -23,10 +25,10 @@ var path = require('path'),
  */
 exports.createComment = function (req, res) {
     var topicId = req.body.topicId;
-    var userId = req.body.userId;
+    var groupId = req.body.groupId;
     var content = req.body.content;
     var comment = new Comment ({
-        createdBy: userId,
+        groupId: groupId,
         content: content,
         topic: topicId
     });
@@ -50,6 +52,100 @@ exports.createComment = function (req, res) {
                 return res.json({'status' : 'success'});
             })
         })
+    })
+}
+exports.createAssignment = function (req, res) {
+    var data = req.body.assignment;
+    var questions = data.questions;
+
+    var promises = questions.map(function (question) {
+        return new Promise(function (resolve, reject) {
+            var ques = new Question(question);
+            ques.save(function (err, q) {
+                if (err) reject(err);
+                resolve(q._id);
+            })
+        });
+    });
+    Promise.all(promises).then(function(ids){
+        var assignment = new Assignment({
+            name: data.name,
+            startDate: data.startDate,
+            endDate: data.endDate,
+            groupId: data.groupId,
+            questions: ids
+        });
+        assignment.save(function (err, value) {
+            if (err) return res.status(400).send({
+                'status' : 'error',
+                'message' : err
+            });
+            return res.json({
+                'status' : 'success',
+                'data' : value
+            })
+        });
+    }).catch(function(err){
+        return res.status(400).send({
+            'status' : 'error',
+            'message' : err
+        });
+    });
+}
+exports.getAssignments = function(req, res) {
+    var groupId = req.params.id;
+
+    Assignment.find({status: 1, groupId: groupId})
+        .populate({path: 'questions'})
+        .exec(function (err, collection){
+            if (err)  return res.status(400).send({
+                'status' : 'error',
+                'message' : err
+            });
+            return res.json({
+                'status': 'success',
+                'data': collection
+            });
+        });
+}
+exports.deleteAssignment = function (req, res) {
+    var id = req.params.id;
+    Assignment.remove({_id: id} ,function (err) {
+        if (err)  return res.status(400).send({
+            'status' : 'error',
+            'message' : err
+        });
+        return res.json({'status': 'success'})
+    });
+}
+exports.updateAssignment = function (req, res) {
+    var id = req.params.id;
+
+}
+exports.getActiveAssignments = function (req, res) {
+    var groupId = req.params.id;
+
+    Assignment.find(
+        {
+            groupId : groupId,
+            status: 1,
+            startDate:{
+                $lt: Date.now()
+            },
+            endDate:{
+                $gte: Date.now()
+            }
+        })
+        .populate({path: 'questions', select: { 'question': 1, 'answers': 1, 'type': 1}})
+        .exec(function (err, collection){
+        if (err)  return res.status(400).send({
+            'status' : 'error',
+            'message' : err
+        });
+        return res.json({
+            'status': 'success',
+            'data': collection
+        });
     })
 }
 /**

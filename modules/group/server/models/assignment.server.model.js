@@ -22,9 +22,9 @@ var AssignmentSchema = new Schema({
         type: Date,
         required: true
     },
-    createdBy: {
+    groupId: {
         type: mongoose.Schema.ObjectId,
-        ref: 'User'
+        ref: 'Group'
     },
     status: {
         type: Number,
@@ -32,7 +32,7 @@ var AssignmentSchema = new Schema({
         min: 0,
         default: 1
     },
-    question: [{
+    questions: [{
         type: mongoose.Schema.ObjectId,
         ref: "Question"
     }]

@@ -25,14 +25,31 @@
       vm.auth = Authentication;
       vm.answer = '';
       vm.question = $scope.value;
-      vm.addAnswer = function(answer) {
-          if (answer != '') {
-              vm.question.answers.push(answer);
-              answer = '';
+      vm.addAnswer = function() {
+          if (vm.answer != '') {
+              vm.question.answers.push(vm.answer);
           }
+          vm.answer = '';
       }
       vm.removeAnswer = function (index, answer) {
           vm.question.answers.splice(index, 1);
+      }
+      vm.changeValue = function (index, answer) {
+          if (answer) vm.question.answers[index] = answer;
+      }
+      vm.resetType = function () {
+          if (vm.question.type == 'multi_choice') {
+              vm.question.answers = [];
+              vm.question.correctAnswer = [];
+          }
+          if (vm.question.type == 'text' || vm.question.type == 'true/false') {
+              vm.question.answers = '';
+              vm.question.correctAnswer = '';
+          }
+          if (vm.question.type == 'pick_one') {
+              vm.question.answers = [];
+              vm.question.correctAnswer = '';
+          }
       }
   }
 })();

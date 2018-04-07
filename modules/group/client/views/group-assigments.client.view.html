@@ -10,32 +10,16 @@
       <div class="table-container">
         <table class="table-users table" border="0">
           <tbody>
-          <tr>
-            <td width="10">
-              <img class="pull-left img-circle nav-user-photo" width="50" ng-src="{{vm.groupInfo.createdBy.profileImageURL?vm.groupInfo.createdBy.profileImageURL:'/modules/users/client/img/profile/default.png'}}" />  
+          <tr ng-repeat="data in vm.assignments">
+            <td>
+              {{data.name}}
             </td>
             <td>
-              {{vm.groupInfo.createdBy.displayName}}
-            </td>
-            <td>
-              {{vm.groupInfo.createdBy.email}}
-            </td>
-            <td>
-              <span class="label label-danger">Chủ nhiệm</span>
-            </td>
-          </tr>
-          <tr ng-repeat="data in vm.teachers">
-            <td width="10">
-              <img class="pull-left img-circle nav-user-photo" width="50" src="{{data.student.profileImageURL?data.student.profileImageURL:'/modules/users/client/img/profile/default.png'}}" />  
-            </td>
-            <td>
-              {{data.teacher.displayName}}
-            </td>
-            <td>
-              {{data.teacher.email}}
+              {{data.startDate|date:'dd/mm/yyyy'}} - {{data.endDate|date:'dd/mm/yyyy'}}
             </td>
             <td ng-if="vm.groupInfo.createdBy._id == vm.auth.user._id" >
-              <button class="btn btn-danger" ng-click="vm.removeTeacher(data.teacher._id)"><i class="fa fa-trash"></i></button>
+              <button class="btn btn-danger" ng-click="vm.removeAssignment(data._id)"><i class="fa fa-trash"></i></button>
+              <button class="btn btn-success" ng-click="vm.editAssignment(data)"><i class="fa fa-edit"></i></button>
             </td>
           </tr>
           </tbody>
@@ -100,7 +84,7 @@
     </div>
   </div>
   <div class="modal-footer text-right">
-    <button class="btn btn-success" ng-disabled="!vm.isValidated()" ng-click="vm.save()">Thêm</button>
+    <button class="btn btn-success" ng-disabled="!vm.isValidated()" ng-click="vm.save()">Xong</button>
     <button class="btn btn-default" ng-click="vm.close()">Đóng</button>
   </div>
 </script>

@@ -9,7 +9,7 @@
         <div class="col-sm-6">
             <div class="form-group">
                 <label for="">Loại câu hỏi</label>
-                <select ng-model="vm.question.type" class="form-control">
+                <select ng-model="vm.question.type" class="form-control" ng-change="vm.resetType()">
                     <option disabled selected value="">Chọn loại câu hỏi</option>
                     <option value="multi_choice">Chọn nhiều đáp án</option>
                     <option value="text">Viết</option>
@@ -29,14 +29,14 @@
                     <div class="form-group">
                         <div class="row" ng-repeat="(index, answer) in vm.question.answers track by index">
                             <div class="col-md-12 input-group">
-                                <input type="text" ng-model="answer" placeholder="Thêm câu trả lời" class="form-control"/>
+                                <input type="text" ng-model="answer" placeholder="Thêm câu trả lời" class="form-control" ng-change="vm.changeValue(index, answer)"/>
                                 <span class="input-btn input-group-addon group-btn glyphicon glyphicon-minus-sign" ng-click="vm.removeAnswer(index)"></span>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-md-12 input-group">
-                                <input type="text" ng-model="vm.answer" placeholder="Thêm câu trả lời" class="form-control"/>
-                                <span class="input-btn input-group-addon group-btn glyphicon glyphicon-plus-sign" ng-click="vm.addAnswer(vm.answer)"></span>
+                                <input type="text" ng-model="vm.answer" ng-enter="vm.addAnswer()" placeholder="Thêm câu trả lời" class="form-control"/>
+                                <span class="input-btn input-group-addon group-btn glyphicon glyphicon-plus-sign" ng-click="vm.addAnswer()"></span>
                             </div>
                         </div>
                     </div>
@@ -47,7 +47,9 @@
     <div class="row">
         <div class="form-group col-md-12 correct-answer" ng-if="vm.question.type == 'pick_one'">
             <label for="">Câu trả lời đúng</label>
-            <select class="form-control" ng-options="value in vm.question.answers" ng-model="vm.question.correctAnswer"></select>
+            <select class="form-control" ng-options="value for value in vm.question.answers" ng-model="vm.question.correctAnswer">
+                <option value=""></option>
+            </select>
         </div>
         <div class="form-group col-md-12 correct-answer" ng-if="vm.question.type == 'true/false'">
             <label for="">Câu trả lời đúng</label>
@@ -57,13 +59,11 @@
             </select>
         </div>
         <div class="form-group correct-answer col-md-12" ng-if="vm.question.type == 'multi_choice'">
+            <label for="">Câu trả lời đúng</label>
             <ui-select multiple ng-model="vm.question.correctAnswer" tagging-label="false" theme="bootstrap" tagging-tokens=",|/" comma-on-blur>
-                <ui-select-match placeholder="Chọn câu trả lời">{{$item.index}} &lt;{{$item.value}}&gt;</ui-select-match>
-                <ui-select-choices repeat="index as value in vm.question.answers | filter: $select.search">
-                    <div>
-                        <span ng-bind="index | highlight: $select.search"></span>
-                        &lt;<span ng-bind="value | highlight: $select.search"></span>&gt;
-                    </div>
+                <ui-select-match placeholder="Chọn câu trả lời">{{$item}}</ui-select-match>
+                <ui-select-choices repeat="value in vm.question.answers | filter: $select.search">
+                    <div><span ng-bind="value | highlight: $select.search"></span></div>
                 </ui-select-choices>
             </ui-select>
         </div>
