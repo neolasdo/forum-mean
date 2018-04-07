@@ -73,6 +73,7 @@ exports.createAssignment = function (req, res) {
             startDate: data.startDate,
             endDate: data.endDate,
             groupId: data.groupId,
+            title: data.title,
             questions: ids
         });
         assignment.save(function (err, value) {
@@ -120,7 +121,60 @@ exports.deleteAssignment = function (req, res) {
 }
 exports.updateAssignment = function (req, res) {
     var id = req.params.id;
+    var data = req.body.assignment;
+    var promises = data.questions.map(function (question) {
+        return new Promise(function (resolve, reject) {
+            if (question._id){
+                Question.findOneAndUpdate({_id: question._id}, question, function(err, ques){
+                    if (err) reject(err);
+                    resolve(ques._id);
+                })
+            }
+            else {
+                var ques = new Question(question);
+                ques.save(function (err, q) {
+                    if (err) reject(err);
+                    resolve(q._id);
+                })
+            }
+        });
+    });
+    Promise.all(promises).then(function (val) {
+        Assignment.findOneAndUpdate({_id: id},
+            {$set: {
+                        name: data.name,
+                        startDate: data.startDate,
+                        endDate: data.endDate,
+                        questions: val,
+                        title: data.title,
+                    }
+            }, function (err, value) {
+                if (err) return res.status(400).send({
+                    'status' : 'error',
+                    'message' : err
+                });
+                return res.json({
+                    'status' : 'success',
+                    'data' : value
+                })
+            });
+    }).catch(function (err) {
+        return res.status(400).send({
+            'status' : 'error',
+            'message' : err
+        });
+    });
 
+}
+exports.deleteQuestion = function (req, res) {
+    var id = req.params.id;
+    Question.findOneAndRemove({_id: id}, function (err, ques) {
+        if (err) return res.status(400).send({
+            'status' : 'error',
+            'message' : err
+        });
+        return res.json({'status' : 'success'});
+    })
 }
 exports.getActiveAssignments = function (req, res) {
     var groupId = req.params.id;
@@ -130,7 +184,7 @@ exports.getActiveAssignments = function (req, res) {
             groupId : groupId,
             status: 1,
             startDate:{
-                $lt: Date.now()
+                $lte: Date.now()
             },
             endDate:{
                 $gte: Date.now()
@@ -414,10 +468,17 @@ exports.count = function (req, res) {
                     })
                 }
                 count.topics= topics.length;
-                return res.json({
-                    'status' : 'success',
-                    'data': count
-                });
+                Assignment.find({status: 1, groupId: groupId}).exec(function(err, assignments){
+                    if (err)  return res.status(400).send({'status' : 'error', 'message' : err});
+                    if(assignments.length){
+                        count.assignments = assignments.length;
+
+                        return res.json({
+                            'status' : 'success',
+                            'data': count
+                        });
+                    }
+                })
             });
         })
     }

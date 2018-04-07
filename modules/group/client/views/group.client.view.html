@@ -39,8 +39,8 @@
               </div>
             </div>
             <div class="nav-tabs">
-              <div class="list-heading" ui-sref="group.assigments">
-                Bài kiểm tra
+              <div ng-if="vm.groupInfo.createdBy._id == vm.auth.user._id" class="list-heading" ui-sref="group.assigments">
+                Bài khảo sát
                 <span class="pull-right"><i class="fa fa-angle-right"></i></span>
               </div>
             </div>
@@ -65,7 +65,7 @@
       <div ui-view></div>
     </div>
     <div class="col-sm-3">
-      <div class="panel panel-success">
+        <div class="panel panel-success">
         <div class="panel-body statics">
           <ul style="padding: 0">
             <li>
@@ -77,7 +77,7 @@
               <p>Bình luận</p>
             </li>
             <li>
-              <p class="statics-count"><i class="fa fa-file"></i> <span ng-bind="vm.count.teachers+1"></span></p>
+              <p class="statics-count"><i class="fa fa-file"></i> <span ng-bind="vm.count.assignments"></span></p>
               <p>Assigment</p>
             </li>
             <li>
@@ -87,9 +87,83 @@
           </ul>
         </div>
       </div>
+        <div class="panel panel-success">
+            <div class="panel-heading">
+                <h3 class="panel-title">Giáo viên đang dạy trực tuyến!</h3>
+            </div>
+            <div class="panel-body row">
+                <div class="col-sm-12" style="padding-bottom: 20px">
+                    Bài giảng về HTML5 - CSS3
+                </div>
+                <div class="col-sm-12 text-right">
+                    <button class="btn btn-info btn-sm" ng-click="vm.openStream()"><span class="fa fa-play"></span> Xem ngay!</button>
+                </div>
+            </div>
+        </div>
+        <div class="panel panel-danger">
+            <div class="panel-heading">
+                <h3 class="panel-title">Bạn có {{vm.assignments.length}} khảo sát cần hoàn thành</h3>
+            </div>
+            <div class="panel-body">
+                <div class="assignment-list">
+                    <div class="assignment row"  ng-repeat="assignment in vm.assignments">
+                        <div class="col-sm-12">
+                            <h4 class="assig-name"><b>{{assignment.name}}</b></h4>
+                            <p class="assig-time">{{assignment.startDate|date:'dd/MM/yyyy'}} - {{assignment.endDate|date:'dd/MM/yyyy'}}</p>
+                            <p class="assig-title" ta-bind ng-model="assignment.title"></p>
+                        </div>
+                        <div class="col-sm-12 text-right">
+                            <button class="btn btn-success btn-sm" ng-click="vm.finishAssignment(assignment)"><span class="fa fa-check-square"></span> Hoàn thành</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
     <div class="col-md-1 hidden-sm">
 
     </div>
   </div>
 </section>
+
+
+<script type="text/ng-template" id="stream-modal.html">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" ng-click="vm.close()"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">Học online</h4>
+    </div>
+    <div class="modal-body">
+        <div class="row" style="padding: 20px">
+
+        </div>
+    </div>
+    <div class="modal-footer text-right">
+        <button class="btn btn-default" ng-click="vm.close()">Đóng</button>
+    </div>
+</script>
+<script type="text/ng-template" id="finish-assignment.html">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" ng-click="vm.close()"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">Hoàn thành khảo sát</h4>
+    </div>
+    <div class="modal-body">
+        <div class="row" style="padding: 10px 20px">
+            <div class="col-sm-4">
+                <h2 class="assig-name">{{vm.assignment.name}}</h2>
+            </div>
+            <div class="col-sm-8">
+                <p><b>Hạn nộp:</b> Trước ngày: {{vm.assignment.endDate|date: 'dd/MM/yyyy'}}</p>
+                <p><b>Nội dung:</b> <span ta-bind ng-model="vm.assignment.title"></span></p>
+            </div>
+        </div>
+        <div class="row" style="padding: 10px 20px">
+            <div class="col-sm-12" ng-repeat="(index,question) in vm.assignment.questions">
+                <quiz value="question" quiz-model="vm.studentAnswer.answers[index]"></quiz>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer text-right">
+        <button class="btn btn-success" ng-click="vm.save()">Xong</button>
+        <button class="btn btn-default" ng-click="vm.close()">Đóng</button>
+    </div>
+</script>

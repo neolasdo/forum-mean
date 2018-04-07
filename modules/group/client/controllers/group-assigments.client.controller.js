@@ -29,7 +29,7 @@
         });
 
         vm.removeAssignment = function (id) {
-            if (confirm('Bạn có chắc chắn muốn xóa?')) {
+            if (window.confirm('Bạn có chắc chắn muốn xóa?')) {
                 groupService.deleteAssignment({id: id},{}, function(res){
                     if (res.status == 'success') {
                         toastr.success('Xóa thành công!');
@@ -82,6 +82,23 @@
                 correctAnswer: "",
                 createdBy: vm.auth.user._id
             })
+        };
+        vm.removeQuestion = function (index, question) {
+            if (window.confirm('Bạn có chắc muốn xóa câu hỏi này?')) {
+                if (question._id) {
+                    groupService.deleteQuestion({id: question._id}, {}, function (res) {
+                        if (res.status == 'success') {
+                            toastr.success('Xóa thành công!');
+                            vm.assigment.questions.splice(index, 1);
+                        }
+                    }, function (fail) {
+                        toastr.warning('Có lỗi!');
+                    })
+                }
+                else {
+                    vm.assigment.questions.splice(index, 1);
+                }
+            }
         }
         vm.groupId = $stateParams.id;
         $scope.dateOptions = {

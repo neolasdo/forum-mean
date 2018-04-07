@@ -175,9 +175,21 @@ i {  vertical-align: middle; }
     margin-bottom: 30px;
 }
 .question {
+    padding-left: 20px;
     margin-bottom: 20px;
     border-left: #ccc 10px solid;
 }
 .input-group-addon:hover {
     cursor: pointer;
+}
+.assig-name{
+    margin-top: 10px;
+}
+.assignment-list .assignment {
+    padding-bottom: 20px;
+    border-bottom: 1px solid #ddd;
+}
+.assignment-list .assignment:last-child {
+    padding-bottom: 20px;
+    border-bottom: none;
 }

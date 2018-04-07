@@ -32,7 +32,7 @@
       }
       vm.getStudents();
       vm.removeStudent = function(id) {
-          if(confirm('Bạn có chắc muốn xóa học viên này?'))
+          if(window.confirm('Bạn có chắc muốn xóa học viên này?'))
           {
               groupService.removeStudent({id: vm.groupId, uid: id}, function(res) {
                   if(res.status == 'success') {

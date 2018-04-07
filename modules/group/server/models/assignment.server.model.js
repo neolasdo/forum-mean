@@ -14,6 +14,10 @@ var AssignmentSchema = new Schema({
         type: String,
         required: true
     },
+    title: {
+        type: String,
+        default: ''
+    },
     startDate: {
         type: Date,
         default: Date.now()

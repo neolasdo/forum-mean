@@ -28,4 +28,5 @@ module.exports = function(app) {
     app.route('/api/assignment/:id/destroy').post(groups.deleteAssignment);
     app.route('/api/group/:id/assignments').get(groups.getAssignments);
     app.route('/api/group/:id/activeAssignments').get(groups.getActiveAssignments);
+    app.route('/api/questions/:id/destroy').post(groups.deleteQuestion);
 };

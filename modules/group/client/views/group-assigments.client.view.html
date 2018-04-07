@@ -1,7 +1,7 @@
 <section ng-controller="GroupAssigmentsController as vm">
   <div class="panel panel-default user_panel">
     <div class="panel-heading" style="height: 40px;">
-      <div class="col-xs-3"><h3 class="panel-title">Bài kiểm tra</h3></div>
+      <div class="col-xs-3"><h3 class="panel-title">Bài khảo sát</h3></div>
       <div class="col-xs-9" ng-if="vm.groupInfo.createdBy._id == vm.auth.user._id">
         <button style="border: 0; background: none" ng-click="vm.addAssignment()" class="pull-right"><span class="fa fa-plus"></span></button>
       </div>
@@ -15,9 +15,9 @@
               {{data.name}}
             </td>
             <td>
-              {{data.startDate|date:'dd/mm/yyyy'}} - {{data.endDate|date:'dd/mm/yyyy'}}
+              {{data.startDate|date:'dd/MM/yyyy'}} - {{data.endDate|date:'dd/MM/yyyy'}}
             </td>
-            <td ng-if="vm.groupInfo.createdBy._id == vm.auth.user._id" >
+            <td ng-if="vm.groupInfo.createdBy._id == vm.auth.user._id" class="text-right">
               <button class="btn btn-danger" ng-click="vm.removeAssignment(data._id)"><i class="fa fa-trash"></i></button>
               <button class="btn btn-success" ng-click="vm.editAssignment(data)"><i class="fa fa-edit"></i></button>
             </td>
@@ -33,26 +33,30 @@
 <script type="text/ng-template" id="add-assigments-modal.html">
   <div class="modal-header">
     <button type="button" class="close" data-dismiss="modal" aria-label="Close" ng-click="vm.close()"><span aria-hidden="true">&times;</span></button>
-    <h4 class="modal-title">Tạo bài kiểm tra</h4>
+    <h4 class="modal-title">Tạo bài khảo sát</h4>
   </div>
   <div class="modal-body">
     <div class="row" style="padding: 20px">
       <form novalidate >
           <div class="row">
             <div class="col-md-6">
-              <label for="">Tên bài kiểm tra</label>
+              <label for="">Tên bài khảo sát</label>
               <input type="text" ng-model="vm.assigment.name" class="form-control">
             </div>
-            <div class="col-md-6">
-
-            </div>
+          </div>
+          <div class="row"  style="padding-top: 20px">
+              <div class="col-md-12">
+                  <label for="">Nội dung</label>
+                  <text-angular  ta-toolbar="[['bold', 'italics', 'underline', 'strikeThrough', 'ul', 'ol', 'quote', 'insertImage','insertLink', 'charcount']]" ng-model="vm.assigment.title">
+                  </text-angular>
+              </div>
           </div>
           <div class="row" style="padding-top: 20px">
             <div class="col-md-6 form-group">
               <label for="">Ngày bắt đầu</label>
               <div class="form-group">
                 <div class="input-group input-group date">
-                  <input type="text" class="form-control" datepicker-popup="{{'dd-MM-yyyy'}}" ng-model="vm.assigment.startDate" is-open="vm.showCalendar1" min-date="today" max-date="'2020-06-22'" datepicker-options="dateOptions" ng-required="true" close-text="Close" ng-click="vm.openDatePicker1()" />
+                  <input type="text" class="form-control" datepicker-popup="{{'dd-MM-yyyy'}}" ng-model="vm.assigment.startDate" ng-model-options="{ timezone: 'UTC' }" is-open="vm.showCalendar1" min-date="today" max-date="'2020-06-22'" datepicker-options="dateOptions" ng-required="true" close-text="Close" ng-click="vm.openDatePicker1()" />
                   <span style="border-radius: 0; cursor: pointer" class="input-group-addon" ng-click="vm.openDatePicker1()">
                         <span class="glyphicon glyphicon-calendar"></span>
                     </span>
@@ -64,7 +68,7 @@
               <label for="">Hạn nộp</label>
               <div class="form-group">
                 <div class="input-group input-group date">
-                  <input type="text" class="form-control" datepicker-popup="{{'dd-MM-yyyy'}}" ng-model="vm.assigment.endDate" is-open="vm.showCalendar2" min-date="today" max-date="'2020-06-22'" datepicker-options="dateOptions" ng-required="true" close-text="Close" ng-click="vm.openDatePicker2()" />
+                  <input type="text" class="form-control" datepicker-popup="{{'dd-MM-yyyy'}}" ng-model="vm.assigment.endDate" ng-model-options="{ timezone: 'UTC' }" is-open="vm.showCalendar2" min-date="today" max-date="'2020-06-22'" datepicker-options="dateOptions" ng-required="true" close-text="Close" ng-click="vm.openDatePicker2()" />
                   <span style="border-radius: 0; cursor: pointer" class="input-group-addon" ng-click="vm.openDatePicker2()">
                         <span class="glyphicon glyphicon-calendar"></span>
                     </span>
@@ -72,9 +76,10 @@
               </div>
             </div>
           </div>
-          <div class="questions" ng-repeat="question in vm.assigment.questions">
+          <div class="questions" ng-repeat="(index, question) in vm.assigment.questions">
               <div class="col-md-12 question">
                   <question value="question"></question>
+                  <button class="btn btn-sm btn-danger" ng-click="vm.removeQuestion(index, question)"><span class="fa fa-times-circle"></span> Bỏ</button>
               </div>
           </div>
           <div class="row text-center">

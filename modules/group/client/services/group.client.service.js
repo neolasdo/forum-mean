@@ -84,6 +84,10 @@
         getActiveAssignment: {
             method: 'GET',
             url: '/api/group/:id/activeAssignments'
+        },
+        deleteQuestion: {
+            method: 'POST',
+            url: '/api/questions/:id/destroy'
         }
     });
   }
