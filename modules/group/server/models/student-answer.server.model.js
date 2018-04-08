@@ -18,10 +18,10 @@ var StudentAnswerSchema = new Schema({
         type: mongoose.Schema.ObjectId,
         ref: "Assignment"
     },
-    answer: [{
-        type: String,
-        default: ''
-    }],
+    answer: {
+        type: Array,
+        default: []
+    },
     date: {
         type: Date,
         default: Date.now()

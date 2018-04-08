@@ -113,7 +113,8 @@
                             <p class="assig-title" ta-bind ng-model="assignment.title"></p>
                         </div>
                         <div class="col-sm-12 text-right">
-                            <button class="btn btn-success btn-sm" ng-click="vm.finishAssignment(assignment)"><span class="fa fa-check-square"></span> Hoàn thành</button>
+                            <button class="btn btn-success btn-sm" ng-if="!assignment.answer" ng-click="vm.finishAssignment(assignment)"><span class="fa fa-check-square"></span> Hoàn thành</button>
+                            <button class="btn btn-info btn-sm" ng-if="assignment.answer" ng-click="vm.getUserAnswer(assignment)"><span class="fa fa-check-square"></span> Xem lại</button>
                         </div>
                     </div>
                 </div>
@@ -164,6 +165,44 @@
     </div>
     <div class="modal-footer text-right">
         <button class="btn btn-success" ng-click="vm.save()">Xong</button>
+        <button class="btn btn-default" ng-click="vm.close()">Đóng</button>
+    </div>
+</script>
+<script type="text/ng-template" id="view-assignment.html">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" ng-click="vm.close()"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">Xem lại</h4>
+    </div>
+    <div class="modal-body">
+        <div class="row" style="padding: 10px 20px">
+            <div class="col-sm-4">
+                <h2 class="assig-name">{{vm.assignment.name}}</h2>
+            </div>
+            <div class="col-sm-8">
+                <p><b>Hạn nộp:</b> Trước ngày: {{vm.assignment.endDate|date: 'dd/MM/yyyy'}}</p>
+                <p><b>Nội dung:</b> <span ta-bind ng-model="vm.assignment.title"></span></p>
+            </div>
+        </div>
+        <div class="row" style="padding: 10px 20px">
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Câu hỏi</th>
+                            <th>Câu trả lời</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="answer in vm.assignment.answer.answer">
+                            <td>{{answer.question}}</td>
+                            <td ta-bind ng-model="answer.answer"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer text-right">
         <button class="btn btn-default" ng-click="vm.close()">Đóng</button>
     </div>
 </script>

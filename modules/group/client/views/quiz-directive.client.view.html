@@ -3,9 +3,12 @@
     <div class="quiz-answer row">
         <label for="" style="padding-left: 20px">Câu trả lời của bạn</label>
         <div class="form-group col-md-12" ng-if="vm.question.type == 'pick_one'">
-            <select class="form-control" ng-options="value for value in vm.question.answers" ng-model="vm.quizModel" ng-change="vm.onChange()">
-                <option value=""></option>
-            </select>
+            <div  ng-repeat="value in vm.question.answers">
+                <input type="radio"   ng-model="vm.quizModel" ng-change="vm.onChange()" ng-value="value"> {{value}}
+            </div>
+            <!--<select class="form-control" ng-options="value for value in vm.question.answers" ng-model="vm.quizModel" ng-change="vm.onChange()">-->
+                <!--<option value=""></option>-->
+            <!--</select>-->
         </div>
         <div class="form-group col-md-12" ng-if="vm.question.type == 'true/false'">
             <input type="radio" ng-model="vm.quizModel" value="true" ng-change="vm.onChange()"> Đúng

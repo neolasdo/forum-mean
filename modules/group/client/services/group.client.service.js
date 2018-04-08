@@ -85,9 +85,25 @@
             method: 'GET',
             url: '/api/group/:id/activeAssignments'
         },
-        deleteQuestion: {
+        getStudentAnswers: {
+            method: 'GET',
+            url: '/api/studentAnswers/get/:uid/:aid'
+        },
+        getAnswersById: {
+            method: 'GET',
+            url: '/api/getAnswersById/:uid'
+        },
+        createStudentAnswers: {
             method: 'POST',
-            url: '/api/questions/:id/destroy'
+            url: '/api/studentAnswers/create'
+        },
+        getAssignmentAnswers: {
+            method: 'GET',
+            url: '/api/assignment/:aid/answers'
+        },
+        answerPoint: {
+            method: 'PUT',
+            url: '/api/studentAnswers/:id/point'
         }
     });
   }

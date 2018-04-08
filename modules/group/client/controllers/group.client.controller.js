@@ -19,9 +19,32 @@ angular.module('group').controller('GroupController', ['$scope', '$http', '$stat
             })
         }
         vm.count();
+        vm.getUserAnswer = function (assignment) {
+            var modalInstance = $modal.open({
+                animation: true,
+                templateUrl: 'view-assignment.html',
+                controller: 'ViewAnswerController',
+                controllerAs: 'vm',
+                size: 'lg',
+                backdrop: 'static',
+                windowClass: 'ViewAnswerController',
+                resolve: {
+                    data: assignment
+                }
+            });
+        }
         groupService.getActiveAssignment({id: vm.groupId}, function(res) {
             if(res.status == 'success') {
                 vm.assignments = res.data;
+                if (vm.assignments.length > 0) {
+                    vm.assignments.forEach(function (assignment){
+                        groupService.getStudentAnswers({aid: assignment._id, uid: vm.auth.user._id}, {}, function(res) {
+                            if (res.status == 'success') {
+                                assignment.answer = res.data;
+                            }
+                        });
+                    })
+                }
             }
         }, function (fail) {
             toastr.warning('Lỗi khi lấy bài kiểm tra');
@@ -83,6 +106,39 @@ angular.module('group').controller('GroupController', ['$scope', '$http', '$stat
         $modalInstance.close();
     };
     vm.save = function () {
-        console.log(vm.studentAnswer)
+        vm.studentAnswer.answer = [];
+        if(window.confirm('Bạn đã xem xét kỹ và muốn kết thúc khảo sát?')) {
+            vm.assignment.questions.forEach(function (ques, index) {
+                Object.entries(vm.studentAnswer.answers).map(function (val, key){
+                    if (key === index){
+                        var mapQA = {
+                            question: ques.question,
+                            answer: vm.studentAnswer.answers[key],
+                            type: ques.question.type
+                        };
+
+                        vm.studentAnswer.answer.push(mapQA);
+                    }
+                });
+            });
+            groupService.createStudentAnswers({answer: vm.studentAnswer}, function(res) {
+                if (res.status == 'success') {
+                    toastr.success('Đã gửi!');
+                    $state.reload();
+                    vm.close();
+                }
+            }, function (fail) {
+                toastr.warning('Có lỗi');
+            })
+        }
     }
-}]);
+}
+]).controller('ViewAnswerController', ['$scope', '$http', 'Authentication', '$state', '$modal', 'toastr', 'groupService', '$modalInstance', 'data',
+    function ViewAnswerController($scope, $http, Authentication, $state, $modal, toastr, groupService, $modalInstance, data) {
+        var vm = this;
+        vm.close = function () {
+            $modalInstance.close();
+        };
+        vm.assignment = data;
+    }
+]);

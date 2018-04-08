@@ -13,6 +13,7 @@ var path = require('path'),
     Comment = mongoose.model('Comment'),
     Assignment = mongoose.model('Assignment'),
     Question = mongoose.model('Question'),
+    StudentAnswer = mongoose.model('StudentAnswer'),
     Document = mongoose.model('Document'),
     GroupStudent = mongoose.model('GroupStudent'),
     errorHandler = require(path.resolve('./modules/core/server/controllers/errors.server.controller')),
@@ -201,6 +202,68 @@ exports.getActiveAssignments = function (req, res) {
             'data': collection
         });
     })
+}
+exports.getAnswersById = function (req,res) {
+    var uid = req.params.uid;
+
+    StudentAnswer.find({student: uid}).exec(function (err, data) {
+        if (err) return res.status(400).send({
+            'status': 'fail',
+            'data': err
+        });
+        return res.json({
+            'status' : 'success',
+            'data' : data
+        })
+    })
+}
+exports.getStudentAnswers = function (req, res) {
+    var uid = req.params.uid;
+    var aid = req.params.aid;
+
+    StudentAnswer.findOne({student: uid, assignment: aid}).exec(function (err, data) {
+        if (err) return res.status(400).send({
+            'status': 'fail',
+            'data': err
+        });
+        return res.json({
+            'status' : 'success',
+            'data' : data
+        })
+    })
+}
+exports.createStudentAnswers = function (req, res) {
+    var answer = req.body.answer;
+
+    var studentAnswer = new StudentAnswer(answer);
+
+    studentAnswer.save(function (err, val) {
+        if (err) return res.status(400).send({
+            'status': 'fail',
+            'data': err
+        });
+        return res.json({
+            'status' : 'success',
+            'data' : val
+        })
+    })
+}
+exports.getAssignmentAnswers = function (req, res) {
+    var aid = req.params.aid;
+
+    StudentAnswer.find({assignment: aid}).exec(function (err, data) {
+        if (err) return res.status(400).send({
+            'status': 'fail',
+            'data': err
+        });
+        return res.json({
+            'status' : 'success',
+            'data' : data
+        })
+    })
+}
+exports.answerPoint = function (req, res) {
+
 }
 /**
  *
