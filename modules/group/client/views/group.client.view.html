@@ -100,7 +100,7 @@
                 </div>
             </div>
         </div>
-        <div class="panel panel-danger">
+        <div class="panel panel-danger" ng-if="vm.auth.user.roles == 'student'" >
             <div class="panel-heading">
                 <h3 class="panel-title">Bạn có {{vm.assignments.length}} khảo sát cần hoàn thành</h3>
             </div>
@@ -184,21 +184,19 @@
             </div>
         </div>
         <div class="row" style="padding: 10px 20px">
-            <div class="table-responsive">
-                <table class="table table-hover">
-                    <thead>
-                        <tr>
-                            <th>Câu hỏi</th>
-                            <th>Câu trả lời</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr ng-repeat="answer in vm.assignment.answer.answer">
-                            <td>{{answer.question}}</td>
-                            <td ta-bind ng-model="answer.answer"></td>
-                        </tr>
-                    </tbody>
-                </table>
+            <div class="answer"  ng-repeat="answer in  vm.assignment.answer.answer">
+                <div class="question-name">
+                    <h5>Câu hỏi: <span>{{answer.question}}</span></h5>
+                </div>
+                <div class="answer-content">
+                    <h5>Câu trả lời:</h5>
+                    <p ta-bind ng-model="answer.answer" ng-if="answer.type == 'text' || answer.type == 'pick_one'"></p>
+                    <p ta-bind ng-repeat="item in answer.answer track by $index" ng-model="item" ng-if="answer.type == 'multi_choice'"></p>
+                    <p ng-if="answer.type == 'true/false'">
+                        {{answer.answer=='true'?'Đúng':'Sai'}}
+                    </p>
+
+                </div>
             </div>
         </div>
     </div>

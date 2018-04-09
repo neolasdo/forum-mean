@@ -27,7 +27,12 @@
         vm.quizModel = '';
         vm.question = $scope.value;
         vm.onChange = function () {
-            $scope.quizModel = vm.answer.length?vm.answer:vm.quizModel;
+            if(vm.answer.length) {
+                $scope.quizModel  = vm.answer.filter(function() { return true; });
+            }
+            else {
+                $scope.quizModel = vm.quizModel;
+            }
         }
     }
 

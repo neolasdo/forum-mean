@@ -114,7 +114,7 @@ angular.module('group').controller('GroupController', ['$scope', '$http', '$stat
                         var mapQA = {
                             question: ques.question,
                             answer: vm.studentAnswer.answers[key],
-                            type: ques.question.type
+                            type: ques.type
                         };
 
                         vm.studentAnswer.answer.push(mapQA);

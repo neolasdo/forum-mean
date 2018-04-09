@@ -32,5 +32,6 @@ module.exports = function(app) {
     app.route('/api/getAnswersById/:uid').get(groups.getAnswersById);
     app.route('/api/studentAnswers/create').post(groups.createStudentAnswers);
     app.route('/api/assignment/:aid/answers').get(groups.getAssignmentAnswers);
+    app.route('/api/answers').get(groups.getAnswers);
     app.route('/api/studentAnswers/:id/point').put(groups.answerPoint);
 };

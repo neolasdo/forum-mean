@@ -4,16 +4,19 @@
     angular
         .module('group')
         .controller('GroupAssigmentsController', GroupAssigmentsController)
-        .controller('AddAssigmentsController', AddAssigmentsController);
+        .controller('AddAssigmentsController', AddAssigmentsController)
+        .controller('ListAnswersController', ListAnswersController);
 
     GroupAssigmentsController.$inject = ['$rootScope', '$scope', '$http', '$stateParams', 'Authentication', '$state', '$modal', 'toastr', 'groupService'];
     AddAssigmentsController.$inject = ['$rootScope', '$scope', '$http', '$stateParams', '$modalInstance', 'Authentication', '$state', '$modal', 'toastr', 'groupService', 'data'];
+    ListAnswersController.$inject = ['$rootScope', '$scope', '$http', '$stateParams', '$modalInstance', 'Authentication', '$state', '$modal', 'toastr', 'groupService', 'data'];
 
     function GroupAssigmentsController($rootScope, $scope, $http, $stateParams, Authentication, $state, $modal, toastr, groupService) {
         var vm = this;
         vm.auth = Authentication;
 
         vm.groupId = $stateParams.id;
+        vm.assignments = [];
         vm.teachers = [];
 
         groupService.get({id: vm.groupId}, function (res) {
@@ -25,6 +28,7 @@
         groupService.getAssignments({id: vm.groupId}, function(res){
             if (res.status == 'success') {
                 vm.assignments = res.data;
+                vm.getAnswers();
             }
         });
 
@@ -65,6 +69,42 @@
                     data: {}
                 }
             });
+        }
+        vm.getAnswers = function (id) {
+            groupService.getAnswers(function (res) {
+                if (res.status == 'success') {
+                    vm.answers = res.data;
+                    vm.answers.forEach(function (awn) {
+                        vm.assignments.forEach(function (item) {
+                            item.answers = [];
+                            if (item._id === awn.assignment._id) {
+                                item.answers.push(awn);
+                            }
+                        })
+                    })
+                }
+            }, function (fail) {
+                toastr.warning('Error')
+            })
+        }
+
+        vm.listAnswer = function(list) {
+            if(list && list.length > 0) {
+                var modalInstance = $modal.open({
+                    animation: true,
+                    templateUrl: 'list-answers-modal.html',
+                    controller: 'ListAnswersController',
+                    controllerAs: 'vm',
+                    size: 'lg',
+                    windowClass: 'ListAnswersController',
+                    resolve: {
+                        data:  function () {
+                            return list
+                        }
+                    }
+                });
+            }
+            else return;
         }
     }
 
@@ -146,6 +186,22 @@
                     toastr.warning('Có lỗi!')
                 })
             }
+        }
+    }
+
+    function ListAnswersController($rootScope, $scope, $http, $stateParams, $modalInstance, Authentication, $state, $modal, toastr, groupService, data) {
+        var vm = this;
+        vm.data = data;
+        vm.item = {};
+        vm.close = function () {
+            $modalInstance.close();
+        };
+        
+        vm.showAnswer = function (item) {
+            vm.item = item;
+        }
+        vm.back = function () {
+            vm.item = {};
         }
     }
 })();

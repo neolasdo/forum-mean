@@ -101,6 +101,10 @@
             method: 'GET',
             url: '/api/assignment/:aid/answers'
         },
+        getAnswers: {
+            method: 'GET',
+            url: '/api/answers'
+        },
         answerPoint: {
             method: 'PUT',
             url: '/api/studentAnswers/:id/point'

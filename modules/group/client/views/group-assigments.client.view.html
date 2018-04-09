@@ -10,12 +10,15 @@
       <div class="table-container">
         <table class="table-users table" border="0">
           <tbody>
-          <tr ng-repeat="data in vm.assignments">
+          <tr ng-repeat="data in vm.assignments|orderBy:startDate">
             <td>
               {{data.name}}
             </td>
             <td>
               {{data.startDate|date:'dd/MM/yyyy'}} - {{data.endDate|date:'dd/MM/yyyy'}}
+            </td>
+            <td>
+                <span ng-click="vm.listAnswer(data.answers)">{{data.answers.length?data.answers.length:0}} <i class="fa fa-file"></i></span>
             </td>
             <td ng-if="vm.groupInfo.createdBy._id == vm.auth.user._id" class="text-right">
               <button class="btn btn-danger" ng-click="vm.removeAssignment(data._id)"><i class="fa fa-trash"></i></button>
@@ -90,6 +93,83 @@
   </div>
   <div class="modal-footer text-right">
     <button class="btn btn-success" ng-disabled="!vm.isValidated()" ng-click="vm.save()">Xong</button>
+    <button class="btn btn-default" ng-click="vm.close()">Đóng</button>
+  </div>
+</script>
+<script type="text/ng-template" id="list-answers-modal.html">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close" ng-click="vm.close()"><span aria-hidden="true">&times;</span></button>
+    <h4 class="modal-title">Danh sách hoàn thành</h4>
+  </div>
+  <div class="modal-body">
+      <table class="table-users table" ng-if="!vm.item._id" border="0">
+          <tbody>
+          <thead>
+          <tr>
+              <th></th>
+              <th>Thành viên</th>
+              <th>Khảo sát</th>
+              <th>Ngày nộp</th>
+              <th class="text-right">Xem</th>
+          </tr>
+          </thead>
+          <tr ng-repeat="data in vm.data">
+              <td width="10" align="center">
+                  <img class="pull-left img-circle nav-user-photo" width="40" ng-src="{{data.student.profileImageURL?data.student.profileImageURL:'/modules/users/client/img/profile/default.png'}}" />  
+              </td>
+              <td>
+                  {{data.student.displayName}}
+              </td>
+              <td>
+                  {{data.assignment.name}}
+              </td>
+              <td>
+                  {{data.date | date:'dd/MM/yyyy'}}
+              </td>
+              <td class="text-right" ng-if="vm.groupInfo.createdBy._id == vm.auth.user._id" >
+                  <button class="btn btn-success" ng-click="vm.showAnswer(data)"><i class="fa fa-search"></i></button>
+              </td>
+          </tr>
+          </tbody>
+      </table>
+
+      <div ng-if="vm.item._id" class="answer-info">
+          <button style="margin: 0  0 20px 20px" class="btn btn-info" ng-click="vm.back()"><span class="fa fa-angle-left"></span> Quay lại</button>
+          <div class="row">
+              <div class="col-sm-6">
+                  <div class="col-xs-3">
+                      <img ng-src="{{vm.item.student.profileImageURL?vm.item.student.profileImageURL:'/modules/users/client/img/profile/default.png'}}" class="img-thumbnail" alt="{{vm.auth.user.displayName}}" width="100%" style="width: 100%; max-height:230px">
+                  </div>
+                  <div class="info col-xs-9">
+                      <h4><span style="font-weight: normal; font-size: 16px">Người nộp: </span>{{vm.item.student.displayName}}</h4><br>
+                      <p>Ngày nộp: {{vm.item.date | date:'dd/MM/yyyy'}}</p>
+                  </div>
+              </div>
+              <div class="col-sm-6 assignment-info">
+                  <h4>Khảo sát: {{vm.item.assignment.name}}</h4>
+                  <p>Tiêu đề: <span ta-bind ng-model="vm.item.assignment.title"></span></p>
+              </div>
+          </div>
+          <hr>
+          <div class="row answers-student" style="padding: 20px">
+              <div class="answer"  ng-repeat="answer in vm.item.answer">
+                  <div class="question-name">
+                      <h5>Câu hỏi: <span>{{answer.question}}</span></h5>
+                  </div>
+                  <div class="answer-content">
+                      <h5>Câu trả lời:</h5>
+                      <p ta-bind ng-model="answer.answer" ng-if="answer.type == 'text' || answer.type == 'pick_one'"></p>
+                      <p ta-bind ng-repeat="item in answer.answer track by $index" ng-model="item" ng-if="answer.type == 'multi_choice'"></p>
+                      <p ng-if="answer.type == 'true/false'">
+                          {{answer.answer=='true'?'Đúng':'Sai'}}
+                      </p>
+
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>
+  <div class="modal-footer text-right">
     <button class="btn btn-default" ng-click="vm.close()">Đóng</button>
   </div>
 </script>

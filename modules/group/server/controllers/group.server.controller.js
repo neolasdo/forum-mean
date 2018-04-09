@@ -262,6 +262,21 @@ exports.getAssignmentAnswers = function (req, res) {
         })
     })
 }
+exports.getAnswers = function (req, res) {
+    StudentAnswer.find({})
+        .populate({path: 'student', select: { 'username': 1, 'displayName': 1, 'profileImageURL': 1}})
+        .populate({path: 'assignment', select: { 'name': 1, 'title' : 1}})
+        .exec(function (err, data) {
+        if (err) return res.status(400).send({
+            'status': 'fail',
+            'data': err
+        });
+        return res.json({
+            'status' : 'success',
+            'data' : data
+        })
+    })
+}
 exports.answerPoint = function (req, res) {
 
 }

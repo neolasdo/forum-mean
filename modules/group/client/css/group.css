@@ -196,3 +196,9 @@ i {  vertical-align: middle; }
 .ui-select-container div:first-child, ul.ui-select-choices.ui-select-choices-content.ui-select-dropdown.dropdown-menu{
     overflow-x: scroll !important;
 }
+.answer{
+    padding-bottom: 20px; border-bottom: 1px solid #999
+}
+.answer:last-child{
+    border: none;
+}
