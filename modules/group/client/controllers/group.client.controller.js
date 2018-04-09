@@ -18,6 +18,13 @@ angular.module('group').controller('GroupController', ['$scope', '$http', '$stat
                 }
             })
         }
+        groupService.checkJoined({id: vm.groupId, uid: vm.auth.user._id}, function (res) {
+            if(res.status != 'success' && vm.groupInfo.createdBy != vm.auth.user_id) {
+                $state.go('group-info', {id: vm.groupId});
+            }
+        }, function (err) {
+            console.log(err);
+        })
         vm.count();
         vm.getUserAnswer = function (assignment) {
             var modalInstance = $modal.open({
