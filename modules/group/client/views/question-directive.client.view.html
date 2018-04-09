@@ -47,8 +47,7 @@
     <div class="row">
         <div class="form-group col-md-12 correct-answer" ng-if="vm.question.type == 'pick_one'">
             <label for="">Câu trả lời đúng</label>
-            <select class="form-control" ng-options="value for value in vm.question.answers" ng-model="vm.question.correctAnswer">
-                <option value=""></option>
+            <select class="form-control" ng-options="value for value in vm.question.answers" ng-model="vm.question.correctAnswer[0]">
             </select>
         </div>
         <div class="form-group col-md-12 correct-answer" ng-if="vm.question.type == 'true/false'">
@@ -58,7 +57,7 @@
                 <option value="false">Sai</option>
             </select>
         </div>
-        <div class="form-group correct-answer col-md-12" ng-if="vm.question.type == 'multi_choice'">
+        <div class="form-group correct-answer multi col-md-12" ng-if="vm.question.type == 'multi_choice'">
             <label for="">Câu trả lời đúng</label>
             <ui-select multiple ng-model="vm.question.correctAnswer" tagging-label="false" theme="bootstrap" tagging-tokens=",|/" comma-on-blur>
                 <ui-select-match placeholder="Chọn câu trả lời">{{$item}}</ui-select-match>

@@ -45,6 +45,7 @@
           var file = vm.fileInfo;
           if (file.name && file.file) {
               file.file = dataURLtoFile(file.file);
+              console.log(file);
               groupService.uploadFile({uid: vm.auth.user._id, gid: vm.groupId, file: file}, function (res) {
 
               }, function (err) {
