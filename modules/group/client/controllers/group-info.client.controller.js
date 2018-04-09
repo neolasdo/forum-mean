@@ -17,7 +17,7 @@
           }
       });
 
-      vm.count = function() {
+      vm.counts = function() {
           groupService.count({id: vm.groupId}, function (res){
               if (res.status == 'success') {
                   vm.count = res.data;
@@ -26,12 +26,12 @@
       }
       groupService.checkJoined({id: vm.groupId, uid: vm.auth.user._id}, function (res) {
           if(res.status == 'success') {
-
+              $state.go('group.home', {id: vm.groupId});
           }
       }, function (err) {
           console.log(err);
       })
-      vm.count();
+      vm.counts();
       vm.join = function () {
           groupService.join({id: vm.groupId, code: vm.code, userId: vm.auth.user._id}, function (res){
               if (res.status == 'success') {

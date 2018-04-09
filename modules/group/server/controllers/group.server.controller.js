@@ -460,7 +460,6 @@ exports.checkJoined = function (req, res) {
                     if (err) return res.status(400).send({status: 'error',message: err});
                     if (gs.length > 0) return res.json({'status' : 'success'});
                 })
-                return res.json({'status' : 'wrong'});
             }
             if (grp.createdBy == uid) return res.json({'status' : 'success'});
         }
