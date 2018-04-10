@@ -27,6 +27,8 @@ module.exports = {
   // for obsecurity reasons
   sessionKey: 'sessionId',
   sessionCollection: 'sessions',
+  openTokApi: '46067612',
+  openTokSecret: '0b0d13b6448702681d604e1835c7922fb581bcbb',
   logo: 'modules/core/client/img/brand/logo.png',
   favicon: 'modules/core/client/img/brand/favicon.ico',
   uploads: {
