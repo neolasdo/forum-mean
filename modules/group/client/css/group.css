@@ -193,7 +193,7 @@ i {  vertical-align: middle; }
     padding-bottom: 20px;
     border-bottom: none;
 }
-.ui-select-container div:first-child, ul.ui-select-choices.ui-select-choices-content.ui-select-dropdown.dropdown-menu{
+.form-group.correct-answer.multi.col-md-12.ng-scope .ui-select-container div:first-child, ul.ui-select-choices.ui-select-choices-content.ui-select-dropdown.dropdown-menu{
     overflow-x: scroll !important;
 }
 .answer{
