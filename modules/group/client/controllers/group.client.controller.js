@@ -157,15 +157,6 @@ angular.module('group').controller('GroupController', ['$scope', '$http', '$stat
                     console.log(err)
                 });
             });
-            // Create a publisher
-            var publisher = OT.initPublisher('publisher', {
-                insertMode: 'append',
-                width: '0',
-                height: '0'
-            }, function (err) {
-                console.log(err)
-            });
-
 
         }else{
             toastr.warning('Giáo viên hiện đang offline');
