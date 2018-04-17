@@ -149,13 +149,18 @@ angular.module('group').controller('GroupController', ['$scope', '$http', '$stat
                 }
             });
             session.on('streamCreated', function(event) {
-                session.subscribe(event.stream, 'subscribers', {
+                session.subscribe(event.stream, 'publisher', {
                     insertMode: 'append',
                     width: '100%',
                     height: '100%'
                 }, function (err) {
                     console.log(err)
                 });
+            });
+            session.on("streamDestroyed", function (event) {
+                console.log("The publisher stopped streaming. Reason: "
+                    + event.reason);
+                vm.close();
             });
 
         }else{
@@ -186,7 +191,6 @@ angular.module('group').controller('GroupController', ['$scope', '$http', '$stat
                         insertMode: 'append',
                         width: '100%',
                         height: '100%',
-                        videoSource: null
                     };
                     publisher = OT.initPublisher('publisher', publisherOptions, function initCallback(err) {
                         if (err) {
