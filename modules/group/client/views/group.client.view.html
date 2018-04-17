@@ -89,24 +89,12 @@
       </div>
         <div class="panel panel-success">
             <div class="panel-heading">
-                <h3 class="panel-title">Giáo viên đang dạy trực tuyến!</h3>
-            </div>
-            <div class="panel-body row">
-                <div class="col-sm-12" style="padding-bottom: 20px">
-                    Bài giảng về HTML5 - CSS3
-                </div>
-                <div class="col-sm-12 text-right">
-                    <button class="btn btn-info btn-sm" ng-click="vm.openStream()"><span class="fa fa-play"></span> Xem ngay!</button>
-                </div>
-            </div>
-        </div>
-        <div class="panel panel-success">
-            <div class="panel-heading">
                 <h3 class="panel-title">Streaming</h3>
             </div>
             <div class="panel-body row">
                 <div class="col-sm-12 text-right">
-                    <button class="btn btn-info btn-sm" ng-click="vm.startStream()"><span class="fa fa-play"></span> Xem ngay!</button>
+                    <button class="btn btn-info btn-sm" ng-if="vm.auth.user._id == vm.groupInfo.createdBy._id" ng-click="vm.openStream()"><span class="fa fa-play"></span> Bắt đầu!</button>
+                    <button class="btn btn-info btn-sm"  ng-if="vm.auth.user._id != vm.groupInfo.createdBy._id" ng-click="vm.openStream()"><span class="fa fa-play"></span> Theo dõi!</button>
                 </div>
             </div>
         </div>
@@ -141,11 +129,14 @@
 <script type="text/ng-template" id="stream-modal.html">
     <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close" ng-click="vm.close()"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title">Học online</h4>
+        <h4 class="modal-title">Dạy/Học online</h4>
     </div>
     <div class="modal-body">
         <div class="row" style="padding: 20px">
-
+            <div class="wrapper">
+                <div id="publisher" style="width: 100%;min-height: 253px;"></div>
+                <div id="subscribers" style="width: 100%;min-height: 253px;"></div>
+            </div>
         </div>
     </div>
     <div class="modal-footer text-right">

@@ -10,14 +10,6 @@ var mongoose = require('mongoose'),
  * Stream Schema
  */
 var StreamSchema = new Schema({
-    title: {
-        type: String,
-        default: ''
-    },
-    streamer: {
-        type: mongoose.Schema.ObjectId,
-        ref: 'User'
-    },
     group: {
         type: mongoose.Schema.ObjectId,
         ref: 'Group'
@@ -26,9 +18,13 @@ var StreamSchema = new Schema({
         type: String,
         default: ''
     },
+    token : {
+        type: String,
+        default: ''
+    },
     startedAt: {
         type: Date,
-        default: Data.now()
+        default: Date.now()
     },
     status: {
         type: Number,

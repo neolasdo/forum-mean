@@ -105,6 +105,18 @@
             method: 'GET',
             url: '/api/answers'
         },
+        getStream: {
+            method: 'GET',
+            url: '/api/getStream/:id'
+        },
+        startSession: {
+            method: 'POST',
+            url: '/api/startSession'
+        },
+        stopSession: {
+            method: 'POST',
+            url: '/api/stopSession'
+        },
         answerPoint: {
             method: 'PUT',
             url: '/api/studentAnswers/:id/point'

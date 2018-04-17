@@ -6,6 +6,8 @@ angular.module('group').controller('GroupController', ['$scope', '$http', '$stat
         vm.auth = Authentication;
         vm.groupId = $stateParams.id;
         vm.assignments = [];
+        vm.title = '';
+        vm.stream = {};
         groupService.get({id: vm.groupId}, function (res){
           if (res.status == 'success') {
               vm.groupInfo = res.data;
@@ -40,6 +42,17 @@ angular.module('group').controller('GroupController', ['$scope', '$http', '$stat
                 }
             });
         }
+        vm.getStream = function() {
+
+            groupService.getStream({id: vm.groupId},function (res) {
+                if (res.status == 'success') {
+                    vm.stream =res.data;
+                }
+            }, function (fail) {
+                console.log(fail)
+            })
+        }
+        vm.getStream();
         groupService.getActiveAssignment({id: vm.groupId}, function(res) {
             if(res.status == 'success') {
                 vm.assignments = res.data;
@@ -58,6 +71,7 @@ angular.module('group').controller('GroupController', ['$scope', '$http', '$stat
             console.log(fail);
         });
         vm.openStream = function() {
+            vm.getStream();
             var modalInstance = $modal.open({
                 animation: true,
                 templateUrl: 'stream-modal.html',
@@ -65,7 +79,14 @@ angular.module('group').controller('GroupController', ['$scope', '$http', '$stat
                 controllerAs: 'vm',
                 size: 'lg',
                 backdrop: 'static',
-                windowClass: 'StreamController'
+                windowClass: 'StreamController',
+                resolve: {
+                    stream: vm.stream,
+                    group: vm.groupInfo
+                }
+            });
+            modalInstance.result.then(function () {
+                $state.reload();
             });
         };
         vm.finishAssignment = function (assignment) {
@@ -94,12 +115,130 @@ angular.module('group').controller('GroupController', ['$scope', '$http', '$stat
             }
         }
     }
-]).controller('StreamController',  ['$scope', '$http', '$stateParams', 'Authentication', '$state', '$modal', 'toastr', 'groupService', '$modalInstance',
-    function StreamController($scope, $http, $stateParams, Authentication, $state, $modal, toastr, groupService, $modalInstance) {
+]).controller('StreamController',  ['$scope', '$http', '$stateParams', 'Authentication', '$state', '$modal', 'toastr', 'groupService', '$modalInstance', 'stream', 'group',
+    function StreamController($scope, $http, $stateParams, Authentication, $state, $modal, toastr, groupService, $modalInstance, stream, group) {
     var vm = this;
+    vm.auth = Authentication;
+    vm.groupInfo = group;
+    vm.session = {};
+    var publisher;
+    var session;
+
+    var openTokApi= '46067612',
+        openTokSecret= '0b0d13b6448702681d604e1835c7922fb581bcbb';
+    vm.stream = stream;
+
+    vm.stopSession = function () {
+        groupService.stopSession({sid: vm.stream._id}, function (res) {
+            if (res.status == 'success'){}
+        },function (fail) {
+            console.log(fail)
+        })
+    };
+    if (vm.auth.user._id != vm.groupInfo.createdBy._id) {
+        if (vm.stream && vm.stream._id) {
+            console.log(vm.stream)
+            var sessionId = vm.stream.sessionId;
+            var sessionToken = vm.stream.token;
+            session = OT.initSession(openTokApi, sessionId);
+            session.connect(sessionToken, function connectCallback(error) {
+                if (!error) {
+                    console.log(session)
+                } else {
+                    console.log('There was an error connecting to the session: ', error.name, error.message);
+                }
+            });
+            session.on('streamCreated', function(event) {
+                session.subscribe(event.stream, 'subscribers', {
+                    insertMode: 'append',
+                    width: '100%',
+                    height: '100%'
+                }, function (err) {
+                    console.log(err)
+                });
+            });
+            // Create a publisher
+            var publisher = OT.initPublisher('publisher', {
+                insertMode: 'append',
+                width: '0',
+                height: '0'
+            }, function (err) {
+                console.log(err)
+            });
+
+
+        }else{
+            toastr.warning('Giáo viên hiện đang offline');
+            vm.close();
+        }
+    }
+    if (vm.auth.user._id == vm.groupInfo.createdBy._id) {
+        if (vm.stream && vm.stream._id) {
+            vm.stopSession();
+        }
+        groupService.startSession({gid: vm.groupInfo._id}, function (res) {
+            vm.session = res.session;
+            vm.stream = res.data;
+            var sessionId = vm.session.sessionId;
+            var sessionToken = res.token;
+
+            session = OT.initSession(openTokApi, sessionId);
+
+            session.on('sessionDisconnected', function sessionDisconnected(event) {
+                console.log('You were disconnected from the session.', event.reason);
+            });
+            // Connect to the session
+            session.connect(sessionToken, function connectCallback(error) {
+                // If the connection is successful, initialize a publisher and publish to the session
+                if (!error) {
+                    var publisherOptions = {
+                        insertMode: 'append',
+                        width: '100%',
+                        height: '100%',
+                        videoSource: null
+                    };
+                    publisher = OT.initPublisher('publisher', publisherOptions, function initCallback(err) {
+                        if (err) {
+                            console.log('There was an error initializing the publisher: ', err.name, err.message);
+                            return;
+                        }
+                        session.publish(publisher, function publishCallback(pubErr) {
+                            if (pubErr) {
+                                console.log('There was an error publishing: ', pubErr.name, pubErr.message);
+                            }
+                        });
+
+                    });
+                    publisher.on("streamDestroyed", function (event) {
+                        console.log("The publisher stopped streaming. Reason: "
+                            + event.reason);
+                    });
+                    publisher.on('streamCreated', function(event) {
+                        console.log('Stream resolution: ' +
+                            event.stream.videoDimensions.width +
+                            'x' + event.stream.videoDimensions.height);
+                    });
+                } else {
+                    console.log('There was an error connecting to the session: ', error.name, error.message);
+                }
+            });
+
+        }, function (fail) {
+            console.log(fail);
+            toastr.warning('Có lỗi!');
+            vm.close();
+        })
+    }
+
     vm.close = function () {
+        if (publisher && session) {
+            publisher.destroy();
+            session.disconnect();
+            vm.stopSession();
+        }
         $modalInstance.close();
     };
+
 }]).controller('FinishAssignmentController',  ['$scope', '$http', '$stateParams', 'Authentication', '$state', '$modal', 'toastr', 'groupService', '$modalInstance', 'data',
     function FinishAssignmentController($scope, $http, $stateParams, Authentication, $state, $modal, toastr, groupService, $modalInstance, data) {
     var vm = this;

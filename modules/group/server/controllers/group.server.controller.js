@@ -6,6 +6,7 @@
 var path = require('path'),
     mongoose = require('mongoose'),
     config = require(path.resolve('./config/config')),
+    df = require(path.resolve('./config/env/default')),
     multer = require('multer'),
     fs = require('fs'),
     Group = mongoose.model('Group'),
@@ -13,17 +14,69 @@ var path = require('path'),
     Comment = mongoose.model('Comment'),
     Assignment = mongoose.model('Assignment'),
     Question = mongoose.model('Question'),
+    Stream = mongoose.model('Stream'),
     StudentAnswer = mongoose.model('StudentAnswer'),
     Document = mongoose.model('Document'),
     GroupStudent = mongoose.model('GroupStudent'),
     errorHandler = require(path.resolve('./modules/core/server/controllers/errors.server.controller')),
-  _ = require('lodash');
+    OpenTok = require('opentok'),
+    opentok = new OpenTok(df.openTokApi, df.openTokSecret),
+    _ = require('lodash');
 
 /**
  *
  * @param req
  * @param res
  */
+exports.createSession = function(req, res) {
+    var gid = req.body.gid;
+    opentok.createSession(function(err, session) {
+        if (err) return console.log(err);
+        Stream.find({group: gid}).remove().exec();
+        var token = session.generateToken();
+        var stream = new Stream({group: gid, sessionId: session.sessionId, token: token, status: 1});
+
+        stream.save(function (err, data) {
+            if (err) return res.status(400).send({
+                'status' : 'error',
+                'data' : err
+            })
+            return res.json({
+                'status' : 'success',
+                'session' : session,
+                'token' : token,
+                'data' : data
+            })
+        })
+    });
+}
+exports.stopSession = function(req, res) {
+    var sid = req.body.sid;
+
+    Stream.findOneAndRemove({_id: sid}).exec(function (err, str) {
+        if (err) return res.status(400).send({
+            'status' : 'error',
+            'data' : err
+        })
+        return res.json({
+            'status' : 'success'
+        })
+    })
+}
+exports.getStream = function (req, res) {
+    var id = req.params.id;
+
+    Stream.findOne({group: id, status: 1}, function (err, stream) {
+        if (err) return res.status(400).send({
+            'status' : 'error',
+            'data' : err
+        })
+        else return res.json({
+            'status' : 'success',
+            'data' : stream
+        })
+    })
+}
 exports.createComment = function (req, res) {
     var topicId = req.body.topicId;
     var groupId = req.body.groupId;

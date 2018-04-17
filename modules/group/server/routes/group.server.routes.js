@@ -34,4 +34,7 @@ module.exports = function(app) {
     app.route('/api/assignment/:aid/answers').get(groups.getAssignmentAnswers);
     app.route('/api/answers').get(groups.getAnswers);
     app.route('/api/studentAnswers/:id/point').put(groups.answerPoint);
+    app.route('/api/getStream/:id').get(groups.getStream);
+    app.route('/api/startSession').post(groups.createSession);
+    app.route('/api/stopSession').post(groups.stopSession);
 };
