@@ -572,10 +572,33 @@ exports.saveDocument = function (req, res) {
     });
 }
 exports.uploadDocument = function (req, res) {
-    var fileInfo = req.body.file;
+    var fileUrl = req.body.file;
+    var info = req.body.info;
     var uid = req.body.uid;
     var gid = req.body.gid;
 
+    var document = new Document({
+        name: info.name,
+        url: fileUrl,
+        group: gid,
+        uploadBy: uid,
+        desc: info.desc
+    })
+
+    document.save(function (err, document) {
+        if(err) {
+            return res.status(400).send({
+                'status': 'error',
+                'message': err
+            });
+        }
+        else {
+            return res.json({
+                'status' : 'success',
+                'data' : document
+            });
+        }
+    })
 }
 /**
  *

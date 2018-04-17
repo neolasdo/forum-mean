@@ -41,17 +41,23 @@
       //     input.click();
       //     input.addEventListener("change", vm.readFile);
       // }
-
+      $scope.cancelUpload = function () {
+          $scope.fileName = '';
+          $scope.uploader.clearQueue();
+      };
       $scope.uploader = new FileUploader({
           url: '/api/saveDocument',
-          alias: 'newDocument'
+          alias: 'newGroupDocument'
       });
       $scope.uploader.filters.push({
           name: 'documentFilter',
           fn: function (item, options) {
               $scope.fileName = item.name;
-              var type = '|' + item.type.slice(item.type.lastIndexOf('/') + 1) + '|';
-              return '|doc|docx|pdf|ppt|pptx|xls|csv|js|xlsx|'.indexOf(type) !== -1;
+              var allowedExtensions = ['doc','docx','pdf','ppt','pptx','xls','csv','xlsx'];
+              var ext  = item.name.split('.').pop(); //get the file extension
+              return allowedExtensions.indexOf(ext) !== -1;;
+              // var type = '|' + item.type.slice(item.type.lastIndexOf('/') + 1) + '|';
+              // return '|doc|docx|pdf|ppt|pptx|xls|csv|js|xlsx|'.indexOf(type) !== -1;
           }
       });
       $scope.uploader.onAfterAddingFile = function (fileItem) {
@@ -70,18 +76,19 @@
       vm.uploadFile = function() {
           $scope.success = $scope.error = null;
           $scope.uploader.uploadAll();
+          $scope.fileName = '';
 
           $scope.uploader.onSuccessItem = function (fileItem, response, status, headers) {
-              $scope.success = true;
-              console.log(fileItem);
-              console.log(response);
-
-              $scope.cancelUpload();
-              groupService.uploadFile({uid: vm.auth.user._id, gid: vm.groupId, file: file}, function (res) {
-
+              groupService.uploadFile({uid: vm.auth.user._id, gid: vm.groupId, file: response, info: vm.fileInfo}, function (res) {
+                  if (res.status == 'success') {
+                      toastr.success('Tài liệu đã được tải lên');
+                      $state.reload();
+                  }
               }, function (err) {
                   console.log(err);
+                  toastr.warning('Có lỗi')
               })
+              $scope.cancelUpload();
           };
           $scope.uploader.onErrorItem = function (fileItem, response, status, headers) {
               $scope.cancelUpload();

@@ -20,6 +20,7 @@
                             </div>
                             <div class="file text-center" ng-show="uploader.queue.length">
                                 {{fileName}}
+                                <br><button class="btn btn-danger" ng-click="cancelUpload()">Hủy</button>
                             </div>
                             <div ng-show="success" class="text-center text-success">
                                 <strong>Đã tải tài liệu</strong>
@@ -41,7 +42,7 @@
                         </div>
                     </div>
                     <div class="row text-center" ng-show="uploader.queue.length">
-                        <button class="btn btn-success"  ng-click="vm.uploadFile()">
+                        <button class="btn btn-success" ng-disabled="!vm.fileInfo.name" ng-click="vm.uploadFile()">
                             Tải lên
                         </button>
                     </div>

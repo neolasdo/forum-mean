@@ -16,12 +16,7 @@ var DocumentSchema = new Schema({
     },
     url: {
         type: String,
-        required: "Bạn phải nhập url cho tài liệu"
-    },
-    status: {
-        type: String,
-        enum: ['public', 'private', 'hide'],
-        default: 'private'
+        required: true
     },
     image: {
         type: String,
