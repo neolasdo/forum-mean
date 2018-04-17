@@ -553,11 +553,28 @@ exports.joinGroup = function (req, res) {
  * @param req
  * @param res
  */
+exports.saveDocument = function (req, res) {
+    var message = null;
+    var upload = multer(config.uploads.groupDocument).single('newGroupDocument');
+    var groupUploadDocumentFilter = require(path.resolve('./config/lib/multer')).documentUploadFileFilter;
+
+    upload.fileFilter = groupUploadDocumentFilter;
+
+    upload(req, res, function (uploadError) {
+        if(uploadError) {
+            return res.status(400).send({
+                message: uploadError
+            });
+        } else {
+            var documentUrl = config.uploads.groupDocument.dest + req.file.filename;
+            res.json(documentUrl);
+        }
+    });
+}
 exports.uploadDocument = function (req, res) {
     var fileInfo = req.body.file;
     var uid = req.body.uid;
     var gid = req.body.gid;
-    var path = config.uploads.groupDocument.dest+fileInfo.fileName;
 
 }
 /**

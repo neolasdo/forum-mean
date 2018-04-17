@@ -47,7 +47,7 @@ module.exports = {
     groupDocument: {
         dest: './modules/group/client/file/uploads/', // group upload destination path
         limits: {
-            fileSize: 100*1024*1024 // Max file size in bytes (100 MB)
+            fileSize: 1024*1024*1024 // Max file size in bytes (1GB)
         }
     }
   }

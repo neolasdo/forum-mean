@@ -13,11 +13,20 @@
                 <form novalidate>
                     <div class="row">
                         <div class="col-sm-12">
-                            <input id="my-file-selector" type="file" style="display:none" onchange="$('#upload-file-info').html(this.files[0].name)">
-                            <button class="btn btn-default" ng-click="vm.chooseFile()">
-                                Chọn file
-                            </button>
-                            <span class='label label-info' id="upload-file-info" ng-model="vm.fileName"></span>
+                            <div class="text-center form-group" ng-hide="uploader.queue.length">
+                              <span class="btn btn-default btn-file">
+                                  Chọn File <input type="file" nv-file-select uploader="uploader"  name="files">
+                              </span>
+                            </div>
+                            <div class="file text-center" ng-show="uploader.queue.length">
+                                {{fileName}}
+                            </div>
+                            <div ng-show="success" class="text-center text-success">
+                                <strong>Đã tải tài liệu</strong>
+                            </div>
+                            <div ng-show="error" class="text-center text-danger">
+                                <strong ng-bind="error"></strong>
+                            </div>
                         </div>
                         <div class="col-sm-12" style="padding: 10px">
                             <div class="form-group">
@@ -31,7 +40,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="row text-center">
+                    <div class="row text-center" ng-show="uploader.queue.length">
                         <button class="btn btn-success"  ng-click="vm.uploadFile()">
                             Tải lên
                         </button>
