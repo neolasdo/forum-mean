@@ -37,6 +37,10 @@
             method: 'GET',
             url: '/api/group/:id/students'
         },
+        getDocuments : {
+            method: 'GET',
+            url: '/api/group/:id/documents'
+        },
         addStudents : {
             method: 'POST',
             url: '/api/group/:id/addStudents'

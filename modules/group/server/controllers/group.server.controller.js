@@ -31,7 +31,10 @@ var path = require('path'),
 exports.createSession = function(req, res) {
     var gid = req.body.gid;
     opentok.createSession(function(err, session) {
-        if (err) return console.log(err);
+        if (err) return res.status(400).send({
+            'status' : 'error',
+            'data' : err
+        });
         Stream.find({group: gid}).remove().exec();
         var token = session.generateToken();
         var stream = new Stream({group: gid, sessionId: session.sessionId, token: token, status: 1});
@@ -600,6 +603,24 @@ exports.uploadDocument = function (req, res) {
         }
     })
 }
+exports.getDocuments = function(req, res) {
+    var gid = req.params.id;
+
+    Document.find({group: gid}).exec(function(err, collection) {
+        if(err) {
+            return res.status(400).send({
+                'status': 'error',
+                'message': err
+            });
+        }
+        else {
+            return res.json({
+                'status' : 'success',
+                'data' : collection
+            });
+        }
+    });
+}
 /**
  *
  * @param req
@@ -725,7 +746,7 @@ exports.uploadPicture = function (req, res) {
             });
         } else {
             var groupImageUrl = config.uploads.groupUpload.dest + req.file.filename;
-            res.json(groupImageUrl);
+            return res.json(groupImageUrl);
         }
     });
 }

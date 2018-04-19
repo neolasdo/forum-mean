@@ -15,6 +15,7 @@ module.exports = function(app) {
     app.route('/api/group/:id/user/:uid').get(groups.checkJoined);
     app.route('/api/group/:id/count').get(groups.count);
     app.route('/api/group/:id/students').get(groups.getListStudent);
+    app.route('/api/group/:id/documents').get(groups.getDocuments);
     app.route('/api/group/:id/addStudents').post(groups.addStudents);
     app.route('/api/group/find/:key').get(groups.findClass);
     app.route('/api/group/resetCode').put(groups.resetCode);

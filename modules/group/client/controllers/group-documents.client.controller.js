@@ -11,7 +11,18 @@
       var vm = this;
       vm.auth = Authentication;
       vm.fileInfo = {};
+      vm.documents = [];
       vm.groupId = $stateParams.id;
+      vm.getDocuments = function() {
+          groupService.getDocuments({id: vm.groupId}, function(res) {
+              if (res.status == 'success') {
+                  vm.documents = res.data;
+              }
+          }, function (fail) {
+              console.log(fail);
+          })
+      }
+      vm.getDocuments();
       // vm.readFile = function(){
       //     if (this.files && this.files[0]) {
       //         var FR= new FileReader();
