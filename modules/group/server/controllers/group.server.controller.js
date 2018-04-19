@@ -558,7 +558,14 @@ exports.joinGroup = function (req, res) {
  */
 exports.saveDocument = function (req, res) {
     var message = null;
-    var upload = multer(config.uploads.groupDocument).single('newGroupDocument');
+    var storage = multer.diskStorage({
+        destination: config.uploads.groupDocument.dest,
+        filename: function (req, file, cb) {
+            var datetimestamp = Date.now();
+            cb(null, file.fieldname + '-' + datetimestamp + '.' + file.originalname.split('.')[file.originalname.split('.').length -1])
+        }
+    })
+    var upload = multer({ storage: storage }).single('newGroupDocument');
     var groupUploadDocumentFilter = require(path.resolve('./config/lib/multer')).documentUploadFileFilter;
 
     upload.fileFilter = groupUploadDocumentFilter;
