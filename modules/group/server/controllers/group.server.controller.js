@@ -589,7 +589,7 @@ exports.uploadDocument = function (req, res) {
 
     var extensionList = ['.doc','.docx', '.txt', '.css', '.csv', '.eot', '.htm', '.html', '.jar', '.js','.json', '.pdf', '.ppt', '.pptx', '.rar', '.xls', '.xlsx', '.xml', '.zip'];
     var extension = path.extname(fileUrl);
-    console.log(extension);
+
     var image;
     if (extensionList.indexOf(extension) > -1){
         extension = extension.replace('.','');
