@@ -587,8 +587,22 @@ exports.uploadDocument = function (req, res) {
     var uid = req.body.uid;
     var gid = req.body.gid;
 
+    var extensionList = ['.doc','.docx', '.txt', '.css', '.csv', '.eot', '.htm', '.html', '.jar', '.js','.json', '.pdf', '.ppt', '.pptx', '.rar', '.xls', '.xlsx', '.xml', '.zip'];
+    var extension = path.extname(fileUrl);
+    console.log(extension);
+    var image;
+    if (extensionList.indexOf(extension) > -1){
+        extension = extension.replace('.','');
+        image = 'modules/group/client/img/document/'+extension+'.png';
+    }
+    else {
+        image = 'modules/group/client/img/document/default.png';
+    }
+
+    console.log(image);
     var document = new Document({
         name: info.name,
+        image: image,
         url: fileUrl,
         group: gid,
         uploadBy: uid,
@@ -613,7 +627,10 @@ exports.uploadDocument = function (req, res) {
 exports.getDocuments = function(req, res) {
     var gid = req.params.id;
 
-    Document.find({group: gid}).exec(function(err, collection) {
+    Document.find({group: gid}).populate({
+        path: 'uploadBy',
+        select: {password:0, salt: 0}
+    }).exec(function(err, collection) {
         if(err) {
             return res.status(400).send({
                 'status': 'error',
@@ -627,6 +644,22 @@ exports.getDocuments = function(req, res) {
             });
         }
     });
+}
+exports.removeDocument = function (req, res) {
+    var did = req.body.id;
+    Document.findOneAndRemove({_id: did}, function (err, deleted) {
+        if(err) {
+            return res.status(400).send({
+                'status': 'error',
+                'message': err
+            });
+        }
+        else {
+            return res.json({
+                'status' : 'success',
+            });
+        }
+    })
 }
 /**
  *

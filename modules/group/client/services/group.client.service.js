@@ -41,6 +41,10 @@
             method: 'GET',
             url: '/api/group/:id/documents'
         },
+        removeDocument : {
+            method: 'POST',
+            url: '/api/document/remove'
+        },
         addStudents : {
             method: 'POST',
             url: '/api/group/:id/addStudents'

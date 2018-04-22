@@ -23,35 +23,18 @@
           })
       }
       vm.getDocuments();
-      // vm.readFile = function(){
-      //     if (this.files && this.files[0]) {
-      //         var FR= new FileReader();
-      //         FR.readAsDataURL( this.files[0] );
-      //         vm.fileInfo.fileName = this.files[0].name;
-      //         vm.fileInfo.extension = vm.getExtension(vm.fileInfo.fileName);
-      //
-      //         FR.addEventListener("load", function(e) {
-      //             vm.fileInfo.file = e.target.result;
-      //         });
-      //     }
-      // };
-      // vm.getExtension = function(filename) {
-      //     return typeof filename != "undefined" ? filename.substring(filename.lastIndexOf(".")+1, filename.length).toLowerCase() : false;
-      // }
-      // function dataURLtoFile(dataurl) {
-      //     var arr = dataurl.split(','), mime = arr[0].match(/:(.*?);/)[1],
-      //         bstr = atob(arr[1]), n = bstr.length, u8arr = new Uint8Array(n);
-      //     while(n--){
-      //         u8arr[n] = bstr.charCodeAt(n);
-      //     }
-      //     var blob = new Blob([u8arr], {type:mime});
-      //     return blob;
-      // }
-      // vm.chooseFile = function () {
-      //     var input = document.querySelector('input[type=file]');
-      //     input.click();
-      //     input.addEventListener("change", vm.readFile);
-      // }
+      vm.removeDocument = function (id) {
+          if($window.confirm('Bạn có chắc chắn muốn xóa tài liệu?')) {
+              groupService.removeDocument({id: id}, function (res) {
+                  if (res.status == 'success') {
+                      toastr.success('Đã xóa!');
+                      vm.getDocuments();
+                  }
+              }, function (fail) {
+                  toastr.warning('Không thể xóa tài liệu');
+              })
+          }
+      }
       $scope.cancelUpload = function () {
           $scope.fileName = '';
           $scope.uploader.clearQueue();
@@ -64,7 +47,7 @@
           name: 'documentFilter',
           fn: function (item, options) {
               $scope.fileName = item.name;
-              var allowedExtensions = ['doc','docx','pdf','ppt','pptx','xls','csv','xlsx'];
+              var allowedExtensions = ['doc','docx', 'txt', 'css', 'csv', 'eot', 'htm', 'html', 'jar', 'js','json', 'pdf', 'ppt', 'pptx', 'rar', 'xls', 'xlsx', 'xml', 'zip'];
               var ext  = item.name.split('.').pop(); //get the file extension
               return allowedExtensions.indexOf(ext) !== -1;;
               // var type = '|' + item.type.slice(item.type.lastIndexOf('/') + 1) + '|';
