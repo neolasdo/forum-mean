@@ -1,0 +1,106 @@
+<section ng-controller="GroupMemberController as vm">
+    <div class="panel panel-default user_panel">
+        <div class="panel-heading" style="height: 40px;">
+            <div class="col-xs-12"><h3 class="panel-title">Thông tin thành viên</h3></div>
+        </div>
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-xs-4">
+                    <img ng-src="{{vm.memberInfo.user.profileImageURL?vm.memberInfo.user.profileImageURL:'/modules/users/client/img/profile/default.png'}}" class="img-thumbnail" alt="{{vm.memberInfo.user.displayName}}" width="100%" style="width: 100%; max-height:230px">
+                </div>
+                <div class="info col-xs-8">
+                    <p>{{vm.memberInfo.user.displayName}}</p>
+                </div>
+            </div>
+            <div class="info-content row">
+                <div class="info-heading">
+                    <h4>Bài viết</h4>
+                </div>
+                <div class="info-body">
+                    <div class="row">
+                        <div ng-repeat="topic in vm.memberInfo.topics | orderBy:'-createdAt'" class="panel panel-default">
+                            <div class="panel-heading">
+                                <a href="#">
+                                    <img ng-src="{{topic.createdBy.profileImageURL?topic.createdBy.profileImageURL:'/modules/users/client/img/profile/default.png'}}" alt="{{topic.createdBy.displayName}}" class="header-profile-image" />
+                                    {{topic.createdBy.displayName}}
+                                </a>
+                                <span class="pull-right">{{vm.getTimeAgo(topic.createdAt)}}</span>
+                                <!--<button ng-if="topic.createdBy._id == vm.auth.user._id || vm.auth.user._id == vm.groupInfo.createdBy " class="pull-right" ng-click="vm.hideTopic(topic._id)">hide</button>-->
+                            </div>
+                            <div class="panel-body">
+                                <div ta-bind ng-model="topic.content"></div>
+                                <div class="comments" ng-if="topic.comments.length" style="margin-top: 5px">
+                                    <div class="row">
+                                        <div class="col-sm-12">
+                                            <div class="page-header">
+                                                <h3><small class="pull-right">{{topic.comments.length+' bình luận'}}</small> Bình luận </h3>
+                                            </div>
+                                            <div class="comments-list" ng-repeat="comment in topic.comments |  orderBy:'-createdAt' | limitTo: 5" style="padding-top: 10px">
+                                                <div class="media">
+                                                    <div class="row comment-info">
+                                                        <div class="col-xs-6">
+                                                            <img ng-src="{{comment.createdBy.profileImageURL?comment.createdBy.profileImageURL:'/modules/users/client/img/profile/default.png'}}" alt="{{comment.createdBy.displayName}}" class="header-profile-image"/>
+                                                            <a href="#">
+                                                                {{comment.createdBy.displayName}}
+                                                            </a>
+                                                        </div>
+                                                        <div class="col-xs-6 pull-right text-right">
+                                                            <span class="time-ago">{{vm.getTimeAgo(comment.createdAt)}}</span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="comment-content">
+                                                        <div class="col-xs-12">
+                                                            {{comment.content}}
+                                                        </div>
+                                                        <div class="action col-xs-12">
+                                                            <!--<p><small><a href="#" ng-click="vm.likeComment(comment._id)">Thích </a><span>({{comment.like}})</span></small></p>-->
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="info-content row">
+                <div class="info-heading">
+                    <h4>Tài liệu</h4>
+                </div>
+                <div class="info-body">
+                    <div class="item" ng-repeat="d in vm.memberInfo.documents">
+                        <div class="row">
+                            <div class="col-xs-2 col-md-2">
+                                <img ng-src="{{d.image}}" class="img-circle img-responsive" alt="" /></div>
+                            <div class="col-xs-9 col-md-9">
+                                <div>
+                                    <a ng-href="{{d.url}}" target="_blank">
+                                        {{d.name}}</a>
+                                    <div class="mic-info">
+                                        By: <a href="#">{{d.uploadBy.displayName}}</a> {{d.uploadAt|date:'dd/mm/yyyy HH:mm'}}
+                                    </div>
+                                </div>
+                                <div class="comment-text">
+                                    <p ta-bind ng-model="d.desc"></p>
+                                </div>
+                            </div>
+                            <div class="col-xs-12">
+                                <div class="action  text-right">
+                                    <button type="button" class="btn btn-success btn-xs" title="Download">
+                                        <a style="color: #fff;" ng-href="{{d.url}}" target="_blank"><span class="glyphicon glyphicon-save"></span></a>
+                                    </button>
+                                    <button type="button" ng-if="vm.groupInfo.createdBy._id == vm.auth.user._id || d.uploadBy == vm.auth.user._id" ng-click="vm.removeDocument(d._id)" class="btn btn-danger btn-xs" title="Delete">
+                                        <span class="glyphicon glyphicon-trash"></span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

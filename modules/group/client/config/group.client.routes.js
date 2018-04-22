@@ -26,6 +26,10 @@
           url: '/home',
           templateUrl: 'modules/group/client/views/group-home.client.view.html',
         })
+        .state('group.member', {
+          url: '/member/:uid',
+          templateUrl: 'modules/group/client/views/group-member.client.view.html',
+        })
         .state('group.students', {
             url: '/students',
             templateUrl: 'modules/group/client/views/group-students.client.view.html',

@@ -12,7 +12,13 @@
       vm.auth = Authentication;
       vm.fileInfo = {};
       vm.documents = [];
+      vm.groupInfo = [];
       vm.groupId = $stateParams.id;
+      groupService.get({id: vm.groupId}, function (res){
+          if (res.status == 'success') {
+              vm.groupInfo = res.data;
+          }
+      })
       vm.getDocuments = function() {
           groupService.getDocuments({id: vm.groupId}, function(res) {
               if (res.status == 'success') {

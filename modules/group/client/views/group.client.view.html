@@ -27,31 +27,31 @@
               <button ng-if="vm.groupInfo.createdBy._id == vm.auth.user._id" style="border: 0; background: none" ng-click="vm.resetCode()" class="pull-right"><span class="fas fa-history"></span></button>
             </p>
             <div class="nav-tabs">
-              <div class="list-heading" ui-sref="group.home">
+              <div class="list-heading" ui-sref="group.home" ui-sref-active="active">
                   Trang chủ
                 <span class="pull-right"><i class="fa fa-angle-right"></i></span>
               </div>
             </div>
             <div class="nav-tabs">
-              <div class="list-heading" ui-sref="group.students">
+              <div class="list-heading" ui-sref="group.students" ui-sref-active="active">
                   Thành viên
                 <span class="pull-right"><i class="fa fa-angle-right"></i></span>
               </div>
             </div>
             <div class="nav-tabs">
-              <div ng-if="vm.groupInfo.createdBy._id == vm.auth.user._id" class="list-heading" ui-sref="group.assigments">
+              <div ng-if="vm.groupInfo.createdBy._id == vm.auth.user._id" class="list-heading" ui-sref="group.assigments" ui-sref-active="active">
                 Bài khảo sát
                 <span class="pull-right"><i class="fa fa-angle-right"></i></span>
               </div>
             </div>
             <div class="nav-tabs">
-              <div class="list-heading" ui-sref="group.documents">
+              <div class="list-heading" ui-sref="group.documents" ui-sref-active="active">
                 Tài liệu
                 <span class="pull-right"><i class="fa fa-angle-right"></i></span>
               </div>
             </div>
             <div class="nav-tabs">
-              <div class="list-heading" ui-sref="group.videos">
+              <div class="list-heading hide" ui-sref="group.videos" ui-sref-active="active">
                 Bài giảng video
                 <span class="pull-right"><i class="fa fa-angle-right"></i></span>
               </div>

@@ -205,3 +205,26 @@ i {  vertical-align: middle; }
 .table-container {
     overflow-x: scroll;
 }
+.list-heading.active {
+    background: #383838;
+}
+.info-content {
+    margin-top: 20px;
+    border-top: 1px solid #787878;
+}
+.info-heading {
+    padding: 10px 20px;
+    background: #d8d8d8;
+    border-bottom: 1px solid #eee;
+}
+.info-heading h4 {
+    margin: 0;
+    padding: 0;
+}
+.info-body {
+    padding: 10px 20px;
+}
+.item {
+    padding: 10px 0;
+    border-bottom: 1px solid #a9a9a9;
+}

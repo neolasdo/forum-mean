@@ -67,7 +67,7 @@ angular.module('group').controller('GroupController', ['$scope', '$http', '$stat
                 }
             }
         }, function (fail) {
-            toastr.warning('Lỗi khi lấy bài kiểm tra');
+            toastr.warning('Lỗi khi lấy bài khảo sát');
             console.log(fail);
         });
         vm.openStream = function() {

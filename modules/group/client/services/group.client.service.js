@@ -37,6 +37,10 @@
             method: 'GET',
             url: '/api/group/:id/students'
         },
+        getMemberInfo : {
+            method: 'GET',
+            url: '/api/group/:id/member/:uid'
+        },
         getDocuments : {
             method: 'GET',
             url: '/api/group/:id/documents'

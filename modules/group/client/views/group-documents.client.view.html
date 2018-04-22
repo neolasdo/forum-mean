@@ -70,7 +70,7 @@
                                 <button type="button" class="btn btn-success btn-xs" title="Download">
                                     <a style="color: #fff;" ng-href="{{d.url}}" target="_blank"><span class="glyphicon glyphicon-save"></span></a>
                                 </button>
-                                <button type="button" ng-click="vm.removeDocument(d._id)" class="btn btn-danger btn-xs" title="Delete">
+                                <button type="button" ng-if="vm.groupInfo.createdBy._id == vm.auth.user._id || d.uploadBy == vm.auth.user._id" ng-click="vm.removeDocument(d._id)" class="btn btn-danger btn-xs" title="Delete">
                                     <span class="glyphicon glyphicon-trash"></span>
                                 </button>
                             </div>

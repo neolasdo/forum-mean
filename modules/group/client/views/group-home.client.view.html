@@ -26,7 +26,7 @@
   </div>
   <div ng-repeat="topic in vm.topics | orderBy:'-createdAt'" class="panel panel-default">
     <div class="panel-heading">
-      <a href="#">
+      <a href="#" ui-sref="group.member({id: vm.groupId,uid: topic.createdBy._id})">
         <img ng-src="{{topic.createdBy.profileImageURL?topic.createdBy.profileImageURL:'/modules/users/client/img/profile/default.png'}}" alt="{{topic.createdBy.displayName}}" class="header-profile-image" />
         {{topic.createdBy.displayName}}
       </a>
@@ -100,7 +100,7 @@
     <h4 class="modal-title">Bài viết</h4>
   </div>
   <div class="modal-body">
-    <a href="#">
+    <a href="#" ui-sref="group.member({id: vm.groupId,uid: topic.createdBy._id})">
       <img ng-src="{{vm.topic.createdBy.profileImageURL?vm.topic.createdBy.profileImageURL:'/modules/users/client/img/profile/default.png'}}" alt="{{vm.topic.createdBy.displayName}}" class="header-profile-image" />
       {{vm.topic.createdBy.displayName}}
     </a>

@@ -10,6 +10,7 @@ var path = require('path'),
     multer = require('multer'),
     fs = require('fs'),
     Group = mongoose.model('Group'),
+    User = mongoose.model('User'),
     Topic = mongoose.model('Topic'),
     Comment = mongoose.model('Comment'),
     Assignment = mongoose.model('Assignment'),
@@ -521,6 +522,58 @@ exports.checkJoined = function (req, res) {
         }
     })
 }
+exports.getMemberInfo = function (req, res) {
+    var id = req.params.id;
+    var uid = req.params.uid;
+    var info = {};
+    var promise = [];
+    var getUser = new Promise(function (resolve, reject) {
+        User.findOne({_id: uid}).select({password: 0, salt: 0}).exec(function (err, topics) {
+            if (err) reject(err);
+            else resolve(topics);
+        })
+    });
+    var getTopics = new Promise(function (resolve, reject) {
+        Topic.find({status: 1, createdBy: uid, group: id})
+            .populate({path: 'comments', populate: { path: 'createdBy', select: { 'username': 1, 'displayName': 1, 'profileImageURL': 1}}})
+            .populate('createdBy', 'username displayName profileImageURL')
+            .exec(function (err, topics) {
+            if (err) reject(err);
+            else resolve(topics);
+        })
+    });
+    var getComments = new Promise(function (resolve, reject) {
+        Comment.find({status: 1, createdBy: uid, group: id}).populate({path: 'topic'}).exec(function (err, topics) {
+            if (err) reject(err);
+            else resolve(topics);
+        })
+    });
+    var getDocuments = new Promise(function (resolve, reject) {
+        Document.find({uploadBy: uid, group: id}).populate({path: 'topic'}).exec(function (err, topics) {
+            if (err) reject(err);
+            else resolve(topics);
+        })
+    });
+    promise.push(getUser, getTopics, getComments, getDocuments);
+    Promise.all(promise)
+        .then(function (data) {
+            info.user = data[0];
+            info.topics = data[1];
+            info.comments = data[2];
+            info.documents = data[3];
+            return res.json({
+                'status' : 'success',
+                'data' : info
+            })
+        })
+        .catch(function (err) {
+            return res.status(400).send({
+                'status': 'error',
+                'message': err
+            });
+    });
+
+}
 /**
  * join group by id
  * @param req
@@ -599,7 +652,6 @@ exports.uploadDocument = function (req, res) {
         image = 'modules/group/client/img/document/default.png';
     }
 
-    console.log(image);
     var document = new Document({
         name: info.name,
         image: image,
