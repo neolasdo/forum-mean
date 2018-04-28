@@ -151,11 +151,12 @@ angular.module('group').controller('GroupController', ['$scope', '$http', '$stat
                     console.log('There was an error connecting to the session: ', error.name, error.message);
                 }
             });
-            session.signal(
-                {
-                    name: vm.auth.user.displayName,
-                    content: "Đã tham gia",
-                    time: Date.now()
+            session.signal({
+                    data: {
+                        name: vm.auth.user.displayName,
+                            content: "Đã tham gia",
+                        time: Date.now()
+                    }
                 },
                 function(error) {
                     if (error) {
@@ -182,10 +183,9 @@ angular.module('group').controller('GroupController', ['$scope', '$http', '$stat
                 }
             });
             session.on("signal", function(event) {
-                console.log(event.data);
                 vm.chats.push({
-                    name: event.name,
-                    content: event.content
+                    name: event.data.name,
+                    content: event.data.content
                 })
             });
             session.on("streamDestroyed", function (event) {
@@ -248,8 +248,8 @@ angular.module('group').controller('GroupController', ['$scope', '$http', '$stat
                     session.on("signal", function(event) {
                         console.log("Signal sent from connection " + event.from.id);
                         vm.chats.push({
-                            name: event.name,
-                            content: event.content
+                            name: event.data.name,
+                            content: event.data.content
                         })
                     });
                 } else {
@@ -264,12 +264,13 @@ angular.module('group').controller('GroupController', ['$scope', '$http', '$stat
         })
     }
     vm.createComment = function (comment) {
-        session.signal(
-            {
-                name: vm.auth.user.displayName,
-                content: comment,
-                time: Date.now()
-            },
+        session.signal({
+                    data: {
+                        name: vm.auth.user.displayName,
+                        content: comment,
+                        time: Date.now()
+                    }
+                },
             function(error) {
                 if (error) {
                     console.log("signal error ("
