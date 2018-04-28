@@ -120,6 +120,9 @@ angular.module('group').controller('GroupController', ['$scope', '$http', '$stat
     var vm = this;
     vm.auth = Authentication;
     vm.groupInfo = group;
+    console.log(vm.groupInfo);
+    vm.subs = [];
+    vm.chats = [];
     vm.session = {};
     var publisher;
     var session;
@@ -148,14 +151,42 @@ angular.module('group').controller('GroupController', ['$scope', '$http', '$stat
                     console.log('There was an error connecting to the session: ', error.name, error.message);
                 }
             });
+            session.signal(
+                {
+                    name: vm.auth.user.displayName,
+                    content: "Đã tham gia",
+                    time: Date.now()
+                },
+                function(error) {
+                    if (error) {
+                        console.log("signal error ("
+                            + error.name
+                            + "): " + error.message);
+                    } else {
+                        console.log("signal sent.");
+                    }
+                }
+            );
             session.on('streamCreated', function(event) {
-                session.subscribe(event.stream, 'publisher', {
-                    insertMode: 'append',
-                    width: '100%',
-                    height: '100%'
-                }, function (err) {
-                    console.log(err)
-                });
+                if (event.stream.name === '') {
+                    session.subscribe(event.stream, 'publisher', {
+                        insertMode: 'append',
+                        width: '100%',
+                        height: '100%'
+                    }, function (err) {
+                        console.log(err)
+                    });
+                }
+                else {
+                    vm.subs.push(event.stream)
+                }
+            });
+            session.on("signal", function(event) {
+                console.log(event.data);
+                vm.chats.push({
+                    name: event.name,
+                    content: event.content
+                })
             });
             session.on("streamDestroyed", function (event) {
                 console.log("The publisher stopped streaming. Reason: "
@@ -191,6 +222,7 @@ angular.module('group').controller('GroupController', ['$scope', '$http', '$stat
                         insertMode: 'append',
                         width: '100%',
                         height: '100%',
+                        fitMode: 'contain',
                     };
                     publisher = OT.initPublisher('publisher', publisherOptions, function initCallback(err) {
                         if (err) {
@@ -213,6 +245,13 @@ angular.module('group').controller('GroupController', ['$scope', '$http', '$stat
                             event.stream.videoDimensions.width +
                             'x' + event.stream.videoDimensions.height);
                     });
+                    session.on("signal", function(event) {
+                        console.log("Signal sent from connection " + event.from.id);
+                        vm.chats.push({
+                            name: event.name,
+                            content: event.content
+                        })
+                    });
                 } else {
                     console.log('There was an error connecting to the session: ', error.name, error.message);
                 }
@@ -223,6 +262,24 @@ angular.module('group').controller('GroupController', ['$scope', '$http', '$stat
             toastr.warning('Có lỗi!');
             vm.close();
         })
+    }
+    vm.createComment = function (comment) {
+        session.signal(
+            {
+                name: vm.auth.user.displayName,
+                content: comment,
+                time: Date.now()
+            },
+            function(error) {
+                if (error) {
+                    console.log("signal error ("
+                        + error.name
+                        + "): " + error.message);
+                } else {
+                    console.log("signal sent.");
+                }
+            }
+        );
     }
 
     vm.close = function () {

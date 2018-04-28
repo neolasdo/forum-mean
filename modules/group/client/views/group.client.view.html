@@ -134,7 +134,27 @@
     <div class="modal-body">
         <div class="row" style="padding: 20px">
             <div class="wrapper col-sm-12 col-xs-12">
-                <div id="publisher" style="width: 100%;min-height: 350px; height: 350px"></div>
+                <div id="publisher" style="width: 100%;min-height: 350px; height: 70vh"></div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="input-group">
+                    <input type="text" name="comment" class="form-control" ng-model="vm.newComment" title="Bình luận" placeholder="Bình luận">
+                    <span class="input-group-btn">
+                      <button class="btn btn-secondary" type="button" ng-disabled="!vm.newComment" ng-click="vm.createComment(vm.newComment)">Gửi</button>
+                    </span>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div ng-repeat="chat in vm.chats | orderBy: '-time'">
+                    <div class="col-sm-2">
+                        <h4>{{chat.name}}</h4>
+                    </div>
+                    <div class="col-sm-10">
+                        <p>{{chat.content}}</p>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
