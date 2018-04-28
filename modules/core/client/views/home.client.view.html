@@ -30,7 +30,7 @@
                     <ul class="list-group"  style="margin-bottom: 0" ng-if="!vm.myGroups.length">
                         <li class="list-group-item">Bạn chưa có lớp học nào!</li>
                     </ul>
-                    <div class="see-more" ng-if="vm.myGroups.length > 7" style="display: block;padding: 10px 15px; cursor: pointer" ng-click="vm.showAllMyGroup()">
+                    <div class="see-more" ng-if="vm.myGroups.length >= 7" style="display: block;padding: 10px 15px; cursor: pointer" ng-click="vm.showAllMyGroup()">
                         <div ng-if="!vm.showAllMy">Xem tất cả <span class="fa  fa-chevron-down pull-right" style="background: none;border: none;"></span></div>
                         <div ng-if="vm.showAllMy">Thu gọn <span class="fa fa-chevron-up pull-right" style="background: none;border: none;"></span></div>
                     </div>
@@ -49,7 +49,7 @@
                     <ul class="list-group"  style="margin-bottom: 0" ng-if="!vm.groupJoined.length">
                         <li class="list-group-item">Bạn chưa tham gia lớp học nào!</li>
                     </ul>
-                    <div class="see-more" ng-if="vm.groupJoined.length > 7" style="display: block;padding: 10px 15px; cursor: pointer" ng-click="vm.showAllJoinedGroup()">
+                    <div class="see-more" ng-if="vm.groupJoined.length >= 7" style="display: block;padding: 10px 15px; cursor: pointer" ng-click="vm.showAllJoinedGroup()">
                         <div ng-if="!vm.showAllJoined">Xem tất cả <span class="fa  fa-chevron-down pull-right" style="background: none;border: none;"></span></div>
                         <div ng-if="vm.showAllJoined">Thu gọn <span class="fa fa-chevron-up pull-right" style="background: none;border: none;"></span></div>
                     </div>
