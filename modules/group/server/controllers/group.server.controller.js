@@ -24,6 +24,16 @@ var path = require('path'),
     opentok = new OpenTok(df.openTokApi, df.openTokSecret),
     _ = require('lodash');
 
+var nodemailer = require('nodemailer');
+var transport = nodemailer.createTransport({
+    host: "smtp.mailtrap.io",
+    port: 2525,
+    auth: {
+        user: "a83f4f6b285d36",
+        pass: "bbafc1987838f8"
+    }
+})
+
 /**
  *
  * @param req
@@ -236,7 +246,21 @@ exports.deleteQuestion = function (req, res) {
 }
 exports.getActiveAssignments = function (req, res) {
     var groupId = req.params.id;
+    var options = {
+        from: '"Fred Foo 👻" <foo@example.com>', // sender address
+        to: 'bar@example.com, baz@example.com', // list of receivers
+        subject: 'Hello ✔', // Subject line
+        text: 'Hello world?', // plain text body
+        html: '<b>Hello world?</b>' // html body
+    };
 
+    transport.sendEmail(options, function (err, info) {
+        if (error) {
+            return console.log(error);
+        }
+        console.log('Message sent: %s', info.messageId);
+        console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
+    })
     Assignment.find(
         {
             groupId : groupId,
