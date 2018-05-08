@@ -58,7 +58,7 @@
     <div class="modal-body">
         <div class="row">
             <div class="form-group col-md-12">
-                <ui-select multiple required ng-model="vm.add" tagging-label="false" theme="bootstrap" tagging-tokens=",|/" comma-on-blur>
+                <ui-select multiple required ng-disabled="vm.disabled" ng-model="vm.add" tagging-label="false" theme="bootstrap" tagging-tokens=",|/" comma-on-blur>
                     <ui-select-match placeholder="Chọn hoặc tìm kiếm học viên">{{$item.displayName}} &lt;{{$item.email}}&gt;</ui-select-match>
                     <ui-select-choices repeat="student in vm.students | filter: $select.search">
                         <div>
@@ -68,6 +68,12 @@
                     </ui-select-choices>
                 </ui-select>
             </div>
+        </div>
+        <div class="container">
+            <form novalidate>
+                <div class="valid-feedback">Hoặc thêm học viên từ file (csv file)</div>
+                <input type="file" class="custom-file-input" ng-click="vm.chooseFile()" id="validatedCustomFile"  accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel">
+            </form>
         </div>
     </div>
     <div class="modal-footer text-right">

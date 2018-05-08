@@ -8,6 +8,7 @@ var path = require('path'),
     config = require(path.resolve('./config/config')),
     df = require(path.resolve('./config/env/default')),
     multer = require('multer'),
+    nodemailer = require('nodemailer'),
     fs = require('fs'),
     Group = mongoose.model('Group'),
     User = mongoose.model('User'),
@@ -23,8 +24,7 @@ var path = require('path'),
     OpenTok = require('opentok'),
     opentok = new OpenTok(df.openTokApi, df.openTokSecret),
     _ = require('lodash');
-
-var nodemailer = require('nodemailer');
+var transport = nodemailer.createTransport(config.mailer.options);
 
 /**
  *
@@ -238,28 +238,6 @@ exports.deleteQuestion = function (req, res) {
 }
 exports.getActiveAssignments = function (req, res) {
     var groupId = req.params.id;
-    var transport = nodemailer.createTransport({
-        host: "smtp.mailtrap.io",
-        port: 2525,
-        auth: {
-            user: "a83f4f6b285d36",
-            pass: "bbafc1987838f8"
-        }
-    })
-    var options = {
-        from: '"Fred Foo 👻" <foo@example.com>', // sender address
-        to: 'bar@example.com, baz@example.com', // list of receivers
-        subject: 'Hello ✔', // Subject line
-        text: 'Hello world?', // plain text body
-        html: '<b>Hello world?</b>' // html body
-    };
-
-    transport.sendMail(options, function (err, info) {
-        if (err) {
-            return console.log(err);
-        }
-
-    })
     Assignment.find(
         {
             groupId : groupId,
@@ -814,19 +792,102 @@ exports.getListStudent = function (req, res) {
 exports.addStudents = function (req, res) {
     var groupId = req.params.id;
     var students = req.body.students;
-    if (students) {
-        students.forEach(function (item) {
-            var groupStudent = new GroupStudent({group: groupId, student: item._id});
-            groupStudent.save(function (err) {
-                if (err) return res.status(400).send({
-                    message: "Có lỗi khi thêm học sinh vào lớp"
-                });
-                return res.json({
-                    'status' : 'success',
-                });
-            });
-        });
+    var generateRandomPassword = function () {
+        var specials = '!@#$%^&*()_+{}:"<>?\|[];\',./`~';
+        var lowercase = 'abcdefghijklmnopqrstuvwxyz';
+        var uppercase = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        var numbers = '0123456789';
+
+        var all = specials + lowercase + uppercase + numbers;
+
+        String.prototype.pick = function(min, max) {
+            var n, chars = '';
+            if (typeof max === 'undefined') {
+                n = min;
+            } else {
+                n = min + Math.floor(Math.random() * (max - min));
+            }
+            for (var i = 0; i < n; i++) {
+                chars += this.charAt(Math.floor(Math.random() * this.length));
+            }
+            return chars;
+        };
+        String.prototype.shuffle = function() {
+            var array = this.split('');
+            var tmp, current, top = array.length;
+
+            if (top) while (--top) {
+                current = Math.floor(Math.random() * (top + 1));
+                tmp = array[current];
+                array[current] = array[top];
+                array[top] = tmp;
+            }
+            return array.join('');
+        };
+
+        var password = (specials.pick(1) + lowercase.pick(7) + uppercase.pick(1) + numbers.pick(1)).shuffle();
+        return password;
     }
+    var promises = students.map(function (item) {
+        return new Promise(function (resolve, reject) {
+            User.findOne({email:item.email}, function (err, user) {
+                if (err) reject(err);
+                if (user) {
+                    GroupStudent.findOne({group: groupId, student: user._id}, function (err, one) {
+                        if (err) reject(err);
+                        if (one) resolve(one);
+                        if (!one) {
+                            var groupStudent = new GroupStudent({group: groupId, student: user._id});
+                            groupStudent.save(function (err, one) {
+                                if (err) reject(err);
+                                if (one) resolve(one);
+                            });
+                        }
+                    })
+                }
+                if(!user) {
+                    item.password = generateRandomPassword();
+                    var user = new User(item);
+                    user.save(function (err, data) {
+                        if (err) reject(err);
+                        else {
+                            var options = {
+                                from: '"Mean Learning 👻" <admin@mean-learning.com>', // sender address
+                                to: data.email, // list of receivers
+                                subject: 'Tài khoản mới được tạo', // Subject line
+                                html: "'Xin chào' data.displaynName, 'tài khoản của bạn vừa được tạo bởi'" +
+                                req.user.displayName + "' với tên đăng nhập là '" + data.username + "' và mật khẩu: '" + data.password +
+                                ". Nhấn vào <a href='localhost:3300'>đây</a> để đăng nhập và sử dụng ứng dụng."
+                            };
+
+                            transport.sendMail(options, function (err, info) {
+                                if (err) {
+                                    return console.log(err);
+                                }
+                                var groupStudent = new GroupStudent({group: groupId, student: data._id});
+                                groupStudent.save(function (err, one) {
+                                    if (err) reject(err);
+                                    if (one) resolve(one);
+                                });
+                            })
+
+                        }
+                    })
+                }
+            })
+        });
+    });
+    Promise.all(promises).then(function(list){
+        return res.json({
+            'status' : 'success',
+            'data' : list
+        })
+    }).catch(function(err){
+        return res.status(400).send({
+            'status' : 'error',
+            'message' : err
+        });
+    });
 }
 /**
  *
