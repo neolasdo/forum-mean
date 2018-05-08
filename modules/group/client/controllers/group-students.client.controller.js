@@ -110,9 +110,13 @@
             var input = document.querySelector('input[type=file]');
             input.addEventListener("change", vm.readFile);
         };
+        function checkIsEmail(string) {
+            var pattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+            return pattern.test(string);
+        }
         vm.checkAdd = function (add) {
             angular.forEach(add, function (item) {
-                if(item.hasOwnProperty('email')) {
+                if(item.hasOwnProperty('email') && checkIsEmail(item.email)) {
                     var data = {};
                     data.email = item.email;
                     data.firstName = item.first_name?item.first_name:'';
