@@ -825,7 +825,8 @@ exports.addStudents = function (req, res) {
             return array.join('');
         };
 
-        var password = (specials.pick(1) + lowercase.pick(7) + uppercase.pick(1) + numbers.pick(1)).shuffle();
+
+        var password = (specials.pick(1) + lowercase.pick(1) + uppercase.pick(1) + numbers.pick(1) + all.pick(6, 10)).shuffle();
         return password;
     }
     var promises = students.map(function (item) {
@@ -845,7 +846,7 @@ exports.addStudents = function (req, res) {
                         }
                     })
                 }
-                if(!user) {
+                if(!user.length) {
                     item.password = generateRandomPassword();
                     var user = new User(item);
                     user.save(function (err, data) {
@@ -855,8 +856,8 @@ exports.addStudents = function (req, res) {
                                 from: '"Mean Learning 👻" <admin@mean-learning.com>', // sender address
                                 to: data.email, // list of receivers
                                 subject: 'Tài khoản mới được tạo', // Subject line
-                                html: "Xin chào"+ data.displaynName +", tài khoản của bạn vừa được tạo bởi" +
-                                req.user.displayName + " với tên đăng nhập là " + data.username + "' và mật khẩu: " + data.password +
+                                html: "Xin chào"+ data.displayName +", tài khoản của bạn vừa được tạo bởi" +
+                                req.user.displayName + " với tên đăng nhập là " + data.username + "' và mật khẩu: " + item.password +
                                 ". Nhấn vào <a href='localhost:3300'>đây</a> để đăng nhập và sử dụng ứng dụng."
                             };
 
