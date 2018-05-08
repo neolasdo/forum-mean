@@ -119,7 +119,7 @@
                     data.lastName = item.last_name?item.last_name:'';
                     data.username = item.user_name?item.user_name:item.email;
                     data.displayName = item.first_name + ' '+ item.last_name;
-                    data.profileImageURL = item.imgUrl?item.imgUrl:'';
+                    data.profileImageURL = item.img_url?item.img_url:'';
                     data.roles = 'student';
                     data.provider  = 'local';
 

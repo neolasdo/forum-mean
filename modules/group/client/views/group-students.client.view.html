@@ -69,11 +69,15 @@
                 </ui-select>
             </div>
         </div>
-        <div class="container">
+        <div class="">
             <form novalidate>
-                <div class="valid-feedback">Hoặc thêm học viên từ file (csv file)</div>
+                <div class="valid-feedback">Hoặc thêm học viên từ file (csv file)*</div>
                 <input type="file" class="custom-file-input" ng-click="vm.chooseFile()" id="validatedCustomFile"  accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel">
             </form>
+            <div class="alert alert-info">
+                *Cấu trúc file csv
+                <img src="/modules/group/client/img/csv-example.png" class="img-responsive" alt="Image">
+            </div>
         </div>
     </div>
     <div class="modal-footer text-right">
