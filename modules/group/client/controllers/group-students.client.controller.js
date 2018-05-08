@@ -115,6 +115,7 @@
             return pattern.test(string);
         }
         vm.checkAdd = function (add) {
+            var array = [];
             angular.forEach(add, function (item) {
                 if(item.hasOwnProperty('email') && checkIsEmail(item.email)) {
                     var data = {};
@@ -127,9 +128,16 @@
                     data.roles = 'student';
                     data.provider  = 'local';
 
-                    vm.add.push(data);
+                    array.push(data);
                 }
             });
+            vm.add = removeDuplicity(array)
+            function removeDuplicity(datas){
+                return datas.filter(function (item, index,arr) {
+                    const c = arr.map(function(item){return  item.email});
+                    return  index === c.indexOf(item.email)
+                })
+            }
 
             (vm.add.length > 0)?vm.disabled = true: vm.disabled = false;
         }

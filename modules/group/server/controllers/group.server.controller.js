@@ -834,6 +834,7 @@ exports.addStudents = function (req, res) {
             User.findOne({email:item.email}, function (err, user) {
                 if (err) reject(err);
                 if (user) {
+                    console.log(user);
                     GroupStudent.findOne({group: groupId, student: user._id}, function (err, one) {
                         if (err) reject(err);
                         if (one) resolve(one);
@@ -847,6 +848,7 @@ exports.addStudents = function (req, res) {
                     })
                 }
                 if(!user.length) {
+                    console.log(item);
                     item.password = generateRandomPassword();
                     var user = new User(item);
                     user.save(function (err, data) {
