@@ -25,14 +25,6 @@ var path = require('path'),
     _ = require('lodash');
 
 var nodemailer = require('nodemailer');
-var transport = nodemailer.createTransport({
-    host: "smtp.mailtrap.io",
-    port: 2525,
-    auth: {
-        user: "a83f4f6b285d36",
-        pass: "bbafc1987838f8"
-    }
-})
 
 /**
  *
@@ -246,6 +238,14 @@ exports.deleteQuestion = function (req, res) {
 }
 exports.getActiveAssignments = function (req, res) {
     var groupId = req.params.id;
+    var transport = nodemailer.createTransport({
+        host: "smtp.mailtrap.io",
+        port: 2525,
+        auth: {
+            user: "a83f4f6b285d36",
+            pass: "bbafc1987838f8"
+        }
+    })
     var options = {
         from: '"Fred Foo 👻" <foo@example.com>', // sender address
         to: 'bar@example.com, baz@example.com', // list of receivers
@@ -254,12 +254,11 @@ exports.getActiveAssignments = function (req, res) {
         html: '<b>Hello world?</b>' // html body
     };
 
-    transport.sendEmail(options, function (err, info) {
-        if (error) {
-            return console.log(error);
+    transport.sendMail(options, function (err, info) {
+        if (err) {
+            return console.log(err);
         }
-        console.log('Message sent: %s', info.messageId);
-        console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
+
     })
     Assignment.find(
         {
