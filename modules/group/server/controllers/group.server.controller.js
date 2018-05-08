@@ -855,8 +855,8 @@ exports.addStudents = function (req, res) {
                                 from: '"Mean Learning 👻" <admin@mean-learning.com>', // sender address
                                 to: data.email, // list of receivers
                                 subject: 'Tài khoản mới được tạo', // Subject line
-                                html: "'Xin chào' data.displaynName, 'tài khoản của bạn vừa được tạo bởi'" +
-                                req.user.displayName + "' với tên đăng nhập là '" + data.username + "' và mật khẩu: '" + data.password +
+                                html: "Xin chào"+ data.displaynName +", tài khoản của bạn vừa được tạo bởi" +
+                                req.user.displayName + " với tên đăng nhập là " + data.username + "' và mật khẩu: " + data.password +
                                 ". Nhấn vào <a href='localhost:3300'>đây</a> để đăng nhập và sử dụng ứng dụng."
                             };
 
