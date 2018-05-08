@@ -62,8 +62,8 @@
                     <ui-select-match placeholder="Chọn hoặc tìm kiếm học viên">{{$item.displayName}} &lt;{{$item.email}}&gt;</ui-select-match>
                     <ui-select-choices repeat="student in vm.students | filter: $select.search">
                         <div>
-                            <span ng-bind="student.displayName | highlight: $select.search"></span>
-                            &lt;<span ng-bind="student.email | highlight: $select.search"></span>&gt;
+                            <span ng-bind-html="student.displayName | highlight: $select.search"></span>
+                            &lt;<span ng-bind-html="student.email | highlight: $select.search"></span>&gt;
                         </div>
                     </ui-select-choices>
                 </ui-select>

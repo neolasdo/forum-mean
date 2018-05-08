@@ -39,15 +39,19 @@
       };
       vm.getTopics();
       vm.createTopic = function() {
-          groupService.createTopic({groupId : vm.groupId, topic : vm.newTopic, user: vm.auth.user._id}, function (res){
-              if (res.status == 'success'){
-                  vm.newTopic = {};
-                  toastr.success('Bài viết đã được tạo thành công');
-                  vm.getTopics();
-              }
-          },function(err){
-              console.log(err);
-          })
+          if(vm.newTopic.content.length < 20) {
+              toastr.warning('Nội dung phải nhiều hơn 20 ký tự!');
+          }else{
+              groupService.createTopic({groupId : vm.groupId, topic : vm.newTopic, user: vm.auth.user._id}, function (res){
+                  if (res.status == 'success'){
+                      vm.newTopic = {};
+                      toastr.success('Bài viết đã được tạo thành công');
+                      vm.getTopics();
+                  }
+              },function(err){
+                  console.log(err);
+              })
+          }
       }
       vm.hideTopic = function(id) {
           if(confirm('Bạn có chắc muốn ẩn bài viết?')){
