@@ -48,7 +48,7 @@
           }
           if (vm.question.type == 'pick_one') {
               vm.question.answers = [];
-              vm.question.correctAnswer = '';
+              vm.question.correctAnswer = [];
           }
       }
   }

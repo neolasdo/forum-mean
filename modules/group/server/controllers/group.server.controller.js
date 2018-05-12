@@ -86,11 +86,13 @@ exports.getStream = function (req, res) {
 exports.createComment = function (req, res) {
     var topicId = req.body.topicId;
     var groupId = req.body.groupId;
+    var user = req.body.userId;
     var content = req.body.content;
     var comment = new Comment ({
         groupId: groupId,
         content: content,
-        topic: topicId
+        topic: topicId,
+        createdBy: user
     });
 
     comment.save(function (err, cmt) {
@@ -98,20 +100,17 @@ exports.createComment = function (req, res) {
             'status' : 'error',
             'message' : err
         });
-        Topic.findById(topicId).exec(function (err, topic) {
-            if (err)  return res.status(400).send({
-                'status' : 'error',
-                'message' : err
+        Topic.findOneAndUpdate({ _id: topicId }, { $push: { comments: cmt._id  } },
+            function (error, success) {
+                if (error) {
+                    return res.status(400).send({
+                        'status' : 'error',
+                        'message' : error
+                    });
+                } else {
+                    return res.json({'status' : 'success'});
+                }
             });
-            topic.comments.push(cmt._id);
-            topic.save(function (err, done) {
-                if (err)  return res.status(400).send({
-                    'status' : 'error',
-                    'message' : err
-                });
-                return res.json({'status' : 'success'});
-            })
-        })
     })
 }
 exports.createAssignment = function (req, res) {
@@ -192,9 +191,9 @@ exports.updateAssignment = function (req, res) {
             }
             else {
                 var ques = new Question(question);
-                ques.save(function (err, q) {
+                ques.save(function (err) {
                     if (err) reject(err);
-                    resolve(q._id);
+                    resolve(ques._id);
                 })
             }
         });

@@ -17,11 +17,11 @@ angular.module('core').controller('HomeController', ['$scope', '$http', 'Authent
 
     vm.showAllMyGroup = function () {
         vm.showAllMy = ! vm.showAllMy;
-        vm.myLength = (vm.showAllMy)? 'false': 6;
+        vm.myLength = (vm.showAllMy)? vm.myGroups.length: 6;
     };
     vm.showAllJoinedGroup = function () {
         vm.showAllJoined = ! vm.showAllJoined;
-        vm.joinedLength = (vm.showAllJoined)? 'false': 6;
+        vm.joinedLength = (vm.showAllJoined)? vm.groupJoined.length: 6;
     };
     vm.getJoinedGroup = function () {
         if (vm.auth.user.roles) {
