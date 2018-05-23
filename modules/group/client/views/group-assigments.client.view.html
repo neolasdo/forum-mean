@@ -154,10 +154,10 @@
           <div class="row answers-student" style="padding: 20px">
               <div class="answer"  ng-repeat="answer in vm.item.answer">
                   <div class="question-name">
-                      <h5>Câu hỏi: <span>{{answer.question}}</span></h5>
+                      <h5><b class="text-uppercase">Câu hỏi:</b> <span>{{answer.question}}</span></h5>
                   </div>
                   <div class="answer-content">
-                      <h5>Câu trả lời:</h5>
+                      <h5><b class="text-uppercase">Câu trả lời:</b></h5>
                       <p ta-bind ng-model="answer.answer" ng-if="answer.type == 'text' || answer.type == 'pick_one'"></p>
                       <p ta-bind ng-repeat="item in answer.answer track by $index" ng-model="item" ng-if="answer.type == 'multi_choice'"></p>
                       <p ng-if="answer.type == 'true/false'">
