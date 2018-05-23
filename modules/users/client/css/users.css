@@ -35,7 +35,8 @@
   max-height: 150px;
 }
 .auth{
-  padding: 50px 0 50px 0;
+    min-height: calc(100vh - 104px);
+  padding: 100px 0 50px 0;
   color: rgba(255,255,255,0.6);
   background:  url('https://github.com/images/modules/site/heroes/simple-codelines.svg') ,#2b3137;
   background-position: center 10%;

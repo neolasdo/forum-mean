@@ -830,55 +830,53 @@ exports.addStudents = function (req, res) {
     }
     var promises = students.map(function (item) {
         return new Promise(function (resolve, reject) {
-            User.findOne({email:item.email}, function (err, user) {
-                if (err) reject(err);
-                if (user) {
-                    console.log(user);
-                    GroupStudent.findOne({group: groupId, student: user._id}, function (err, one) {
-                        if (err) reject(err);
-                        if (one) resolve(one);
-                        if (!one) {
-                            var groupStudent = new GroupStudent({group: groupId, student: user._id});
-                            groupStudent.save(function (err, one) {
-                                if (err) reject(err);
-                                if (one) resolve(one);
-                            });
-                        }
-                    })
-                }
-                if(!user.length) {
-                    console.log(item);
-                    item.password = generateRandomPassword();
-                    var user = new User(item);
-                    user.save(function (err, data) {
-                        if (err) reject(err);
-                        else {
-                            var options = {
-                                from: '"Mean Learning 👻" <admin@mean-learning.com>', // sender address
-                                to: data.email, // list of receivers
-                                subject: 'Tài khoản mới được tạo', // Subject line
-                                html: "Xin chào"+ data.displayName +", tài khoản của bạn vừa được tạo bởi" +
-                                req.user.displayName + " với tên đăng nhập là " + data.username + "' và mật khẩu: " + item.password +
-                                ". Nhấn vào <a href='localhost:3300'>đây</a> để đăng nhập và sử dụng ứng dụng."
-                            };
+                User.find({email: item.email}).exec(function (err, user) {
+                    if (err) reject(err);
+                    if (user.length === 0) {
+                        item.password = generateRandomPassword();
+                        var user = new User(item);
+                        user.save(function (err, data) {
+                            if (err) reject(err);
+                            else {
+                                var options = {
+                                    from: '"Mean Learning 👻" <admin@mean-learning.com>', // sender address
+                                    to: data.email, // list of receivers
+                                    subject: 'Tài khoản mới được tạo', // Subject line
+                                    html: "Xin chào" + data.displayName + ", tài khoản của bạn vừa được tạo bởi " +
+                                    req.user.displayName + " với tên đăng nhập là " + data.username + "' và mật khẩu: <b>" + item.password +
+                                    "</b>. Nhấn vào <a href='localhost:3300'>đây</a> để đăng nhập và sử dụng ứng dụng."
+                                };
 
-                            transport.sendMail(options, function (err, info) {
-                                if (err) {
-                                    return console.log(err);
-                                }
-                                var groupStudent = new GroupStudent({group: groupId, student: data._id});
+                                transport.sendMail(options, function (err, info) {
+                                    if (err) {
+                                        return console.log(err);
+                                    }
+                                    var groupStudent = new GroupStudent({group: groupId, student: data._id});
+                                    groupStudent.save(function (err, one) {
+                                        if (err) reject(err);
+                                        if (one) resolve(one);
+                                    });
+                                })
+
+                            }
+                        })
+                    } else {
+                        GroupStudent.find({group: groupId, student: user[0]._id}).exec(function (err, grps) {
+                            if (err) reject(err);
+                            if (grps.length === 0) {
+                                var groupStudent = new GroupStudent({group: groupId, student: user[0]._id});
                                 groupStudent.save(function (err, one) {
                                     if (err) reject(err);
                                     if (one) resolve(one);
                                 });
-                            })
-
-                        }
-                    })
-                }
+                            } else {
+                                resolve(grps[0])
+                            }
+                        })
+                    }
+                })
             })
-        });
-    });
+    })
     Promise.all(promises).then(function(list){
         return res.json({
             'status' : 'success',
